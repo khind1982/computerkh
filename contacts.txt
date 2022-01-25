@@ -1,0 +1,2 @@
+first_name:D|last_name:Bye|full_name:Bye, D|company:Clarivate|phone:123456|e-mail:db@pq.com
+first_name:Kevin|last_name:Hind|full_name:Hind, Kevin|company:Clarivate|phone:(01223) 271259|e-mail:kh@clarivate.com
