@@ -9,14 +9,14 @@
 
 exit = False
 
-contacts = [{
-    'first_name' : 'Kevin',
-    'last_name' : 'Hind',
-    'full_name' : 'Hind, Kevin',
-    'company' : 'Clarivate',
-    'phone' : '(01223) 271259',
-    'e-mail' : 'kevin.hind@proquest.com'
-    }]
+# contacts = [{
+#     'first_name' : 'Kevin',
+#     'last_name' : 'Hind',
+#     'full_name' : 'Hind, Kevin',
+#     'company' : 'Clarivate',
+#     'phone' : '(01223) 271259',
+#     'e-mail' : 'kevin.hind@proquest.com'
+#     }]
 
 
 def menu_of_options():
@@ -27,8 +27,7 @@ def menu_of_options():
         2 - Print the contacts list
         3 - Add a contact
         4 - Delete or Edit a contact by name
-        5 - Sort the contacts list by key
-        6 - Show a list of names
+        5 - Save the file
         0 - Exit
         """)
 
@@ -47,6 +46,7 @@ def add_a_contact(contacts):
         'phone' : phone,
         'e-mail' : email
         })
+    save_the_contacts(contacts)
     return contacts
 
 
@@ -67,10 +67,12 @@ def edit_or_delete_contact(contacts):
         if action == '1':
             contact_to_delete = filter_contact(contacts, 'full_name', to_edit)[0]
             contacts.remove(contact_to_delete)
+            save_the_contacts(contacts)
             break
         elif action == '2':
             contact_to_edit = filter_contact(contacts, 'full_name', to_edit)[0]
             contacts = edit_contact(contacts, contact_to_edit)
+            save_the_contacts(contacts)
             break
         else:
             print("Unknown action.  Try again")
@@ -110,6 +112,27 @@ def filter_contact(contacts, field, value):
     return [contact for contact in contacts if contact[field] == value]
 
 
+def save_the_contacts(contacts):
+    with open('contacts_output.txt', 'wt') as output_file:
+        for contact in contacts:
+            for key, value in contact.items():
+                if key != 'e-mail':
+                    output_file.write(f'{key}:{value}|')
+                else:
+                    output_file.write(f'{key}:{value}')
+            output_file.write('\n')
+
+
+with open('file_to_read.txt', 'rt') as input_file:
+    individual_contacts = [line.strip() for line in input_file.readlines()]
+    contacts = []
+    for individual_contact in individual_contacts:
+        contact = {}
+        for contact_detail in individual_contact.split('|'):
+            contact[contact_detail.split(':')[0]] = contact_detail.split(':')[1]
+        contacts.append(contact)
+
+
 while not exit:
     # Where user is required to type words, don't mix case
     # use numbers for basic options
@@ -125,9 +148,11 @@ while not exit:
     elif selection == '4':
         edit_or_delete_contact(contacts)
     elif selection == '5':
-        contacts = dict(sorted(contacts.items()))
-    elif selection == '6':
-        print(contacts.keys())
+        save_the_contacts(contacts)
+    # elif selection == '5':
+    #     contacts = dict(sorted(contacts.items()))
+    # elif selection == '6':
+    #     print(contacts.keys())
     elif selection == '0':
         exit = True
     else:
