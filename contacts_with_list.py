@@ -28,6 +28,7 @@ def menu_of_options():
         3 - Add a contact
         4 - Delete or Edit a contact by name
         5 - Save the file
+        6 - Sort the contacts
         0 - Exit
         """)
 
@@ -133,7 +134,7 @@ with open('file_to_read.txt', 'rt') as input_file:
         contacts.append(contact)
 
 
-while not exit:
+while True:
     # Where user is required to type words, don't mix case
     # use numbers for basic options
     print(menu_of_options())
@@ -149,11 +150,11 @@ while not exit:
         edit_or_delete_contact(contacts)
     elif selection == '5':
         save_the_contacts(contacts)
-    # elif selection == '5':
-    #     contacts = dict(sorted(contacts.items()))
+    elif selection == '6':
+        contacts = sorted(contacts, key = lambda i: i['last_name'])
     # elif selection == '6':
     #     print(contacts.keys())
     elif selection == '0':
-        exit = True
+        break
     else:
         "Please enter a number from the menu."

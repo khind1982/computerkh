@@ -1,0 +1,1 @@
+first_name:Kevin|last_name:Hind|full_name:Hind, Kevin|company:Clarivate|phone:(01223) 271259|e-mail:kevin.hind@proquest.com
