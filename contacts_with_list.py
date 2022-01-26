@@ -24,6 +24,8 @@ def menu_of_options():
         5 - Delete a contact by name
         6 - Save the file
         7 - Sort the contacts
+        8 - Search contacts
+        9 - Print a contact by name
         0 - Exit
         """)
 
@@ -118,6 +120,32 @@ def save_the_contacts(contacts):
             output_file.write('\n')
 
 
+def search_contacts(contacts):
+    search_term = input("Enter text to search for in contacts: ")
+    search_term_found = False
+    for contact in contacts:
+        for key, value in contact.items():
+            if value.casefold() in search_term.casefold():
+                print(f"\nValue {search_term} found in contact for {contact['full_name']}")
+                search_term_found = True
+                break
+    if not search_term_found:
+        print(f"No value {search_term} in contacts database.")
+
+
+def print_contact_by_name(contacts):
+    to_find = input(
+            """Enter the name of a contact
+            in the form last name, first_name: """).strip()
+    contact_to_display = filter_contact(contacts, 'full_name', to_find)[0]
+    print(
+        f"""
+        First Name: {contact_to_display['first_name']}
+        Last Name:  {contact_to_display['last_name']}
+        E-mail: {contact_to_display['e-mail']}
+        """)
+
+
 with open('contacts.txt', 'rt') as input_file:
     contacts = []
     for contact in [line.strip() for line in input_file]:
@@ -144,6 +172,10 @@ while True:
         save_the_contacts(contacts)
     elif selection == '7':
         contacts.sort(key = lambda i: i['last_name'])
+    elif selection == '8':
+        search_contacts(contacts)
+    elif selection == '9':
+        print_contact_by_name(contacts)
     elif selection == '0':
         break
     else:
