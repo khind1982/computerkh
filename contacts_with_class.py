@@ -42,6 +42,16 @@ def menu_of_options():
         """)
 
 
+def print_all_contacts(contacts):
+    """
+    Given the contacts list 
+    print all the contacts as a dictionary"""
+    for contact in contacts:
+        for key, value in contact.__dict__.items():
+            print(key + ': ', value)
+        print('\n')
+
+
 def add_a_contact(contacts):
     first_name = input("Enter the contact's first name: ")
     last_name = input("Enter the contact's last name: ")
@@ -155,24 +165,17 @@ def print_contact_by_name(contacts):
     contact_to_display = filter_contact(contacts, 'full_name', to_find)[0]
     print(
         f"""
-        First Name: {contact_to_display['first_name']}
-        Last Name:  {contact_to_display['last_name']}
-        E-mail: {contact_to_display['e-mail']}
+        First Name: {contact_to_display.first_name}
+        Last Name:  {contact_to_display.last_name}
+        E-mail: {contact_to_display.email}
         """)
-
-
-# with open('contacts.txt', 'rt') as input_file:
-#     contacts = []
-#     for contact in [line.strip() for line in input_file]:
-#         contacts.append(dict([tuple(i.split(':')) for i in contact.split('|')]))
 
 
 with open('contacts2.txt', 'rt') as input_file:
     contacts = []
     for line in [line.strip() for line in input_file]:
         first_name, last_name, full_name, company, phone, email = line.split('|')
-        contact = Contact(first_name, last_name, full_name, company, phone, email)
-        contacts.append(contact)
+        contacts.append(Contact(first_name, last_name, full_name, company, phone, email))
 
 
 while True:
@@ -184,7 +187,7 @@ while True:
     if selection == '1':
         menu_of_options()
     elif selection == '2':
-        print(contacts)
+        print_all_contacts(contacts)
     elif selection == '3':
         add_a_contact(contacts)
     elif selection == '4':
