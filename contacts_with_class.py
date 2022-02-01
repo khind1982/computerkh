@@ -12,7 +12,7 @@
 # Enable functionality to display a specific contact
 # List first name, last name, e-mail address
 
-import mailbox
+import textwrap
 
 
 class Contact:
@@ -23,6 +23,32 @@ class Contact:
         self.company = company
         self.phone = phone
         self.email = email
+
+    def __str__(self):
+        # Removes leading whitespace
+        return textwrap.dedent(f"""
+                first name: {self.first_name}
+                last name: {self.last_name}
+                full name: {self.full_name}
+                company: {self.company}
+                phone: {self.phone}
+                email: {self.email}
+    """)
+
+    def __contains__(self, value):
+        for var in vars(self):
+            if value.casefold() in getattr(self, var).casefold():
+                return True
+        return False
+
+    def save_format(self):
+        return "|".join([
+                self.first_name,
+                self.last_name,
+                self.full_name,
+                self.company,
+                self.phone,
+                self.email])
 
 
 def menu_of_options():
@@ -44,12 +70,10 @@ def menu_of_options():
 
 def print_all_contacts(contacts):
     """
-    Given the contacts list 
+    Given the contacts list
     print all the contacts as a dictionary"""
     for contact in contacts:
-        for key, value in contact.__dict__.items():
-            print(key + ': ', value)
-        print('\n')
+        print(contact)
 
 
 def add_a_contact(contacts):
@@ -134,26 +158,18 @@ def filter_contact(contacts, field, value):
 
 
 def save_the_contacts(contacts):
-    with open('contacts2.txt', 'wt') as output_file:
+    with open('contacts2_out.txt', 'wt') as output_file:
         for contact in contacts:
-            for key, value in contact.__dict__.items():
-                if key != 'email':
-                    output_file.write(f'{value}|')
-                else:
-                    output_file.write(f'{value}')
-
-            output_file.write('\n')
+            output_file.write(f"{contact.save_format()}\n")
 
 
 def search_contacts(contacts):
     search_term = input("Enter text to search for in contacts: ")
     search_term_found = False
     for contact in contacts:
-        for key, value in contact.__dict__.items():
-            if value.casefold() in search_term.casefold():
-                print(f"\nValue {search_term} found in contact for {contact.full_name}")
-                search_term_found = True
-                break
+        if search_term in contact:
+            print(f"\nValue {search_term} found in contact for {contact.full_name}")
+            search_term_found = True
     if not search_term_found:
         print(f"No value {search_term} in contacts database.")
 
