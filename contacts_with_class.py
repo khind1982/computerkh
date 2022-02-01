@@ -195,8 +195,6 @@ with open('contacts2.txt', 'rt') as input_file:
 
 
 while True:
-    # Where user is required to type words, don't mix case
-    # use numbers for basic options
     menu_of_options()
     selection = input("Enter a number from the menu: ")
 
