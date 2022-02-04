@@ -1,2 +1,5 @@
-Kevin|Hind|Hind, Kevin|ProQuest|(01223) 271259|kevin.hind@clarivate.com
-Dan|Bye|Bye, Dan|pq|123456|db@pq.com
+K|Hind|ProQuest|(01223) 271259|kevin.hind@clarivate.com
+Dan|Bye|pq|123456|db@pq.com
+Jim|Doe|Clarivate|343434|jd@clarivate.com
+Jane|Doe|ExLibris|1010101|jd@exlibris.com
+Jane|Doe|PQ|123456|jd@pq.com

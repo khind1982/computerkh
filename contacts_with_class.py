@@ -16,10 +16,9 @@ import textwrap
 
 
 class Contact:
-    def __init__(self, first_name, last_name, full_name, company, phone, email):
+    def __init__(self, first_name, last_name, company, phone, email):
         self.first_name = first_name
         self.last_name = last_name
-        self.full_name = full_name
         self.company = company
         self.phone = phone
         self.email = email
@@ -29,7 +28,6 @@ class Contact:
         return textwrap.dedent(f"""
                 first name: {self.first_name}
                 last name: {self.last_name}
-                full name: {self.full_name}
                 company: {self.company}
                 phone: {self.phone}
                 email: {self.email}
@@ -45,7 +43,6 @@ class Contact:
         return "|".join([
                 self.first_name,
                 self.last_name,
-                self.full_name,
                 self.company,
                 self.phone,
                 self.email])
@@ -86,7 +83,6 @@ def add_a_contact(contacts):
         Contact(
             first_name,
             last_name,
-            last_name + ', ' + first_name,
             company,
             phone,
             email
@@ -95,22 +91,35 @@ def add_a_contact(contacts):
     return contacts
 
 
+def filter_contact(contacts, field, value):
+    filters = [contact for contact in contacts if getattr(contact, field) == value]
+    while len(filters) > 1:
+        print(f"More than one contact with last name {value} in the database.")
+        filter_field = input(
+            """Enter another search term to filter the search.
+            Choose from: first_name, company, phone, email :
+            """)
+        filter_field_value = input(
+            f"""Enter the value of the {filter_field} you want to search on:
+            """)
+        filters = [contact for contact in filters if getattr(contact, filter_field) == filter_field_value]
+    return filters
+
+
 def delete_contact(contacts):
     to_edit = input(
-            """Enter the name of a contact
-            in the form last name, first_name: """).strip()
+            """Enter the contact's last name: """).strip()
 
-    contact_to_delete = filter_contact(contacts, 'full_name', to_edit)[0]
+    contact_to_delete = filter_contact(contacts, 'last_name', to_edit)[0]
     contacts.remove(contact_to_delete)
     save_the_contacts(contacts)
 
 
 def edit_contact(contacts):
     to_edit = input(
-            """Enter the name of a contact
-            in the form last name, first_name: """).strip()
+            """Enter the contact's last name: """).strip()
 
-    contact_to_edit = filter_contact(contacts, 'full_name', to_edit)[0]
+    contact_to_edit = filter_contact(contacts, 'last_name', to_edit)[0]
 
 
     while True:
@@ -147,14 +156,8 @@ def edit_contact(contacts):
 
     new_value = input("Type replacement text for this field: ")
     setattr(contact_to_edit, field_to_edit, new_value)
-    if field_to_edit in ['first_name', 'last_name']:
-        contact_to_edit.full_name = contact_to_edit.last_name + ', ' + contact_to_edit.first_name
     save_the_contacts(contacts)
     return contacts
-
-
-def filter_contact(contacts, field, value):
-    return [contact for contact in contacts if getattr(contact, field) == value]
 
 
 def save_the_contacts(contacts):
@@ -168,7 +171,7 @@ def search_contacts(contacts):
     search_term_found = False
     for contact in contacts:
         if search_term in contact:
-            print(f"\nValue {search_term} found in contact for {contact.full_name}")
+            print(f"\nValue {search_term} found in contact for {contact.last_name}")
             search_term_found = True
     if not search_term_found:
         print(f"No value {search_term} in contacts database.")
@@ -176,9 +179,8 @@ def search_contacts(contacts):
 
 def print_contact_by_name(contacts):
     to_find = input(
-            """Enter the name of a contact
-            in the form last name, first_name: """).strip()
-    contact_to_display = filter_contact(contacts, 'full_name', to_find)[0]
+            """Enter the contact's last name: """).strip()
+    contact_to_display = filter_contact(contacts, 'last_name', to_find)[0]
     print(
         f"""
         First Name: {contact_to_display.first_name}
@@ -190,8 +192,8 @@ def print_contact_by_name(contacts):
 with open('contacts2.txt', 'rt') as input_file:
     contacts = []
     for line in [line.strip() for line in input_file]:
-        first_name, last_name, full_name, company, phone, email = line.split('|')
-        contacts.append(Contact(first_name, last_name, full_name, company, phone, email))
+        first_name, last_name, company, phone, email = line.split('|')
+        contacts.append(Contact(first_name, last_name, company, phone, email))
 
 
 while True:
