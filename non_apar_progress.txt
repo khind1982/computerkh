@@ -1,0 +1,49 @@
+ d = defaultdict(list)
+     ...: for n, elem in enumerate(data.xpath(".//summary")):
+     ...:     closing_tags = sorted(
+     ...:         [
+     ...:             f"</{e.tag}>"
+     ...:             for e in elem.xpath(".//ancestor::*")
+     ...:             if e.tag not in ["html", "body", "doc", elem.tag]
+     ...:         ],
+     ...:         reverse=True,
+     ...:     )
+     ...:     opening_tags = [
+     ...:         f"<{e.tag}>"
+     ...:         for e in elem.xpath(".//ancestor::*")
+     ...:         if e.tag not in ["html", "body", "doc", elem.tag]
+     ...:     ]
+     ...:     d[n].append(closing_tags)
+     ...:     d[n].append(opening_tags)
+
+for num, summary in enumerate(data.xpath(".//summary")):
+     ...:     if num in d.keys():
+     ...:         existing_text = summary.text
+     ...:         closing_tags = "".join(d[num][0])
+     ...:         opening_tags = "".join(d[num][1])
+     ...:         print(closing_tags)
+     ...:         print(opening_tags)
+     ...:         summary.text = (
+     ...:             f"{closing_tags}<new_summary>{existing_text}</new_summary>{opening_tags}"
+     ...:         )
+     ...:         print(summary.text)
+
+     text = et.tostring(data).decode()
+
+     text = text.replace("&gt;", ">")
+     text = text.replace("&lt;", "<")
+     text = text.replace("<summary>", "")
+     text = text.replace("</summary>", "")
+
+     new_data = et.fromstring(text)
+
+     In [151]: for num, summ in enumerate(new_data.xpath(".//new_summary")):
+     ...:     non_apar_div = et.Element("non_apar_div")
+     ...:     for element in summ.xpath(".//preceding-sibling::*"):
+     ...:         if element.tag != "new_summary":
+     ...:             non_apar_div.append(element)
+     ...:     if num == 0:
+     ...:         doc = summ.xpath(".//ancestor::doc")[0]
+     ...:         doc.append(non_apar_div)
+     ...:     else:
+     ...:         summ.addprevious(non_apar_div)
