@@ -40,13 +40,9 @@ In [75]: for num, summary in enumerate(data.xpath(".//summary")):
      new_data = et.fromstring(newtext)
      
 
-     In [151]: for num, summ in enumerate(new_data.xpath(".//new_summary")):
-     ...:     non_apar_div = et.Element("non_apar_div")
-     ...:     for element in summ.xpath(".//preceding-sibling::*"):
-     ...:         if element.tag != "new_summary":
-     ...:             non_apar_div.append(element)
-     ...:     if num == 0:
-     ...:         doc = summ.xpath(".//ancestor::doc")[0]
-     ...:         doc.append(non_apar_div)
-     ...:     else:
-     ...:         summ.addprevious(non_apar_div)
+# To get the first and last anchor point for the opening and closing tags
+In [12]: summary.xpath(".//ancestor::*")[1].xpath(".//preceding-sibling::*")[0]
+Out[12]: <Element target at 0x7fa5802a52c0>
+
+In [16]: summary.xpath(".//ancestor::*")[1].xpath(".//following-sibling::*")[-3]
+Out[16]: <Element div5 at 0x7fa580290a80>
