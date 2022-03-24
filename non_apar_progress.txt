@@ -16,17 +16,16 @@
      ...:     d[n].append(closing_tags)
      ...:     d[n].append(opening_tags)
 
-for num, summary in enumerate(data.xpath(".//summary")):
-     ...:     if num in d.keys():
-     ...:         existing_text = summary.text
-     ...:         closing_tags = "".join(d[num][0])
-     ...:         opening_tags = "".join(d[num][1])
-     ...:         print(closing_tags)
-     ...:         print(opening_tags)
-     ...:         summary.text = (
-     ...:             f"{closing_tags}<new_summary>{existing_text}</new_summary>{opening_tags}"
-     ...:         )
-     ...:         print(summary.text)
+In [75]: for num, summary in enumerate(data.xpath(".//summary")):
+    ...:     if num in d.keys():
+    ...:         existing_text = summary.text
+    ...:         closing_tags = "".join(d[num][0])
+    ...:         opening_tags = "".join(d[num][1])
+    ...:         print(closing_tags)
+    ...:         print(opening_tags)
+    ...:         summary.text = f"{closing_tags}</nonapar><new_summary>{existing_text}</new_summary><no
+    ...: napar>{opening_tags}"
+    ...:         print(summary.text)
 
      text = et.tostring(data).decode()
 
@@ -35,7 +34,11 @@ for num, summary in enumerate(data.xpath(".//summary")):
      text = text.replace("<summary>", "")
      text = text.replace("</summary>", "")
 
-     new_data = et.fromstring(text)
+     newtext = re.sub(r'booktype="Book Chapter">', 'booktype="Book Chapter"><nonapar>', text)
+     newtext = re.sub(r'<div5 id="Z500061658">', '</nonapar><div5 id="Z500061658">', newtext)
+
+     new_data = et.fromstring(newtext)
+     
 
      In [151]: for num, summ in enumerate(new_data.xpath(".//new_summary")):
      ...:     non_apar_div = et.Element("non_apar_div")
