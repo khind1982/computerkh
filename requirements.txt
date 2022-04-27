@@ -1,0 +1,5 @@
+ipython
+lxml
+pytest
+pymarc
+
