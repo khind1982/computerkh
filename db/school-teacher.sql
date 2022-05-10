@@ -107,3 +107,24 @@ INSERT into qualification(QualificationID, QualificationDescription) VALUES
 SELECT * FROM employee
 WHERE DepartmentID = 1;
 
+/* Question 2 */
+UPDATE qualification
+SET QualificationDescription = 'GCSE English'
+WHERE QualificationID = 2
+
+DELETE FROM qualification
+WHERE QualificationID = 7
+
+UPDATE employee
+SET QualificationID = 2
+WHERE QualificationID = 7
+
+/* Question 3 */
+SELECT DepartmentID, COUNT(DepartmentID) as "Total Staff"
+FROM employee
+GROUP BY DepartmentID
+
+/* Question 4 */
+DELETE FROM employee
+WHERE Surname = 'Tottman' AND Forename = 'Sandro'
+
