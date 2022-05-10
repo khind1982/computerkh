@@ -128,3 +128,10 @@ GROUP BY DepartmentID
 DELETE FROM employee
 WHERE Surname = 'Tottman' AND Forename = 'Sandro'
 
+/* Question 5 */
+SELECT Forename, Surname, QualificationDescription
+FROM employee e
+JOIN qualification q ON q.QualificationID = e.QualificationID
+WHERE e.DepartmentID = 5
+
+/* Question 6 - to be attempted! */
