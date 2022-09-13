@@ -1,0 +1,38 @@
+body {
+    font-size:12px;
+    /* background-color: #ffdead; */
+    font-family:Arial, Verdana, Helvetica, sans-serif;
+    color:black;
+    line-height:1.3px;
+    margin:0;
+}
+
+th {
+    background-color: lightseagreen;
+    font-size:14px;
+    line-height:10px;
+    margin:1px;
+    padding:10px;
+    border:1px solid black;
+}
+
+td {
+    background-color: darkseagreen;
+    font-size:12px;
+    line-height:10px;
+    margin:1px;
+    padding:5px;
+    border:1px solid black;
+}
+
+table {
+    margin:10px;
+}
+
+div#table {
+    text-align:center;
+}
+
+h2 {
+    text-align:center;
+}
