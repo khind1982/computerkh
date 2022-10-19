@@ -9,11 +9,21 @@
 <head>
     <title>Employee Database</title>
     <meta charset=utf-8 />
+    <script type="text/javascript">
+        function revealText() {
+        var findreveal = document.getElementById('reveal');
+        findreveal.outerHTML = "<h2>This text is bigger now that the button has been clicked!</h2>";
+        }
+        </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
 <h2 position="center">Employee data table</h2>
+
+<p id="reveal">This text will get bigger when the button is clicked!</p>
+
+<input type="button" onclick="revealText()" value="Select"></input>
 
 <div id="table">
 <table>
