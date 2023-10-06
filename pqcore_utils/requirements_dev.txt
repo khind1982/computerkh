@@ -1,0 +1,6 @@
+ipython
+pylama
+pytest
+pytest-cov
+pytest-mock
+-r requirements.txt

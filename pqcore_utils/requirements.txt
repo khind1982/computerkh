@@ -1,0 +1,4 @@
+dateparser
+lxml>=4.2.1
+tabulate
+colorama
