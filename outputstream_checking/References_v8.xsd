@@ -1,0 +1,1017 @@
+<!--  edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Paul Kassal (ProQuest)  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="2">
+<!--  References schema         
+	Each file contains the information contained in the references from one referring document/item.        
+	 "ItemWithRef_v2" is the root element to use when indicating the metadata for one document/item and the references within it.
+	 "ExtractedRef_v2" is the root element to use for representing a reference in isolation. 
+	 "StoredRef_v2" is the root element for what will be stored in the citation metadata store. 
+	 
+	 All top level elements have a version number, so that multiple versions of, say, StoredRef can be returned in a result list and it will be clear
+	 which structure each should follow.  The most recent version should be used
+	 wherever possible.
+	 
+	 Nearly all elements allow optional confidence values [0,100] and elementIds that may be referred to in the Annotation element.  elementIds are
+	 intended only to be unique within a reference.	 
+
+	 NOTE: This schema is a superset of the references.xsd used by REFCCR and should be kept up to date with any changes there.
+	 
+	 Revision History:
+	 v2 - 2015-09-23. Added PatentKey (was added on REFCCR side in 2011)
+     v2 - 2010-03-05. Added COSID to ExternalId
+     v2 - 2010-03-04. Added ELibID to ExternalId
+	 v2 - 2009-11-12. Added DataStarID, DialogID, SIRSID, GOID and primary attribute on ExternalId
+	 v2 - 2009-02-18. New external id types for ERIC, PQ Global IDs.  New pub type of "Undetermined".  DegreeDate and SchoolName now optional.  PublisherName optional. 
+	 v2 - 2008-06-26. Added HNPID to hold HNP document Ids.
+	 v2 - 2008-04-09. Added "type" attribute to Author and a few more Misc tags.  Version kept at 2 since this is backward compatible and the changes are for internal use. 
+	 v2 - 2008-03-14. Converted "any" tags to "Misc" to avoid the Unique Particle Attribution problem. See http://www.w3.org/TR/2001/REC-xmlschema-1-20010502/#non-ambig
+	 v1 - 2008-01-14. Orginal version. 
+	  -->
+<xs:element name="ItemWithRef_v2">
+<xs:annotation>
+<xs:documentation> An item with references</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="ReferringItem">
+<xs:annotation>
+<xs:documentation>This is the main, or parent item. For example, this is the metadata of the document itself.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element ref="ExtractedRef_v2"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element ref="ExtractedRef_v2" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="ExtractedRef_v2">
+<xs:annotation>
+<xs:documentation>Contains the extracted metadata for one reference or item. For references in a document, the "order" attribute should be used to indicate the order in which they appear. The "language" attribute can be used to indicate the language of the reference, if other than English.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="ReferenceText" type="xs:string" minOccurs="0">
+<xs:annotation>
+<xs:documentation>The citation exactly as given in the source. In other words, the original text. This element may be missing for seeds, or constructed my concatinating known fields.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="Authors" type="AuthorsType" minOccurs="0"/>
+<xs:element name="ItemTitle" minOccurs="0">
+<xs:annotation>
+<xs:documentation>The title of the work.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:complexContent>
+<xs:extension base="TitleType"/>
+</xs:complexContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Source" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Contains information that refers to the publication where the reference was published. Multiple occurrences indicate sources within sources, for example, a journal article included in an anthology. Source 1 = journal, Source 2 = anthology. The pubType of the source should assist in determining the relationship of multiple sources to the ReferenceItem. </xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="SourceTitle" minOccurs="0">
+<xs:annotation>
+<xs:documentation>The title of the publication, journal, etc.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:complexContent>
+<xs:extension base="TitleType"/>
+</xs:complexContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="SourceAuthors" type="AuthorsType" minOccurs="0">
+<xs:annotation>
+<xs:documentation>Authors of the source, if different than the cited item itself.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="Editor" minOccurs="0" maxOccurs="unbounded">
+<xs:complexType>
+<xs:complexContent>
+<xs:extension base="NameType">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Translator" minOccurs="0" maxOccurs="unbounded">
+<xs:complexType>
+<xs:complexContent>
+<xs:extension base="NameType">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Publisher" minOccurs="0">
+<xs:annotation>
+<xs:documentation>This element will be present only if publisher name or location is known</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="PublisherName" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="PublisherLocation" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="Conference" minOccurs="0">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="Date" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="ConferenceTitle" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Location" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="Edition" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Volume" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Issue" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Section" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Part" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Supplement" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Misc" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Any other metadata that seems important for the item, but is not captured above.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="value" type="xs:string" use="required"/>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+<xs:attribute name="pubType" use="optional">
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Journal_Article"/>
+<xs:enumeration value="Newspaper_Article"/>
+<xs:enumeration value="Article"/>
+<xs:enumeration value="Pamphlet"/>
+<xs:enumeration value="Standards"/>
+<xs:enumeration value="Public_Document"/>
+<xs:enumeration value="Book"/>
+<xs:enumeration value="Book_Article/Chapter"/>
+<xs:enumeration value="Website/Web_Page"/>
+<xs:enumeration value="Dissertation/Paper/Thesis"/>
+<xs:enumeration value="Conference_Report/Paper"/>
+<xs:enumeration value="Email/Mailing_List"/>
+<xs:enumeration value="Online_Group_Posting"/>
+<xs:enumeration value="Online_Source"/>
+<xs:enumeration value="Press_Release"/>
+<xs:enumeration value="Video"/>
+<xs:enumeration value="Television/Radio_Episode"/>
+<xs:enumeration value="Court_Case"/>
+<xs:enumeration value="Map"/>
+<xs:enumeration value="Other"/>
+<xs:enumeration value="Magazine_Article"/>
+<xs:enumeration value="Report"/>
+<xs:enumeration value="Scholarly_Journal_Article"/>
+<xs:enumeration value="Trade_Journal_Article"/>
+<xs:enumeration value="Audio"/>
+<xs:enumeration value="Working_Paper"/>
+<xs:enumeration value="Wire_feed"/>
+<xs:enumeration value="Transcript"/>
+<xs:enumeration value="Patent"/>
+<xs:enumeration value="Abstract"/>
+<xs:enumeration value="Undetermined"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:attribute>
+</xs:complexType>
+</xs:element>
+<xs:element name="PaginationInfo" minOccurs="0">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="Pagination" minOccurs="0">
+<xs:annotation>
+<xs:documentation>For example "3-5,7,11-13"</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="StartPage" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="EndPage" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Length" minOccurs="0">
+<xs:annotation>
+<xs:documentation>For example, "407 pp."</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Misc" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Any other metadata that seems important for the item, but is not captured above.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="value" type="xs:string" use="required"/>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="DegreeInfo" minOccurs="0">
+<xs:annotation>
+<xs:documentation>Information about any degree awarded with the publication of the item. Usually used for dissertations.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="DegreeType" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="DegreeDate" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="SchoolName" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Misc" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Any other metadata that seems important for the item, but is not captured above.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="value" type="xs:string" use="required"/>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="ExternalId" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Identifiers listed here appear in the original text of the reference, or for seed references these may be known from the seeding process. </xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:complexContent>
+<xs:extension base="ExternalIdType">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="PubDate" minOccurs="0">
+<xs:annotation>
+<xs:documentation>Date of publication of the item</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Misc" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Any other metadata that seems important for the item, but is not captured above.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="value" type="xs:string" use="required"/>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+<xs:attribute name="order" type="xs:positiveInteger" use="optional"/>
+<xs:attribute name="language" type="xs:language" use="optional"/>
+<xs:attributeGroup ref="ConfidenceAttributes"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="StoredRef_v2">
+<xs:annotation>
+<xs:documentation>This is the top level element for a stored reference in the citation metadata store</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element ref="ExtractedRef_v2"/>
+<xs:element name="Annotation" minOccurs="0">
+<xs:annotation>
+<xs:documentation>This node contains information that was derived or added after extraction. It is intended for internal use and is not supplied by an extraction vendor.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="MatchedId" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Identifiers listed here are the result of approximately matching the reference text against lists of known documents.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:complexContent>
+<xs:extension base="ExternalIdType">
+<xs:attributeGroup ref="ConfidenceAttributes"/>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Date" minOccurs="0">
+<xs:annotation>
+<xs:documentation>This is the normalized form of the PubDate</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:date">
+<xs:attributeGroup ref="ConfidenceAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Year" minOccurs="0">
+<xs:annotation>
+<xs:documentation>The inferred year for this reference. This may be the year portion of the date or the citation may only specify the year.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:gYear">
+<xs:attributeGroup ref="ConfidenceAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="ElementAnnotation" minOccurs="0" maxOccurs="unbounded">
+<xs:complexType>
+<xs:sequence>
+<xs:any processContents="skip" maxOccurs="unbounded"/>
+</xs:sequence>
+<xs:attribute name="elementId" type="xs:integer" use="required"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="SIS" minOccurs="0">
+<xs:annotation>
+<xs:documentation>Under this tag can be stored any information that is produced and consumed by SIS. It should be ignored by other subsystems.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:any processContents="skip" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="CCR" minOccurs="0">
+<xs:annotation>
+<xs:documentation>Under this tag can be stored any information that is produced and consumed by CCR. It should be ignored by other subsystems.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:any processContents="skip" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="History" minOccurs="0">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="Rev" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>This element is used to track changes to this stored refrence. Every time the reference is changed, another tag should be added here, using the attributes to indicate the datesystem making the change and the date of change. Optionally the version of the system and the type of change chan be indicated.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="date" type="xs:date" use="required"/>
+<xs:attribute name="time" type="xs:time" use="optional"/>
+<xs:attribute name="by" type="xs:string" use="required"/>
+<xs:attribute name="version" type="xs:string" use="optional"/>
+<xs:attribute name="type" type="xs:string" use="optional"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="Seed" minOccurs="0">
+<xs:annotation>
+<xs:documentation>Under this tag can be stored any information specific to seeds.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="PMID" type="xs:string" minOccurs="0">
+<xs:annotation>
+<xs:documentation>For ProQuest seeds, we often know the Print Media ID inherently from the seed. We capture this here as a hint for clustering.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="NumericPubDate" type="xs:string" minOccurs="0">
+<xs:annotation>
+<xs:documentation>The publication date stored in ProQuest is actually a range of dates for some publications, such as quarterly journals. The contents of this field is a space seperated list of numeric publication dates such as "20070401 20070501 20070630".</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="ArticleTypes" minOccurs="0">
+<xs:annotation>
+<xs:documentation>For ProQuest seeds, the article types associated with the document should be placed here. This can serve as a hint for clustering.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="ArticleType" type="xs:string" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="Misc" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Any other metadata that seems important for the item, but is not captured above.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="value" type="xs:string" use="required"/>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="Misc" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Any other metadata that seems important for the item, but is not captured above.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="value" type="xs:string" use="required"/>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+<xs:attribute name="id" type="xs:string" use="required"/>
+<xs:attribute name="master" type="xs:boolean" use="optional" default="false"/>
+</xs:complexType>
+</xs:element>
+<xs:complexType name="TitleType">
+<xs:annotation>
+<xs:documentation> Title Type contains a long title or an abbreviated title. </xs:documentation>
+</xs:annotation>
+<xs:sequence>
+<xs:element name="Title" minOccurs="0">
+<xs:annotation>
+<xs:documentation>This is the title as it appears in the citation.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="SubTitle" minOccurs="0">
+<xs:annotation>
+<xs:documentation>This is the subtitle as it appears in the citation</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Misc" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Any other metadata that seems important for the item, but is not captured above.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="value" type="xs:string" use="required"/>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+<xs:complexType name="NameType">
+<xs:annotation>
+<xs:documentation> Name Type contains all the parts of a person name. </xs:documentation>
+</xs:annotation>
+<xs:sequence>
+<xs:element name="Full">
+<xs:annotation>
+<xs:documentation>The full text of the name as it appears in the reference.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:choice>
+<xs:element name="Institution" minOccurs="0">
+<xs:annotation>
+<xs:documentation>Any corporations or organizations that were authors of this item.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Person" minOccurs="0">
+<xs:annotation>
+<xs:documentation>An author that was a single person</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="Prefix" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="First" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Middle" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Last" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Suffix" minOccurs="0">
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Misc" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Any other metadata that seems important for the item, but is not captured above.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="value" type="xs:string" use="required"/>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:choice>
+<xs:element name="Misc" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Any other metadata that seems important for the item, but is not captured above.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="value" type="xs:string" use="required"/>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ExternalIdType">
+<xs:annotation>
+<xs:documentation>The primary attribute may be set to true when this id is the source for the seeding of this citation. For example, a document seeded from Chadwyck that was originally a Proquest document, would have primary='true" indicated on the element wrapping CHID.</xs:documentation>
+</xs:annotation>
+<xs:choice>
+<xs:element name="ISSN" type="xs:string">
+<xs:annotation>
+<xs:documentation>International Standard Serial Number of a periodical</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="ISBN" type="xs:string">
+<xs:annotation>
+<xs:documentation>International Standard Book Number, a unique commercial book number identifier</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="DOI" type="xs:string">
+<xs:annotation>
+<xs:documentation>Digital Object identifier, a standard for persistently identify a piece of intellectual property on a digital network and associating it with related data in a structured, extensible way.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="URL" type="xs:string">
+<xs:annotation>
+<xs:documentation>A web address</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="SICI" type="xs:string">
+<xs:annotation>
+<xs:documentation>A variable length code which can be used to identify both print and electronic serial publications.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="PQID" type="xs:string">
+<xs:annotation>
+<xs:documentation>Proquest document identifier (classic).</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="HNPID" type="xs:string">
+<xs:annotation>
+<xs:documentation>Proquest document identifier (historical newspapers)</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="DissPubNum" type="xs:string">
+<xs:annotation>
+<xs:documentation>A UMI/ProQuest dissertation publication number.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="CHID" type="xs:string">
+<xs:annotation>
+<xs:documentation>A Chadwyck-Healey identifier</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="CSAID" type="xs:string">
+<xs:annotation>
+<xs:documentation>A CSA identifier</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="ERICID" type="xs:string">
+<xs:annotation>
+<xs:documentation>Identifier for the Education Resources Information Center </xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="PQGOID" type="xs:string">
+<xs:annotation>
+<xs:documentation>Proquest Global Identifier</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="DataStarID" type="xs:string">
+<xs:annotation>
+<xs:documentation>DataStar Identifier</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="DialogID" type="xs:string">
+<xs:annotation>
+<xs:documentation>Dialog Identifier</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="SIRSID" type="xs:string">
+<xs:annotation>
+<xs:documentation>Student publishing ID from SIRS, SKS, Pegasus, Reasearcher II</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="ELibID" type="xs:string">
+<xs:annotation>
+<xs:documentation>Student publishing ID from Elibrary</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="COSID" type="xs:string">
+<xs:annotation>
+<xs:documentation>Community of Scholars ID</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="GOID">
+<xs:annotation>
+<xs:documentation>The ultimate, final, and true Global Identifier (as of Vega).</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attribute name="scinfo" type="xs:string" use="optional"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="PatentKey" type="xs:string">
+<xs:annotation>
+<xs:documentation>This is a combination of Country, Year, Normalized Patent number and Kind code seperated by slashes. These four pieces of metadata uniquely identify a patent. </xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="Misc">
+<xs:annotation>
+<xs:documentation>Other locator/identifier information that does not fall into one of the other specified categories.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="value" type="xs:string" use="required"/>
+</xs:complexType>
+</xs:element>
+</xs:choice>
+<xs:attribute name="primary" type="xs:boolean" use="optional"/>
+</xs:complexType>
+<xs:complexType name="AuthorsType">
+<xs:sequence>
+<xs:element name="AuthorPortion" minOccurs="0">
+<xs:annotation>
+<xs:documentation>This is the portion of the ReferenceText that contains all the authors. This will be how authors may be stored for some seeds or may be provided by the vendor if separating the authors is ambiguous.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="Author" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>This element had be used to hold individual authors in the order they appear in the reference. The "inferred" attribute can be set to true to indicate that the author name did not actually appear in the reference and was instead replaced with some kind of underbars or ditto mark. In this case the name listed in this element is the actual name inferred from the other references.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:complexContent>
+<xs:extension base="NameType">
+<xs:attributeGroup ref="ExtractedAttributes"/>
+<xs:attribute name="inferred" type="xs:boolean" use="optional" default="false"/>
+<xs:attribute name="type" type="xs:string" use="optional"/>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+</xs:element>
+<xs:element name="EtAl" type="xs:boolean" default="0" minOccurs="0">
+<xs:annotation>
+<xs:documentation>Set this element to true to indicate that the author list ends with "Et. Al." meaning that there are other authors not included here.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="Misc" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>Any other metadata that seems important for the item, but is not captured above.</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="value" type="xs:string" use="required"/>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+<xs:attributeGroup ref="ExtractedAttributes"/>
+</xs:complexType>
+<xs:attributeGroup name="ConfidenceAttributes">
+<xs:annotation>
+<xs:documentation>Any attributes associated with assigning confidence to an element. Allows the definition of the legal values for confidence in one place.</xs:documentation>
+</xs:annotation>
+<xs:attribute name="confidence" use="optional">
+<xs:simpleType>
+<xs:restriction base="xs:byte">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="100"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:attribute>
+</xs:attributeGroup>
+<xs:attributeGroup name="ExtractedAttributes">
+<xs:annotation>
+<xs:documentation>All elements that are extracted from the raw text of the citation will have these attributes. The confidence attribute is used to indicate the certainty of the parse, ranging from 1.0 which indicates maximum certainty of correctness to 0 indicating minimal certainty. The confidence may be supplied by the vendor, an automated extraction process, or possibly post processing. If this attribute is missing, the data is generally treated as having been assigned a confidence of 1.0. The elemendId attribute is generally not supplied the vendor. It may be added during later processing of the citation if needed. it's purpose is to provide a way to refer to this specific element from within the Annotation element. </xs:documentation>
+</xs:annotation>
+<xs:attribute name="elementId" type="xs:integer" use="optional"/>
+<xs:attributeGroup ref="ConfidenceAttributes"/>
+</xs:attributeGroup>
+<!-- 
+		After this point are XML elements used in the Middleware service
+	 -->
+<xs:element name="References">
+<xs:complexType>
+<xs:sequence>
+<xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+<xs:attribute name="CGMCRCOUNT" type="xs:integer" use="optional"/>
+<xs:attribute name="rowsPreAppended" type="xs:integer" use="optional"/>
+<xs:attribute name="CGMCRTM" type="xs:integer" use="optional"/>
+<xs:attribute name="RefCount" type="xs:integer" use="optional"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="reference">
+<xs:complexType mixed="true">
+<xs:choice>
+<xs:element ref="Failure"/>
+<xs:element ref="StoredRef_v2"/>
+</xs:choice>
+<xs:attribute name="sortKey" type="xs:integer" use="optional"/>
+<xs:attribute name="inCommon" type="xs:integer" use="optional"/>
+<xs:attribute name="score" type="xs:float" use="optional"/>
+<xs:attribute name="CMRSCOUNT" type="xs:integer" use="optional"/>
+<xs:attribute name="master" type="xs:integer" use="optional"/>
+<xs:attribute name="CMRSTM" type="xs:integer" use="optional"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="CitedBy">
+<xs:annotation>
+<xs:documentation>which masters cited the specified master</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="citation" type="xs:integer" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>master ids</xs:documentation>
+</xs:annotation>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="SharedBy">
+<xs:annotation>
+<xs:documentation>masters shared by the specified master</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="citation" type="xs:integer" minOccurs="0" maxOccurs="unbounded">
+<xs:annotation>
+<xs:documentation>master ids</xs:documentation>
+</xs:annotation>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="Ids">
+<xs:annotation>
+<xs:documentation>list of masters</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element ref="Id" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="Id">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="Type" type="xs:string">
+<xs:annotation>
+<xs:documentation>type</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="Value" type="xs:string">
+<xs:annotation>
+<xs:documentation>value</xs:documentation>
+</xs:annotation>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="Results">
+<xs:annotation>
+<xs:documentation>list of Results displayed for each Id</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element ref="Result" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="Result">
+<xs:annotation>
+<xs:documentation>list of Results displayed for each Id</xs:documentation>
+</xs:annotation>
+<xs:complexType>
+<xs:sequence>
+<xs:element name="ErrorMessage" type="xs:string" minOccurs="0"/>
+<xs:element name="MasterId" type="xs:integer" minOccurs="0"/>
+<xs:element name="LocatorType" type="xs:string"/>
+<xs:element name="LocatorValue" type="xs:string"/>
+<xs:element name="SharedBy" type="xs:integer"/>
+<xs:element name="CitedIn" type="xs:integer"/>
+<xs:element name="CitedBy" type="xs:integer"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="Failure">
+<xs:complexType mixed="true"/>
+</xs:element>
+</xs:schema>
