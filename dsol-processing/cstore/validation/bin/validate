@@ -1,0 +1,245 @@
+#!/usr/local/bin/ruby -w
+# -*- mode: ruby -*-
+
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'xml'
+require 'gserver'
+require 'active_support/inflector'
+require 'base64'
+
+class ValidationServer < GServer
+  attr_reader :started_at, :schemata, :docs_seen, :invalid_count
+
+  def initialize(port)
+    super(port)
+    @schemata = {}
+    @docs_seen = 0
+    @invalid_count = 0
+    @started_at = Time.now
+    $stderr.puts "Ready..." if $debug
+  end
+
+  def serve(client)
+    client.each("CHVPayloadEnd") do |payload|
+      @payload = PayLoad.new(payload.split("\n").map {|line| line.strip unless line =~ /CHVPayloadEnd/}.join("\n"))
+      Validator.new(@payload, schema).validate do |r|
+        @invalid_count += 1 if r =~ /^Invalid/
+        client.puts r
+      end
+      client.close
+      @docs_seen += 1
+      GC.start if @docs_seen.modulo(10_000) == 0
+      puts "Seen #{@docs_seen} docs" if $debug
+      client.close
+    end
+  end
+
+  private
+  def schema
+    schema_id = "#{@payload.schema_name}-#{@payload.schema_version}"
+    unless @schemata.has_key?(schema_id)
+      @schemata[schema_id] = Schema.new(@payload.schema_name, @payload.schema_version)
+    end
+    @schemata[schema_id]
+  end
+end
+
+class Schema
+  attr_reader :name, :version, :xmlschema, :seen, :failures, :loaded_at
+
+  SCHEMA_PATH = File.join(File::SEPARATOR, 'packages', 'dsol', 'libdata', 'mstar', 'ingestschemas')
+
+  def initialize(name, version)
+    @name = name
+    @version = version
+    @xmlschema = XML::Schema.document(XML::Document.file(File.join(SCHEMA_PATH, @version, @name)))
+    @loaded_at = Time.now.strftime("%H:%M:%S %Y-%m-%d")
+    @seen = 0
+    @failures = 0
+  end
+
+  def id
+    "#{@name}-#{@version}"
+  end  
+  def increment_seen
+    @seen += 1
+  end
+  def increment_failures
+    @failures += 1
+  end 
+  def reset_counters
+    @seen = 0
+    @failures = 0
+  end
+end
+
+class Validator
+  def initialize(payload, schema)
+    @schema = schema
+    @data = XML::Document.string(payload.decoded_data)
+  end
+
+  def validate
+    @schema.increment_seen
+    @data.validate_schema(@schema.xmlschema) do |msg, flag|
+      puts "#{flag}: #{msg}" if $debug
+      @schema.increment_failures
+      yield "Invalid: #{msg}"
+      break 
+    end
+    yield "Valid"
+  end
+end
+
+class PayLoad
+  attr_accessor :schema_name, :schema_version, :encoded_data
+
+  def initialize(data)
+    parse_payload(data)
+  end
+
+  def decoded_data
+    Base64.decode64(@encoded_data)
+  end
+
+  private
+  def parse_payload(data)
+    data.lines("\n") do |line|
+      %w(CHVSchemaName CHVSchemaVersion CHVEncodedData).each do |hdr|
+        if line.match hdr
+          attr_name, attr_value = line.split(': ')
+          send("#{PayLoad.hdr_to_attr(attr_name)}=", attr_value.chomp)
+        end
+      end
+      unless line.match(/^CHV[a-zA-Z]*:/)
+        @encoded_data << line
+      end
+    end
+  end
+
+  def self.hdr_to_attr(string)
+    ActiveSupport::Inflector.underscore(string.sub('CHV', ''))
+  end
+end
+
+class ValidationServerMonitor < GServer
+  def initialize(port, vserver)
+    super(port)
+    @vserver = vserver
+  end
+
+  def serve(client)
+    cmd, arg = client.gets.split
+    cmd = case cmd
+          when /^STATUS$/, /^STOP$/, /^HELP$/ then client.puts send(cmd.downcase)
+          when /^RESET$/, /^UNLOAD$/  then client.puts send(cmd.downcase, arg)
+          else
+            client.puts "Unknown command - #{cmd}"
+          end
+  end
+
+  private
+  def help
+    return <<-EOF
+      XML Validation Server monitor interface
+      Valid commands:
+
+      status - returns details about uptime, loaded schemas
+               and number of documents processed.
+      reset  - resets per-schema counters for the named schema,
+               or for all schemas if none is named.
+      unload - unloads the named schema.
+      stop   - stop the validation server.
+      help   - this message.
+      EOF
+  end
+
+  def status
+    ret  = "#{sig}"
+    ret << "#{running_since}"
+    ret << "#{doc_count}"
+    ret << "#{schema_status}"
+  end
+
+  def sig
+    "CH XML Validation Server status monitor\n"
+  end
+  def running_since
+    "Running since #{@vserver.started_at} (Uptime #{uptime})\n"   ##{(Time.now - @vserver.started_at).to_i})\n"
+  end
+  def doc_count
+    "Processed #{@vserver.docs_seen} documents (#{@vserver.invalid_count} validation errors)\n"
+  end
+  def schema_status
+    ret = "Loaded schema stats:\n"
+    @vserver.schemata.each_value do |schema|
+      ret << "#{schema.name}, v #{schema.version}:\t#{schema.seen} docs, #{schema.failures} errors (#{schema.loaded_at})\n"
+    end
+    ret
+  end
+
+  def uptime
+    time = (Time.now - @vserver.started_at).to_i
+    sec  = time % 60
+    time = (time - sec) / 60
+    min  = time % 60
+    time = (time - min) / 60
+    hour = time % 24
+    time = (time - hour) / 24
+    days = time % 7
+    if days > 0
+      ret = "#{days} days, "
+    end
+    ret = "#{ret}%02d:%02d:%02d" % [hour, min, sec]
+  end
+
+  def reset(schema)
+    if schema == "ALL" or schema == nil
+      @vserver.schemata.each_value {|s| s.reset_counters}
+      "Per-schema counters reset"
+    elsif @vserver.schemata.has_key?(schema)
+      @vserver.schemata[schema].reset_counters
+      "Schema counters reset for #{schema}"
+    else
+      "No such schema loaded - #{schema}"
+    end
+  end
+
+  def unload(schema)
+    if @vserver.schemata.has_key?(schema)
+      @vserver.schemata.delete(schema)
+      "Unloaded #{schema}"
+    else
+      "Schema #{schema} not loaded. Doing nothing."
+    end
+  end
+
+  def stop
+    @vserver.stop
+    "Server shutting down..."
+  end
+
+  def method_missing(meth)
+    "Unknown method - #{meth}"
+  end
+end
+
+if ARGV[0] == "-d" or ARGV[0] == "--debug"
+  $debug = true
+else
+  $debug = false
+end
+
+unless $debug
+  pid = fork
+  exit if pid
+end
+
+vserver = ValidationServer.new(12345)
+#vserver.audit = $debug
+
+vsrvmon = ValidationServerMonitor.new(12346, vserver)
+vsrvmon.start
+
+vserver.start
+vserver.join

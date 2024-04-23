@@ -1,0 +1,10 @@
+#!/usr/local/bin/python2.6
+import site
+site.addsitedir('/packages/dsol/lib/python2.6/site-packages')
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from summon_migration.annual_register import *
+
+if __name__ == '__main__':
+    process_annual_register()

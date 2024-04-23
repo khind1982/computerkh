@@ -1,0 +1,29 @@
+# -*- mode: shell-script -*-
+#
+# A central bashrc file for Content Development
+
+DSOLETC=/packages/dsol/etc
+
+if [ -f ${DSOLETC}/bash_prompt.subr ]
+then
+    . ${DSOLETC}/bash_prompt.subr
+fi
+
+# Define some useful command aliases.
+# Users can override these and/or define their own in their .bashrc.
+
+if [ -f ${DSOLETC}/import_defs.dsol ]
+then
+    . ${DSOLETC}/import_defs.dsol
+fi
+unset DSOLETC
+
+# If the current user is a member of the dsol group, read function
+# definitions from /packages/dsol/etc/bash_subr.dsol
+if (grep dsol <(id -a) 2>&1 > /dev/null) 
+then
+    if [ -f /packages/dsol/etc/bash_subr.dsol ]
+    then
+        . /packages/dsol/etc/bash_subr.dsol
+    fi
+fi

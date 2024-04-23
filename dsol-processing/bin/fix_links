@@ -1,0 +1,11 @@
+#!/usr/local/bin/python2.5
+
+
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from  abell.abellinks import *
+
+if __name__ == '__main__':
+    a=abell()
+    a.fix_links(sys.argv[1:])

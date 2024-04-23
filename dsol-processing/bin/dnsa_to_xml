@@ -1,0 +1,10 @@
+#!/usr/local/bin/python2.5
+
+
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from  dnsa.dnsa_to_xml import *
+
+if __name__ == '__main__':
+    convert_dnsa()

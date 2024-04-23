@@ -1,0 +1,139 @@
+# -*- mode: shell-script -*-
+#
+# DSol managed bash_profile.
+
+# As we usually start bash by calling exec from a csh shell, we need
+# to set SHELL to the right value, or screen and others will continue
+# to use tcsh.
+
+test "$SHELL" = "/bin/bash" || export SHELL=/bin/bash
+
+# Set a sane path. Those who need to can append to it in their .bashrc
+
+# If logging in to mfgsun[123]0[012], set an appropriate path to find mysql and python 3
+case $(hostname) in
+	mfgsun[123]0[0123]*)
+		export PATH=/packages/dsol/local/bin:/packages/dsol/s11-test/python3.8/bin:/packages/dsol/s11-test/python2.7/bin:/usr/mysql/5.7/bin:/packages/dsol/opt/bin:/packages/dsol/bin:/packages/dsol/platform/bin:/usr/ccs/bin:/usr/local/bin:/usr/bin:/bin:/usr/gnu/bin
+		;;
+	*)
+		export PATH=/packages/dsol/opt/bin:/packages/dsol/bin:/packages/dsol/platform/bin:/dc/misc/python:/usr/ucb:/usr/local/mysql/bin:/usr/local/imagemagick/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/gnu/bin:/usr/sfw/bin:/opt/sfw/bin
+		;;
+esac
+
+# Turn on the checkwinsize shell option to help correct the display
+# when resizing terminal windows
+shopt -s checkwinsize
+
+# Read some function definitions to help set up the prompt.
+. /packages/dsol/etc/bash_prompt.subr
+
+# Set a nice PS1 prompt, so users know where they are, and on what machine.
+# It looks like this: [user@host:/path]$
+# It can be overridden in users' own .bashrc files if they have a preferred
+# format.
+
+export PS1="$(__titlebar)[${BLUE}\u${DEFAULT}@${GREEN}\h${DEFAULT}:${RED}\w${DEFAULT}]\n${WHITE}--->${DEFAULT}\\$ "
+
+PS2='> '
+PS4='+ '
+
+
+# If the current user is a member of the DSOL group, add some other stuff
+# to the PATH
+if (grep dsol <(id -a) 2>&1 > /dev/null) 
+then
+    case $(uname -r) in
+        5.10)
+            export PATH=/packages/dsol/platform/bin:/usr/ccs/bin:$PATH
+            ;;
+	*)
+            ;;
+    esac
+
+    if [ -f /packages/dsol/etc/bash_subr.dsol ]
+    then
+        . /packages/dsol/etc/bash_subr.dsol
+    fi
+
+    # .bash_dsol_rc.conf - set APPVERSIONS to pick up particular
+    # versions of software under /usr/local/versions
+    # First, pick up the standard file in /packages/dsol
+    . /packages/dsol/etc/bash_dsol_rc.conf
+    #APPVERSIONS=
+    if [ -f ${HOME}/.bash_dsol_rc.conf ]
+    then
+        . ${HOME}/.bash_dsol_rc.conf
+    fi
+
+    ver_path='/usr/local/versions'
+    for app in ${APPVERSIONS}
+    do
+        if [ -d "${ver_path}/${app}" ]
+        then
+            PATH="${ver_path}/${app}/bin:$PATH"
+        fi
+        case $app in
+            gcc*)
+                export LDFLAGS="-L/usr/ccs/lib -L${ver_path}/${app}/lib -L/packages/dsol/opt/lib -L/usr/local/gnu/lib -Wl,-rpath /usr/ccs/lib:${ver_path}/${app}/lib:/packages/dsol/opt/lib:/usr/local/gnu/lib"
+                #export LD_LIBRARY_PATH="${ver_path}/${app}/lib"
+                ;;
+            *) true
+                ;;
+        esac
+    done
+
+    #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/packages/dsol/opt/lib
+    # export PATH="/packages/dsol/opt/bin:${PATH}"
+
+    # Don't choke if the user doesn't have rbenv installed
+    if [ -d "${HOME}/.rbenv" ]
+    then        
+        export PATH="${HOME}/.rbenv/bin:/opt/Node/bin:${PATH}"
+        eval "$(rbenv init -)"
+        
+        # Now set up the prompt to display ruby version and current TTY
+        export PS1="$(__titlebar)[${BLUE}\u${DEFAULT}@${GREEN}\h${DEFAULT}:${RED}\w${DEFAULT}]\n${WHITE}(\!, \$?) [\$(__cur_tty)]\$(__rbenv_ps1)\n[${GREEN}\d \t${DEFAULT}]--->\\$ " 
+    fi
+fi
+
+# For those power users out there, set CDPATH as well.
+# This will do no harm to those who don't know how to use it.
+export CDPATH=".:~:/usr:/dc"
+
+# Don't save duplicate entries in the HISTFILE (this effectively makes
+# the history buffer longer - it will only record one instance of each
+# unique command invocation)
+export HISTCONTROL="erasedups:ignoredups"
+
+# Use a nice pager. less(1) is so much more than more(1).
+export PAGER="less"
+
+# Tell top(1) to refresh every second and display 50 processes
+export TOP="-s 1 50"
+
+# Set a reasonable umask
+umask 002   # Files created will have default permissions of 0775
+
+# Unset stty's stop option. C-S will now work in bash to search
+# forward in the command history
+stty stop ^@
+
+# Make sure we pick up any global aliases and functions by calling the
+# import_defs.dsol file
+
+DSOLETC=/packages/dsol/etc
+
+if [ -f ${DSOLETC}/import_defs.dsol ]
+then
+    . ${DSOLETC}/import_defs.dsol
+fi
+unset DSOLETC
+
+# Set the LANG variable to en_GB.UTF-8 where it's available, or en_US.UTF-8
+# otherwise
+if (locale -a | grep en_GB.UTF-8 2>&1 > /dev/null); then
+    LANG="en_GB.UTF-8"
+else
+    LANG="en_US.UTF-8"
+fi
+export LANG

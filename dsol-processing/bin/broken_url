@@ -1,0 +1,10 @@
+#!/usr/local/bin/python2.5
+
+
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from  policyfile.popurl import *
+
+if __name__ == '__main__':
+    broken_url(sys.argv[1],sys.argv[2])

@@ -1,0 +1,22 @@
+<comcitn>#slurp
+<TY>CHAP</TY>#slurp
+<AU>$author_attribution_set[0].namefromdata</AU>#slurp
+<TI>$title</TI>#slurp
+#if len($author_attribution_set) > 1
+#for $author in $author_attribution_set[1:]
+<A2>$author.namefromdata</A2>#slurp
+#end for
+#end if
+<T2>$volume_set[0].title</T2>#slurp
+<CY>$volume_set[0].city</CY>#slurp
+<PBL>$volume_set[0].publisher</PBL>#slurp
+<Y2>$volume_set[0].filepubdate</Y2>#slurp
+<Y1>$volume_set[0].pubdate.replace('[', '').replace(']', '')</Y1>#slurp
+<SP>$startpage</SP>#slurp
+<SN>$volume_set[0].ISBN</SN>#slurp
+<T3>Literature Online</T3>#slurp
+<UR>$idref</UR>#slurp
+<N1a>$volume_set[0].excludere.sub('', $volume_set[0].notes)</N1a>#slurp
+<N1b>$volume_set[0].filecity, $volume_set[0].filepublisher, $volume_set[0].filepubdate</N1b>#slurp
+<N1c>$volume_set[0].copyright</N1c>#slurp
+</comcitn>#slurp

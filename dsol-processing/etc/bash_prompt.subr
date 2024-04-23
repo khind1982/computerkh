@@ -1,0 +1,50 @@
+# -*- mode: shell-script -*-
+
+BLUE="\[\033[36m\]"
+DEFAULT="\[\033[0;00m\]"
+WHITE="\[\033[0;37m\]"
+RED="\[\033[1;31m\]"
+GREEN="\[\033[1;32m\]"
+
+__titlebar () {
+    case $TERM in
+        xterm*)
+            printf '\[\033]0;\u@\h:\w\007\]'
+            ;;
+        *) ;;
+    esac
+}
+
+
+# Show the current TTY and screen window, if running under screen.
+__cur_tty () {
+    local TTY=$(temp=$(tty); echo ${temp:5})
+    if [ "x${WINDOW}" != "x" ]
+    then
+        TTY="${TTY}:${WINDOW}"
+    fi
+    printf $TTY
+}
+
+# A function to set the current ruby version
+__rbenv_ps1 () {
+    if [ -d ~/.rbenv ]
+    then
+        local rbenv_ruby_version=$(__rbenv_ruby_ver)
+        printf " (\033[;31mRuby: ${rbenv_ruby_version}\033[0;00m)"
+    fi
+}
+
+__rbenv_ruby_ver () {
+    local rb_version=$(rbenv version | sed -e 's! .*!!')
+    if [ $rb_version = "system" ]                
+    then
+        local sysfile=~/.rbenv_system_ruby~
+        if [ ! -f ${sysfile} ]
+        then
+            ruby -v | awk '{print $2}' > ${sysfile}
+        fi
+        rb_version="system ($(cat ${sysfile}))"
+    fi
+    echo $rb_version
+}

@@ -1,0 +1,9 @@
+#!/usr/local/bin/python2.6
+# -*- mode: python -*-
+
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from abell.matchCitation import matchFTCitation
+
+matchFTCitation('/dc/elp/lionref/data/master/ab_target.txt', sys.argv[1], None)

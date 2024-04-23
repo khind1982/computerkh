@@ -1,0 +1,11 @@
+AR|Arabic
+DE|German
+EN|English
+ES|Spanish
+FR|French
+HU|Hungarian
+IT|Italian
+NL|Dutch
+PL|Polish
+RO|Romanian
+RU|Russian

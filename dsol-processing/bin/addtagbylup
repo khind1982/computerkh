@@ -1,0 +1,15 @@
+#!/usr/local/bin/python2.6
+# -*- mode: python -*-
+
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from abell.processAbell import addtagbylup
+
+if sys.argv[1]:
+    objectFile = sys.argv[1]
+else:
+    print "No file name given!"
+    exit(1)
+
+addtagbylup(objectFile, '/dc/elp/lookups/dururl.lup')

@@ -1,0 +1,16 @@
+#!/usr/local/bin/python2.5
+# -*- mode: python -*-
+
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+if len(sys.argv) == 1:
+    sys.stderr.write('NO FILES PROVIDED\n')
+    sys.stderr.write('usage:\n')
+    sys.stderr.write('mockToC filenames.*\n')
+    sys.exit(1)
+
+from abell.mockToC import *
+mockup(sys.argv[1:])
+
+

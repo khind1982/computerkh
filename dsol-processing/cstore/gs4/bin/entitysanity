@@ -1,0 +1,23 @@
+#!/usr/local/bin/python2.6
+# -*- mode: python -*-
+
+''' take a file name on stdin, apply
+commonUtils.textUtils.cleanAndEncode() to that file, and report any
+errors. '''
+
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib'))
+sys.path.append('../lib')
+
+import commonUtils.textUtils as tu
+
+if __name__ == '__main__':
+    for file in sys.argv[1:]:
+        with open(file) as infile:
+            for lineno, line in enumerate(infile.readlines()):
+                try:
+                    tu.cleanAndEncode(line)
+                except tu.EntRefError as e:
+                    print >> sys.stderr, ("%s, line %s in %s" % (e, lineno, file))
+            

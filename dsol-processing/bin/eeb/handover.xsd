@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="rec">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="itemid" />
+                <xs:element ref="subscription" />
+                <xs:element ref="itemimagefiles" />
+                <!-- volumeimagefiles optional -->
+                <xs:element ref="volumeimagefiles" minOccurs="0"/>
+                <xs:element ref="rec_search" />
+                <xs:element ref="linksec"  minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="itemid" type="xs:string"/>
+
+	<xs:element name="subscription">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="unit"/>
+				<xs:element ref="country"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="unit" type="xs:string"/>
+	<xs:element name="country" type="xs:string"/>
+
+	<xs:element name="itemimagefiles">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="itemimage" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="itemimage">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="itemimagefile1"/>
+				<xs:element ref="order"/>
+				<xs:element ref="imagenumber"/>
+                <xs:element ref="colour"/>
+                <xs:element ref="pagetype"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="itemimagefile1" type="xs:string"/>
+	<xs:element name="order" type="xs:integer"/>
+	<xs:element name="imagenumber"  type="xs:integer"/>
+    <xs:element name="colour">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="colour"/>
+                <xs:enumeration value="monochrome"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+	<xs:element name="pagetype" type="xs:string"/>
+
+	<xs:element name="volumeimagefiles">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="volumeimage" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="volumeimage">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="volumeimagefile"/>
+				<xs:element ref="order"/>
+				<xs:element ref="imagenumber"/>
+                <xs:element ref="colour"/>
+                <xs:element ref="pagetype"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="volumeimagefile" type="xs:string"/>
+
+    <xs:element name="rec_search">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="pqid" />
+                <xs:element ref="title" />
+				<xs:element ref="alt_title" />
+                <xs:element ref="author_main" />
+                <xs:element ref="author_other"  minOccurs="0"/>
+				<xs:element ref="startdate" />
+				<xs:element ref="enddate" />
+				<xs:element ref="displaydate" />
+                <xs:element ref="imprint" />
+				<xs:element ref="place_of_publication" />
+				<xs:element ref="country_of_publication" />
+				<xs:element ref="publisher_printer" />
+				<xs:element ref="size" />
+                <xs:element ref="pagination" />
+                <xs:element ref="shelfmark" />
+                <xs:element ref="source_library" />
+                <xs:element ref="source_collection" />
+                <xs:element ref="subject" />
+                <xs:element ref="language" />
+                <xs:element ref="illustrations" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+	<xs:element name="pqid" type="xs:string"/>
+	<xs:element name="title" type="xs:string"/>
+	<xs:element name="alt_title" type="xs:string"/>
+	<xs:element name="startdate" type="xs:string"/>
+	<xs:element name="enddate" type="xs:string"/>
+	<xs:element name="displaydate" type="xs:string"/>
+	<xs:element name="imprint" type="xs:string"/>
+	<xs:element name="place_of_publication" type="xs:string"/>
+	<xs:element name="country_of_publication" type="xs:string"/>
+	<xs:element name="publisher_printer" type="xs:string"/>
+	<xs:element name="size" type="xs:string"/>
+	<xs:element name="pagination" type="xs:string"/>
+	<xs:element name="shelfmark" type="xs:string"/>
+	<xs:element name="source_library" type="xs:string"/>
+	<xs:element name="source_collection" type="xs:string"/>
+	<xs:element name="subject" type="xs:string"/>
+	<xs:element name="language" type="xs:string"/>
+
+    <xs:element name="author_main">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="author_name" />
+                <xs:element ref="author_corrected" />
+                <xs:element ref="author_uninverted" />
+                <xs:element ref="lionid"  minOccurs="0" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="author_name" type="xs:string" />
+    <xs:element name="author_corrected" type="xs:string" />
+    <xs:element name="author_uninverted" type="xs:string" />
+    <xs:element name="lionid" type="xs:string" />
+
+
+    <xs:element name="author_other">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="author_name" />
+                <xs:element ref="author_corrected" />
+                <xs:element ref="author_uninverted" />
+                <xs:element ref="lionid"  minOccurs="0" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="illustrations">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="illustration" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="illustration" type="xs:string" />
+
+    <xs:element name="linksec">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="link" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="link">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="linktitle" />
+                <xs:element ref="linkid" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="linktitle" type="xs:string" />
+    <xs:element name="linkid" type="xs:string" />
+
+</xs:schema>

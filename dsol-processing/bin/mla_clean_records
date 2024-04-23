@@ -1,0 +1,25 @@
+#!/usr/local/bin/python2.6
+# -*- mode: python -*-
+
+import sys, os, re, shutil
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+try:
+    infile = sys.argv[1]
+except IndexError:
+    sys.stderr.write("No file name to work with!\n")
+    exit(1)
+
+backup = infile + '.bak'
+shutil.copyfile(infile, backup)
+
+with open(backup, 'r') as inf:
+    with open(infile, 'w') as outf:
+        for line in inf:
+            line = re.sub(r'<(inc|esp|sit)[^ ]', r'<\1 ', line)
+            line = re.sub(r'--[A-Z]{3} (--[A-Z]{3} )', r'\1', line)
+            line = re.sub(r'--[A-Z]{3} \|', r'|', line)
+            line = re.sub(r'--[A-Z]{3} --NEW(--[A-Z]{3} )', r'\1', line)
+            line = re.sub(r'\|SIC_([^|]*)<([^|]*)>([^|]*)\|', r'|SIC_\g<1>\g<2>\g<3>|', line)
+            outf.write(line)
+

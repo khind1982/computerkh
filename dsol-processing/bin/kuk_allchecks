@@ -1,0 +1,54 @@
+#!/usr/bin/ksh
+
+# allchecks:	Korn shell script to run all Unix validation routines at once. 
+
+if [[ $1 = ? ]];then 
+ 
+	echo "\nallchecks: runs validation routines chrcheck, gen_sgml, gen_ent and nsgmls\n"
+	echo "in sequence on input file.  Use from any folder.  Requires:\n"
+	echo "\tfile kuk3.dtd in your home folder\n"
+	echo "\tfile entity.lut in /dc/know/uk2/control/utils\n"
+	echo "\tpath set to the above routines in your profile\n\n"
+	echo "Usage: allchecks filename\n\n" 
+ 
+elif [[ ! -e $1 ]]; then 
+ 
+	echo "\nPlease enter a valid filename.\n\nUsage: allchecks filename\nFor help type: valid ?\n\n" 
+ 
+elif [[ ! -e /dc/know/uk2/control/utils/entity.lut ]]; then
+
+	echo "\n entity.lut not found in folder:\n/dc/know/uk2/control/utils/\n\n"
+
+elif [[ ! -e ~/kuk3.dtd ]]; then
+ 
+	cp /dc/know/uk2/control/utils/kuk3.dtd ~/
+	echo "file kuk3.dtd copied to your home folder\n"
+else 
+
+	FILENAME=$1
+	
+	echo "\nCHECKING CHARACTERS --> chrcheck $FILENAME"
+	chrcheck $FILENAME
+	CHRERRS=`egrep -c ".+" chrcheck.log`
+ 
+	echo "CHECKING TAGGING --> gen_sgml $FILENAME"
+	gen_sgml $FILENAME
+ 	SGMLERRS=`egrep -c ".+" gen_sgml.log`
+ 	
+	echo "CHECKING HTML ENTITIES --> gen_ent /../../../../utils/$FILENAME"
+	gen_ent /dc/know/uk2/control/utils/entity.lut $FILENAME
+	ENTERRS=`egrep -c ".+" gen_ent.log`
+ 
+	echo "PARSING --> nsgmls -E0 -f error.txt -s kuk3.dtd"
+	perl -p -i.bak -e 's{(<!ENTITY file1 system \").+?(\">)}{$1'`pwd`/$FILENAME'$2}' ~/kuk3.dtd
+	nsgmls -E0 -f error.txt -s ~/kuk3.dtd
+ 
+	DTDERRS=`egrep -c ".+" error.txt`
+	echo "$DTDERRS errors listed in file error.txt\n"
+ 
+	more chrcheck.log gen_sgml.log gen_ent.log error.txt > allchecks.log
+ 
+	ALLERRS=$(( CHRERRS + SGMLERRS + ENTERRS + DTDERRS))
+ 
+	echo "All error/log files concatenated to --> allchecks.log (total errors: $ALLERRS)\n"
+fi

@@ -1,0 +1,157 @@
+##filter EncodeUnicode
+<document>
+  <collection>$collection</collection>
+  <itemid>$recid</itemid>
+  <allegroid>$allegroid</allegroid>
+  <display>
+    <all>
+      <catalog>
+#for $field in $search.keys
+        <$field>
+#for $tag in $search[$field]
+#if $tag.sortatt != ''
+          <$tag.xmlname sort='$tag.sortatt'>
+#else
+          <$tag.xmlname>
+#end if
+            $maintag($tag)
+#if $tag.approx != ''
+            <approx>$tag.approx</approx>
+#end if
+#if $tag.startdate != ''
+            <startdate type="int32">$tag.startdate</startdate>
+#end if
+#if $tag.enddate != ''
+            <enddate type="int32">$tag.enddate</enddate>
+#end if
+#if $tag.shelfbrowse != ''
+            <shelfmark_browse>$tag.shelfbrowse</shelfmark_browse>
+#end if
+#if $tag.shelfsort != ''
+            <shelfmark_sort>$tag.shelfsort</shelfmark_sort>
+#end if
+#if $tag.imageid != ''
+            <imageitemid>$tag.imageid</imageitemid>
+#end if
+#if $tag.mountid != ''
+            <mountimageid>$tag.mountid</mountimageid>
+#end if
+#if $tag.subtags != None
+#for $subtag in $tag.subtags
+#if hasattr($subtag, 'display')
+            <$subtag.xmlname display="$subtag.display">$subtag.content</$subtag.xmlname>
+#else
+            <$subtag.xmlname>$subtag.content</$subtag.xmlname>
+#end if
+#end for
+#end if
+          </$tag.xmlname>
+#end for
+        </$field>
+#end for
+        <name_keyword>
+#for $tag in $namesearch['main']
+          <$tag.xmlname>
+            $maintag($tag)
+#if $tag.subtags != None
+#for $subtag in $tag.subtags
+#if hasattr($subtag, 'display')
+            <$subtag.xmlname display="$subtag.display">$subtag.content</$subtag.xmlname>
+#else
+            <$subtag.xmlname>$subtag.content</$subtag.xmlname>
+#end if
+#end for
+#end if
+          </$tag.xmlname>
+#end for
+          <other>
+#for $tag in $namesearch['other']
+            <$tag.xmlname>
+              $maintag($tag)
+#if $tag.subtags != None
+#for $subtag in $tag.subtags
+#if hasattr($subtag, 'display')
+              <$subtag.xmlname display="$subtag.display">$subtag.content</$subtag.xmlname>
+#else
+              <$subtag.xmlname>$subtag.content</$subtag.xmlname>
+#end if
+#end for
+#end if
+            </$tag.xmlname>
+#end for
+          </other>
+        </name_keyword>
+      </catalog>
+      <fulltext>$fulltext</fulltext>
+    </all>
+#for $tag in $display
+    <$tag.xmlname>
+#if $tag.display != ''
+      <main display="$tag.display">$tag.content</main>
+#else
+      <main>$tag.content</main>
+#end if
+#if hasattr($tag, 'physcatother')
+      <main display="none">other</main>
+#end if
+#for $subtag in $tag.subtags
+#if hasattr($subtag, 'display')
+      <$subtag.xmlname display="$subtag.display">$subtag.content</$subtag.xmlname>
+#else
+      <$subtag.xmlname>$subtag.content</$subtag.xmlname>
+#end if
+#end for
+    </$tag.xmlname>
+#end for
+  </display>
+  <somxml>
+#for $field in $som.keys
+#if $field == 'som_shelfmarks':
+    <$field>
+#for $shelf in $som[$field]
+      <shelfmark>
+        <main>$shelf.content</main>
+      </shelfmark>
+#end for
+    </$field>
+#else if $som[$field] is not None
+    <$field>
+      <$som[$field].xmlname>
+#if $som[$field].display != ''
+        <main display='$som[$field].display'>$som[$field].content</main>
+#else
+        <main>$som[$field].content</main>
+#end if
+#if $som[$field].startdate != ''
+        <startdate type="int32">$som[$field].startdate</startdate>
+#end if
+#if $som[$field].enddate != ''
+        <enddate type="int32">$som[$field].enddate</enddate>
+#end if
+#for $subtag in $som[$field].subtags
+#if hasattr($subtag, 'display')
+        <$subtag.xmlname display="$subtag.display">$subtag.content</$subtag.xmlname>
+#else
+        <$subtag.xmlname>$subtag.content</$subtag.xmlname>
+#end if
+#end for
+      </$som[$field].xmlname>
+    </$field>
+#end if
+#end for
+  </somxml>
+</document>
+##end filter
+
+#def maintag($tag)
+#set $outputtext = $tag.content
+#if $tag.sfl != ''
+#set $outputtext = '<sfl>' + $outputtext + '</sfl>'
+#end if
+#if $tag.display != ''
+#set $outputtext = '<main display="' + $tag.display + '">' + $outputtext + '</main>'
+#else
+#set $outputtext = '<main>' + $outputtext + '</main>'
+#end if
+$outputtext#slurp
+#end def

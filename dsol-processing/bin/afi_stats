@@ -1,0 +1,8 @@
+#!/usr/local/bin/python2.6
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+from afi.afi_stats import *
+
+if __name__ == '__main__':
+    stats=Statistics(sys.argv[1],sys.argv[2])
+    stats.name_stats()

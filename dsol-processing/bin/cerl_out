@@ -1,0 +1,4 @@
+#!/bin/bash
+
+eeb-strip_cerl.py .
+python2 /packages/dsol/bin/cerl_out_actual

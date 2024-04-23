@@ -1,0 +1,13 @@
+Conversions that are currently implemented:
+
+yyyymmdd -> PQ AN (20021201 -> Dec 1, 2002)
+yyyyddmm -> PQ AN (20021201 -> Jan 12, 2002)
+
+mmm. dd, yyyy -> PQ default (Dec. 1, 2002 -> 20021201)
+M dd, yyyy -> PQ default (December 1, 2002 -> 20021201)
+dd mmm. yyyy -> PQ default (1 Dec. 2002 -> 20021201)
+
+PQ default -> PQ AN (20021201 -> Dec 1, 2002)
+PQ AN -> PQ default (Dec 1, 2002 -> 20021201)
+
+

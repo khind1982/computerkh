@@ -1,0 +1,13 @@
+#!/usr/bin/env python2.7
+
+# Given a file containing one string per line, find the
+# longest common prefix, pass it through os.path.dirname,
+# and print it.
+
+import os.path
+import sys
+
+with open(sys.argv[1]) as inf:
+    files = inf.readlines()
+
+print os.path.dirname(os.path.commonprefix(files)).split('/images')[0]

@@ -1,0 +1,27 @@
+#!/usr/local/bin/bash
+
+# Given an EEB book ID, find where it lives on disk, and call jp2_to_jp2 for
+# each image.
+
+DATADIR="$(dirname $0)/../libdata/eeb"
+
+case $# in
+    2)
+        BOOKID=$1
+        OUTDIR=$2
+        ;;
+    *)
+        echo "Usage: $0 <bookid> <outputdir>"
+        exit 1
+        ;;
+esac
+
+BOOKLIB=$(echo ${BOOKID} | awk -F- '{print $2}')
+LIBINDEX="${DATADIR}/index-${BOOKLIB}.txt"
+
+BOOKDIR=$(grep ${BOOKID} ${LIBINDEX})
+
+for img in $(find ${BOOKDIR} -name \*.jp2)
+do
+    $(dirname $0)/jp2_to_jp2 ${img} ${OUTDIR}
+done

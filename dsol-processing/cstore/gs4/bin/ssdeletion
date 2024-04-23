@@ -1,0 +1,93 @@
+#!/bin/sh
+
+# Generate ingest schema format deletion records from the list of IDs
+# given as input.
+
+# ./ssdeletion [-P product] <ids>
+
+# product must be one of the names in the $products variable We always
+# try to guess the product name by taking anything before the first
+# '-' and comparing it to the list of known products. If no match is
+# found, we then use the value passed with -P, if any, or die
+# grumbling.
+#
+# ids can be a list of IDs passed literally on the command line,
+# or the path to a file containing IDs, one per line.
+
+products="bpc iimp iimpft iipa iipaft vogue eima prisma pio wwd aaa afi fiaf fiafref fiaftre fiifilm fiipers"
+platform="CH"
+product=""
+
+hnp_products="eima"
+eima_platform="HNP"
+
+while getopts hp:P: opt
+do
+    case $opt in
+        h)
+            platform="HNP"
+            shift
+            ;;
+        P)
+            product=$OPTARG
+            shift; shift
+            ;;
+    esac
+done
+
+if [ "x$1" = "x" ]
+then
+    echo "Usage: `basename $0` [-P <product>] <ids>" 2>&1 
+    exit 1
+elif [ -f ${1} ]
+then
+    ids=`cat ${1}`
+else
+    ids=$@
+fi
+
+updatetime=`date +%Y%m%d%H%M%S`
+
+for id in ${ids}
+do
+    prd=`echo $id | awk -F- '{print $1}'`
+    if ( echo ${products} | grep -w $prd 2>&1 >/dev/null )
+    then
+        product=$prd
+        id=${id}
+    else
+        if [ "x$product" = "x" ]
+        then
+            echo "Can't determine product name for ${id}. Quitting" >&2
+            exit 2        
+        else
+            if [ "$product" = "bpc" ]
+            then
+                id="bp${id}"
+            else
+                id=`echo "${product}-${id}" | sed -e s:APS_::`
+            fi
+        fi
+    fi
+    if ( echo ${hnp_products} | grep -w ${product} 2>&1 >/dev/null )
+    then
+        platform="HNP"
+    fi
+        
+    sed \
+        -e s:LEGACYID:${id}: \
+        -e s:PLATFORM:${platform}: \
+        -e s:UPDATE:${updatetime}: <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<IngestRecord>
+  <MinorVersion>3</MinorVersion>
+  <ControlStructure>
+    <ActionCode>delete</ActionCode>
+    <LegacyPlatform>PLATFORM</LegacyPlatform>
+    <LegacyID>LEGACYID</LegacyID>
+    <LastLegacyUpdateTime>UPDATE</LastLegacyUpdateTime>
+  </ControlStructure>
+</IngestRecord>
+
+EOF
+done

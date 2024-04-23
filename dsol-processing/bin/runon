@@ -1,0 +1,170 @@
+#!/usr/local/bin/python2.6
+# -*- mode: python -*-
+
+import os
+import re
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from optparse import OptionParser
+
+from simpleParsers import basicSGMLParser
+
+def count(n=0):
+    while True:
+        yield n
+        n += 1
+
+def parseNotes(folder, startnumber, startprefix, dateaddtest = None):
+
+    number = startnumber
+    prefix = startprefix
+
+    for item in os.listdir(folder):
+    
+        np = noteParser(number, prefix, dateaddtest)
+                
+        np.process(os.path.join(folder, item), os.path.join(folder, item[:-4] + '.not'))
+        
+        number = np.lionntcounter.next()
+    
+    print number
+
+class noteParser(basicSGMLParser):
+
+    def __init__(self, number, prefix, dateaddtest = None):
+        
+        self.lionntcounter = count(n=number)
+        self.noteflag = 1
+        self.level = '0'
+        self.prefix = prefix
+        self.dateaddtest = dateaddtest
+        
+        basicSGMLParser.__init__(self)
+
+    def start_dateadd(self, attrs):
+        self.unknown_starttag('dateadd', attrs)
+        self.shortoutput = []
+        
+    def end_dateadd(self):
+        self.dateadd = self.shortgather()
+        self.noteflag = 1
+        if self.dateaddtest is not None:
+            if self.dateaddtest != self.dateadd:
+                self.noteflag = 0
+            
+        self.unknown_endtag('dateadd')
+
+    def start_note(self, attrs):
+        
+        if self.noteflag == 1:
+        
+            self.write('<note idref="')
+            self.write(self.prefix + 'N')
+            self.write(self.level)
+            self.write(str(self.lionntcounter.next()).zfill(5))
+            self.write('">')
+            
+        else:
+
+            self.unknown_starttag('note', attrs)
+        
+    def end_note(self):
+        self.unknown_endtag('note')
+
+    def unknown_starttag(self, tag, attrs):
+        if tag[:3] == 'div':
+            self.level = tag[3]
+        
+        basicSGMLParser.unknown_starttag(self, tag, attrs)
+                
+class runonParser(basicSGMLParser):
+
+    def __init__(self):
+        basicSGMLParser.__init__(self)
+        self.linecount = 0      
+        self.entity = re.compile(r'&.*?;')
+        self.rendering = re.compile(r'<.?hi.*?>')
+        
+    def start_vlgroup(self, attrs):
+        self.unknown_starttag('vlgroup', attrs)
+
+    def end_vlgroup(self):
+        self.unknown_endtag('vlgroup')
+
+    def start_poem(self, attrs):
+    
+        self.linecount = 0
+        self.unknown_starttag('poem', attrs)
+
+    def end_poem(self):
+        
+        self.unknown_endtag('poem')
+
+    def start_firstl(self, attrs):
+        self.unknown_starttag('firstl', None)
+        self.start_l(attrs)
+
+    def end_firstl(self):
+        self.end_l()
+        self.unknown_endtag('firstl')
+
+    def start_l(self, attrs):
+        self.linecount = self.linecount + 1
+        
+        self.write('<l n="' + str(self.linecount) + ("\240" * (6 - len(str(self.linecount)))) + '"')
+        
+        for k, v in attrs:
+            if not (k == 'runon' or k == 'indent' or k == 'ln'):
+                self.write(" %s=\"%s\"" % (k, v))
+        self.write(">")
+        self.shortoutput = []
+
+        for k, v in attrs:
+            if k == 'indent':
+                self.lineindent = int(v.replace('y', '1').replace('c', '2').replace("1'", '1').replace('l','1'))
+                self.write("&#160;" * int(float(3) * float(self.lineindent) * float(1.25)))
+            else:
+                self.lineindent = 0
+
+        for k, v in attrs:
+            if k == 'runon':
+                self.write("&#160;" * int(float(self.linelength) * float(1.25)))
+                
+    def end_l(self):
+
+        self.test = self.entity.sub('Z', self.shortgather())
+        self.test = self.rendering.sub('', self.test)
+
+        self.linelength = len(self.test)
+        self.unknown_endtag('l')
+
+    def handle_entityref(self, ref):
+        
+        if ref == 'indent':
+            self.write("&#160;" * int(float(3) * float(1.25)))
+        else:
+            self.write(r'&' + ref + r';')
+
+    def unknown_entityref(self, ref):
+
+        if ref == 'indent':
+            self.write("&#160;" * int(float(3) * float(1.25)))
+        else:
+            self.write(r'&' + ref + r';')
+
+
+def main():
+
+    usage = "%prog [options] arg"
+    myOptionParser = OptionParser(usage)
+    
+    myOptionParser.add_option("-i", "--in", action="store", dest="inputFilename", help="name of the input file")
+    myOptionParser.add_option("-o", "--out", action="store", dest="outputFilename", help="name of the output file")
+    
+    (options, args) = myOptionParser.parse_args()
+
+    myrunon = runonParser()
+    myrunon.process(options.inputFilename, options.outputFilename)
+    
+if __name__ == '__main__': main()

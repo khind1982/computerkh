@@ -1,0 +1,8 @@
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from eurobo.eurobo2 import *
+
+if __name__ == '__main__':
+    a=Euro()
+    a.eurout()

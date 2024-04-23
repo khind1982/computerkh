@@ -1,0 +1,13 @@
+#!/usr/local/bin/python2.6
+# -*- mode: python -*-
+
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+if not len(sys.argv) == 2:
+    sys.stderr.write("Please pass me a file to work with.\n")
+    exit(1)
+
+from abell import processAbell
+
+processAbell.festCont([sys.argv[1]])

@@ -1,0 +1,34 @@
+from matchild import *
+a=twin()
+a.check()
+
+
+
+
+Matchild.py is an example of subclass ( how matchtest should be used)
+
+the method is not perfect as it allow for matches to be duplicated...
+
+
+
+pass:holdall
+user:holdall
+db: holdall_beta_2_ajws
+
+SELECT * 
+FROM `ZNewrelships_sameas` 
+LIMIT 0 , 30
+
+    relid      id1               table1                   id2            table2         confidence 
+
+      1 cit-ja-000000823 citations_journalarticles cit-ja-000014369 citations_journalarticles 0 
+      2 cit-ja-000006418 citations_journalarticles cit-ja-000034476 citations_journalarticles 0 
+      3 cit-ja-000014369 citations_journalarticles cit-ja-000000823 citations_journalarticles 0 
+      4 cit-ja-000034476 citations_journalarticles cit-ja-000006418 citations_journalarticles 0 
+
+
+Note that when a table is compared to itself(as above) the duplicate  take the form A=B and B=A
+record 1= record 3
+and record 2= record 4
+
+The duplicates (in the match table only) are removed by the cleaner module

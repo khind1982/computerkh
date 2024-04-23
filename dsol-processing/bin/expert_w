@@ -1,0 +1,36 @@
+#!/usr/local/bin/python2.6
+import site
+site.addsitedir('/packages/dsol/lib/python2.6/site-packages')
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+import list_utils
+from knowuk.witness import *
+
+if __name__ == '__main__':
+    lut_file = open('/packages/dsol/lib/python/knowuk/entities.lut','r')
+    entities_dict = {}
+    for lin in lut_file.xreadlines():
+        if lin.strip()!= '\n':
+            l = lin.decode('latin-1')
+            l_match = l.split('|')
+            #create a dictionary based on the lookup
+            entities_dict[l_match[0].strip()] = (l_match[1]).strip().strip('\n')   
+    record_rgx = re.compile('<record>(.*?)</record>', re.DOTALL)
+    open_source = open(sys.argv[1], 'rU')
+    read_source = open_source.read().decode('latin-1')
+    read_source = (read_source.replace('Name:', '</record>\n<record>\nName:')) + '\n</record>'
+    #replacing entities
+    for k in entities_dict.keys():
+        read_source = read_source.replace(k, entities_dict[k])
+    records = record_rgx.findall(read_source)
+    open_output = open('expert.end', 'w')
+    a = list_utils.pg()
+    for record in a.progressbar(records, "Processed records: ", 40):
+        time.sleep(0.1)
+        ew = expert_witness()
+        ew.map_fields(record.strip())
+        ew.templateclass = witness_template
+        open_output.write(ew.FillTemplate())
+        
+        

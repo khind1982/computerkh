@@ -1,0 +1,36 @@
+#!/usr/local/bin/python2.6
+# -*- mode: python -*-
+
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+import re
+import mla #from mla import *
+
+
+def subcommands():
+    return [fn for fn in dir(mla) if re.match(r'^bib|dop|fetch', fn)]
+    
+def subcommandSummaries():
+    fns = subcommands()
+    for fn in fns:
+        print fn + ':\t' + eval('mla.' + fn + '.summary')
+
+if len(sys.argv) == 1:
+    sys.stderr.write("No subcommand given.\nType 'mla help' for details of available subcommands\n")
+elif re.match(r'^-h|(--)?help', sys.argv[1]):
+    try:
+        if sys.argv[2] in subcommands():
+            try:
+                print eval('mla.' + sys.argv[2] + '.longDesc')
+            except:
+                print "No additional information for " + sys.argv[2]
+        else: print "Nothing known about " + sys.argv[2]
+    except:
+        print "Type 'mla help <commandname>' for more information\nAvailable subcommands:"
+        subcommandSummaries()
+elif sys.argv[1] in subcommands():
+    args = str(sys.argv[2:])
+    eval('mla.' + sys.argv[1] + '.main(' + args + ')')
+else:
+    sys.stderr.write("Invalid subcommand: " + sys.argv[1] + '\n')

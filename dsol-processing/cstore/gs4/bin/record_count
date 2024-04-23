@@ -1,0 +1,22 @@
+#!/usr/local/bin/bash
+
+# Do we have zgrep, or do we have gzgrep?
+[ -e /usr/bin/zgrep ] && ZGREP=/usr/bin/zgrep || ZGREP=/bin/gzgrep
+
+# Count the number of records in the specified steadystate batch
+
+BATCH=$1
+
+if [ "x$BATCH" = "x" ]
+then
+    echo "No files to check!" >&2
+    exit 1
+fi
+
+COUNT=0
+for file in $@
+do
+    COUNT=$(($COUNT + `${ZGREP} -c "<RECORD>" $file`))
+    echo -ne "\r\E[0m\E[KRunning total: \E[31m$COUNT\E[0m"
+done
+echo -e "\r\E[0m\E[KGrand total: \E[1;32m$COUNT\E[0m"

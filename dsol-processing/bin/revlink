@@ -1,0 +1,16 @@
+#!/usr/local/bin/python2.6
+# -*- mode: python -*-
+
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from abell.processAbell import revLink
+
+if len(sys.argv) > 1:
+    filelist = sys.argv[1:]
+else:
+    sys.stderr.write("No file to work on\n")
+    exit(1)
+    
+revLink(filelist)
+

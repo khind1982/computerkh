@@ -1,0 +1,9 @@
+#!/usr/local/bin/python2.6
+import site
+site.addsitedir('/packages/dsol/lib/python2.6/site-packages')
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+from summon_migration.sum_mocat import *
+#python2.6 bin_mocat.py /products/monthlycatalog/fast/data/scripts/Nov2011/pass4out
+if __name__ == '__main__':
+    process_mocat(sys.argv[1])

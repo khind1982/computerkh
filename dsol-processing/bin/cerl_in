@@ -1,0 +1,14 @@
+#!/usr/bin/env python2
+
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from eurobo.cerl import *
+
+if __name__ == '__main__':
+    if os.path.isfile('corporate_names_complete.xml') and os.path.isfile('imprint_names_complete.xml') and os.path.isfile('imprint_places_complete.xml') and os.path.isfile('personal_names_complete.xml'):
+        a=thesaurus()
+        a.cerl_in()
+    else:
+        print 'One or more of the following input files are missing from this directory:\ncorporate_names_complete.xml\nimprint_names_complete.xml\nimprint_places_complete.xml\npersonal_names_complete.xml\n'
+        print 'cerl_in will not be run until all the files are available'

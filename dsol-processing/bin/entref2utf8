@@ -1,0 +1,15 @@
+#!/usr/local/bin/python2.5
+# -*- mode: python -*-
+
+
+''' Take an input string and convert any entitiy references to their UTF-8
+    equivalent. Extracted from ds_abstract_mapping.py, part of the Morningstar
+    data conversion suite. '''
+    
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from entref2utf8 import replace_entityrefs
+
+if __name__ == '__main__':
+    replace_entityrefs(sys.argv[1:])

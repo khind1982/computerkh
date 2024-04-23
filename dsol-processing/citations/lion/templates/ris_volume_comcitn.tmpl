@@ -1,0 +1,22 @@
+<comcitn>#slurp
+<TY>BOOK</TY>#slurp
+#if len($author_attribution_set) > 0
+<AU>$author_attribution_set[0].namefromdata</AU>#slurp
+#if len($author_attribution_set) > 1
+#for $author in $author_attribution_set[1:]
+<A2>$author.namefromdata</A2>#slurp
+#end for
+#end if
+#end if
+<TI>$title</TI>#slurp
+<CY>$city</CY>#slurp
+<PBL>$publisher</PBL>#slurp
+<Y2>$filepubdate</Y2>#slurp
+<Y1>$pubdate.replace('[', '').replace(']', '')</Y1>#slurp
+<SN>$ISBN</SN>#slurp
+<T2>Literature Online</T2>#slurp
+<UR>$idref</UR>#slurp
+<N1a>$excludere.sub('', $notes)</N1a>#slurp
+<N1b>$filecity, $filepublisher, $filepubdate</N1b>#slurp
+<N1c>$copyright</N1c>#slurp
+</comcitn>#slurp

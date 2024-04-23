@@ -1,0 +1,44 @@
+#!/bin/sh
+# \
+exec expect -- "$0" ${1+"$@"}
+
+# ftp-put /path/to/target/files
+
+# Sends data to the ftp site in the US.
+
+exp_version -exit 5.0
+
+if {$argc!=2} {
+        send_user "usage: ftp-put <src_directory> <dst_directory>\n"
+        exit
+}
+
+
+set src [lindex $argv 0]
+set dst [lindex $argv 1]
+
+cd $src
+
+set timeout 60
+spawn ftp itftp102.dc4.pqe
+expect "Name*:"
+send "darkstardata\r"
+expect "Password:"
+send "pw4welcome\r"
+expect "ftp>"
+send "binary\r"
+expect "ftp>"
+send "prompt\r"
+expect "ftp>"
+send "cd $dst\n"
+expect "ftp>"
+foreach f [glob $src/CH_*.gz] {
+    set fn [file tail "$f"]
+    send "put $fn\r"
+    expect "226*ftp>"
+}
+
+send "bye\r"
+expect eof
+send_user "\nDone\n"
+

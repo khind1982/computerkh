@@ -1,0 +1,37 @@
+# -*- mode: shell-script -*-
+
+# Set some default values for controlling the 
+# transformation script wrappers.
+
+# Default output location.
+SSROOT=/dc/dsol/steadystate
+SSOUT=${SSROOT}/out
+
+TRANSFORM=`dirname $0`/transform
+
+outputdest=""
+destdir=""
+
+# Most sessions are not resumed
+resumedsession="no"
+
+# Don't set -m rebuildcache
+rebuildcache="no"
+
+# Don't set -m fulltext
+fulltext="no"
+
+# Don't set -m noss
+noss="no"
+
+# Don't set -m forcess
+forcess="no"
+
+# Enable XML validation
+validate="true"
+
+# Send XML validation logging to this directory
+validation_logs=${HOME}/validationlogs
+
+# Generate an audit file
+audit="yes"

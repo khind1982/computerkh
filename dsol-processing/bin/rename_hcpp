@@ -1,0 +1,11 @@
+#!/usr/local/bin/python2.6
+import site
+site.addsitedir('/packages/dsol/lib/python2.6/site-packages')
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+from  summon_migration.c19_index import *
+from  HCPP.rename_hcpp import *
+
+
+if __name__ == '__main__':
+    rename()

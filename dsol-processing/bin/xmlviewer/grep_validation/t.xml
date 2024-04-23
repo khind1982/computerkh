@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<IngestRecord>
+  <MinorVersion>37</MinorVersion>
+  <ControlStructure>
+    <ActionCode>add</ActionCode>
+    <LegacyPlatform>CH</LegacyPlatform>
+    <LegacyID>iimp-iimp00458697</LegacyID>
+    <LastLegacyUpdateTime>20160518103429</LastLegacyUpdateTime>
+    <RelatedLegacyID>
+      <LegacyPlatform>CH</LegacyPlatform>
+      <LegacyID>iimp-iimp00458697</LegacyID>
+      <RelationshipType>DerivedFrom</RelationshipType>
+    </RelatedLegacyID>
+    <PublicationInfo>
+      <LegacyPubID>JID10483713</LegacyPubID>
+    </PublicationInfo>
+    <Parent>
+      <ParentInfo>
+        <LegacyPlatform>CH</LegacyPlatform>
+        <Title>General Music Today</Title>
+        <AlphaPubDate>Fall 2001</AlphaPubDate>
+        <RawPubDate>Fall 2001</RawPubDate>
+        <NumericPubDate>20011001</NumericPubDate>
+        <StartDate>20011001</StartDate>
+        <Volume>15</Volume>
+        <Issue>1</Issue>
+      </ParentInfo>
+    </Parent>
+    <ObjectBundleData>
+      <ObjectBundleType>CHProductCode</ObjectBundleType>
+      <ObjectBundleValue>IIMPFT</ObjectBundleValue>
+    </ObjectBundleData>
+    <Component ComponentType="Citation">
+      <Representation RepresentationType="Citation">
+        <MimeType>text/xml</MimeType>
+        <Resides>FAST</Resides>
+      </Representation>
+    </Component>
+    <Component ComponentType="Abstract">
+      <Representation RepresentationType="Abstract">
+        <MimeType>text/xml</MimeType>
+        <Resides>FAST</Resides>
+      </Representation>
+    </Component>
+    <Component ComponentType="FullText">
+      <Representation RepresentationType="FullText">
+        <MimeType>text/xml</MimeType>
+        <Resides>FAST</Resides>
+      </Representation>
+    </Component>
+  </ControlStructure>
+  <RECORD>
+    <Version>Global_Schema_v5.1.xsd</Version>
+    <ObjectInfo>
+      <LegacyProductMapping>
+        <GroupName>iimp</GroupName>
+      </LegacyProductMapping>
+      <ObjectType>Book Review</ObjectType>
+      <Title>This 'n' That in Books</Title>
+      <Language>
+        <RawLang>English</RawLang>
+        <ISO>
+          <ISOCode>ENG</ISOCode>
+        </ISO>
+      </Language>
+      <PrintLocation>
+        <StartPage>28</StartPage>
+        <EndPage>29</EndPage>
+        <Pagination>28-29</Pagination>
+      </PrintLocation>
+      <ObjectIDs>
+        <ObjectID IDType="CHLegacyID" IDOrigin="CH">iimp-iimp00458697</ObjectID>
+        <ObjectID IDType="ISSN">1048-3713</ObjectID>
+        <ObjectID IDType="CHOriginalLegacyID" IDOrigin="iimp">iimp00458697</ObjectID>
+      </ObjectIDs>
+      <Contributors>
+        <Contributor ContribRole="Author" ContribOrder="1">
+          <OriginalForm>Ammon, Richard</OriginalForm>
+        </Contributor>
+      </Contributors>
+      <Terms>
+        <Term TermType="Personal">
+          <TermValue>Goodman, Benny</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Winter, Jonah</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Winter, Jeannette</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Taback, Simms</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Moss, Lloyd</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Priceman, Marjorie</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Guthrie, Woody</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Radunsky, Vladimir</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Myers, Walter Dean</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Laden, Nina</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Bootman, Colin</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Battle-Lavert, Gwendolyn</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>Thomas, Joyce Carol</TermValue>
+        </Term>
+        <Term TermType="Personal">
+          <TermValue>McGill, Alice</TermValue>
+        </Term>
+        <FlexTerm FlexTermName="BroadSubject">
+          <FlexTermValue>Music Education</FlexTermValue>
+        </FlexTerm>
+        <FlexTerm FlexTermName="Thes">
+          <FlexTermValue>Picture Books</FlexTermValue>
+        </FlexTerm>
+        <FlexTerm FlexTermName="Thes">
+          <FlexTermValue>Songbooks</FlexTermValue>
+        </FlexTerm>
+        <FlexTerm FlexTermName="Thes">
+          <FlexTermValue>Afro-American music</FlexTermValue>
+        </FlexTerm>
+        <FlexTerm FlexTermName="Thes">
+          <FlexTermValue>Lyrics</FlexTermValue>
+        </FlexTerm>
+        <FlexTerm FlexTermName="Thes">
+          <FlexTermValue>Lullabies</FlexTermValue>
+        </FlexTerm>
+        <FlexTerm FlexTermOpt="NAXOSID: 20372" FlexTermName="NaxosComposer">
+          <FlexTermValue>Goodman, Benny</FlexTermValue>
+        </FlexTerm>
+        <FlexTerm FlexTermOpt="NAXOSID: 22924" FlexTermName="NaxosComposer">
+          <FlexTermValue>Guthrie, Woody</FlexTermValue>
+        </FlexTerm>
+      </Terms>
+      <Abstract AbstractType="Synopsis">
+        <AbsText>
+      Several books for children's music education are reviewed: (1) "Hollow of Your Hand: Slave Lullabies," a song collection by Alice McGill (Houghton Mifflin, 2000); (2) "Hush Songs: African American Lullabies," a collection selected by Joyce Carol Thomas (Hyperion, 2000); (3) "The Music in Derrick's Heart," a picture book by Gwendolyn Battle-Lavert illustrated by Colin Bootman (Holiday House, 2000); (4) "The Blues of Flats Brown," a storybook by Walter Dean Myers and illustrated by Nina Laden (Holiday  House, 2000); (5) "Bling Blang," a picture book of the lyrics of Woody Guthrie's song of the same title illustrated by Vladimir Radunsky; (6) "Zin! Zin! Zin! A Violin," a picture book by Lloyd Moss and illustrated by Marjorie Priceman (Simon &amp; Schuster, 1995); (7) "Joseph Had a Little Overcoat," by Simms Taback; and (8) "Once upon a Time in Chicago: The Story of Benny Goodman," a picture book by Jonah Winter and illustrated by Jeannette Winter (Hyperion, 2000).
+      </AbsText>
+      </Abstract>
+      <TextInfo>
+        <Text Source="IMPAInno" HTMLContent="true"><![CDATA[<html> <body>  <p>  </p>  <h2>   This 'n' That in Books  </h2>  <h4>   Richard Ammon  </h4>  <i>   Richard Ammon is associate professor of education at the Pennsylvania State University in Harrisburg.  </i>  <p>   Among this collection of books are four that have African-American connections, two books with nonsense titles, one Caldecott Medal winner, and a story focusing on Benny Goodman's childhood.  </p>  <p>   In the   <i>    Hollow of Your Hand: Slave Lullabies   </i>   contains thirteen songs collected and sung by Alice McGill (Houghton Mifflin, 2000). Each lullaby is presented with lyrics that are enhanced with pictures of graphic quilts designed by Michael Cummings. Below each song is a brief explanation of its origin. Melodies with lyrics and chords are included at the end of the book, and a compact disc accompanies it. Unfortunately, because two songs are squeezed into each page, one may have difficulty reading the music while trying to play the piano or guitar. One solution would be to enlarge these tunes. Some of the lullabies are rather silly, such as "Rock de Cradle, Joe." Others, such as the chorus lines of "Great Big Dog," are heartfelt:  </p>  <p>   Mamma loves you, Papa loves you,  </p>  <p>   Ev'ybody loves baby.  </p>  <p>   <i>    Hush Songs: African America Lullabies   </i>   is a collection of African-American lullabies selected by Joyce Carol Thomas (Hyperion, 2000). Illustrated in warm colors by Brenda Joysmith, this compilation includes such traditional favorites as "All the Pretty Little Horses," "He's Got the Whole World in His Hands," "The Lord's Prayer," and "Scarlet Ribbons." A brief background snippet introduces each lullaby. Each melody is presented in large, clear notes with chord notation. One tune, "The Angels' Lullaby," has full accompaniment.  </p>  <p>   <i>    The Music in Derrick's Heart   </i>   by Gwendolyn Battle-Lavert (Holiday House, 2000) is a picture book story handsomely illustrated by Colin Bootman. When Uncle Booker T. gives his nephew a harmonica, Derrick practices and practices. Throughout the book, Booker T. gives Derrick advice: "Slow down! Don't rush! Tadpoles don't turn into frogs overnight." Later, he says, "Music is something you hear with your ears. But you've got to feel it with your heart." When arthritis keeps Booker T. from playing his harmonica, Derrick pulls out his own harmonica and begins playing for Booker T. "ever so quietly, ever so slowly Â just sweet, sweet music."  </p>  <p>   <i>    The Blues of Flats Brown   </i>   was written by the award-winning African-American author Walter Dean Myers (Holiday House, 2000). Richly colored illustrations by Nina Laden evoke drama that draws children to each page. They first meet Flats Brown, a junkyard dog from Mississippi who plays the blues. One night Flats and his friend, Caleb, run away from mean Mr. Grubbs and his junkyard. Flats makes money playing in Shanty Town and later at a club called "Curly-Que," where Mr. Grubbs finds them. But they escape, this time to Memphis, where Flats records some songs. They are again surprised by Mr. Grubbs. When they run away this time, Flats takes the train to New York City. While Flats is playing in another club in New York, Mr. Grubbs shows up once more. This time, however, Flats plays a tune, "The Gritty Grubbs Blues," which is "about a man nobody understood and everybody thought was bad because he lived in a junkyard." The tune touches Mr. Grubbs so much that he begins to cry. Myers tells his readers, "All he needed was for someone to show him a little love." The lyrics and music for "The New York City Blues" are printed on the back end-papers of the book. The teacher may wish to read   <i>    The Blues of Flats Brown   </i>   to the students and then play some blues by Elmore James, Ray Charles, B. B. King, or other blues artists.  </p>  <p>   <i>    Bling Blang   </i>   (Candlewick, 2000) is a picture book version of the lyrics of Woody Guthrie's song of the same title. Illustrated by Vladimir Radunsky, the book contains graphic collages with some childlike paintings. Unfortunately, the music is not included, but used music stores often have a section that includes Woody Guthrie's music, should one want to search for it. "Bling Blang" is also found on   <i>    Woodie Guthrie: Songs to Grow on for Mother and Child   </i>   (Smithsonian Folkways, ASIN B000001NY).  </p>  <p>   <i>    Zin! Zin! Zin! A Violin   </i>   by Lloyd Moss (Simon & Schuster, 1995, and Simon & Schuster, 2000 (paper)) is a picture book that received a Caldecott Honor award for wonderfully free-spirited illustrations by Marjorie Priceman. Written in verseÂ"With mournful moan and silken tone,/Itself alone comes ONE TROMBONE"Âthe words are printed in arcs representing the rise and fall of melodies.   <i>    Zin! Zin! Zin!   </i>   is perfect for introducing instruments of the orchestra to young music students and teaching them how to count. A new instrument is introduced on each page, and each addition adds to the growing number of orchestral instruments:  </p>  <p>   "FLUTE, that sends our soul a-shiver;  </p>  <p>   FLUTE, that slender, silver sliver.  </p>  <p>   A place among the set it picks  </p>  <p>   To make a young SEXTETÂthat's SIX."  </p>  <p>   Once the instruments number ten, the small orchestra can begin.  </p>  <p>   The Caldecott Medal for 2000 went to   <i>    Joseph Had a Little Overcoat   </i>   by Simms Taback (Viking, 1999). Joseph has an old overcoat, which he turns into a jacket. When it becomes old he turns it into a vest, which he turns into a scarf, which he turns into a necktie, which he turns into a handkerchief, which he turns into a button. When he loses the button, he has nothing. "So Joseph made a book about it. Which shows Â you can always make something out of nothing." The book also includes clever die-cuts (cutouts) revealing the various articles of clothing. At the book's end, the song "I Had a Little Overcoat" appears, which adds more sense to the story.  </p>  <p>   <i>    Once upon a Time in Chicago: The Story of Benny Goodman   </i>   by Jonah Winter (Hyperion, 2000) was illustrated by the author's mother, Jeannette Winter. The story begins with Benny growing up in a Russian Jewish neighborhood in Chicago, where his mother and father work hard. At the synagogue, the three Goodman boys are given instrumentsÂHarry receives a tuba, Freddy receives a trumpet, and Benny, the youngest, is given a clarinet. Although Benny takes private lessons and is being trained in classical music, he loves jazz. At the Central Park Theatre, Benny plays his clarinet in an amateur night program. "A week later the phone rang," writes Winter. "It was the theatre owner. He asked Benny if he could fill in for someone that night." Soon Benny is playing in the clubs around Chicago. The story continues with some tragic and poignant events that teachers could use to encourage insightful classroom discussions. This book can be used effectively for introducing elementary school children to Benny Goodman and his music by helping them to understand the noted musician and the background to an early style of jazz music.  </p>  <hr/>  <br/>  <br/>    <hr/>  <center>   <em>    Â©Copyright 2001 MENC-The National Association for Music Education   </em>  </center> </body></html>]]></Text>
+      </TextInfo>
+    </ObjectInfo>
+    <Product>
+      <CHIMPA>
+        <FulltextFlag>1</FulltextFlag>
+        <AutoftFlag>0</AutoftFlag>
+        <RoyaltiesID>LOUJID10483713</RoyaltiesID>
+      </CHIMPA>
+    </Product>
+  </RECORD>
+</IngestRecord>
+<?xml version='1.0' encoding='UTF-8'?>

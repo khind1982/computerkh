@@ -1,0 +1,66 @@
+#!/usr/local/bin/bash
+# Query the eurobo indexes to find which library delivery a book arrived in,
+# and which collection it's published in.
+
+BASE="$(dirname $0)/../libdata/eeb"
+PUBTABLE="${BASE}/eurobo_published_collections.txt"
+HINTABLE="${BASE}/eurobo_wellcome_deliveries.txt"
+NEDTABLE="${BASE}/eurobo_ned_deliveries.txt"
+DENTABLE="${BASE}/eurobo_den_deliveries.txt"
+
+case $# in
+    1) TARGET=$1
+       ;;
+    *) echo >&2 "usage: `basename $0` bookid"
+       exit 1
+       ;;
+esac
+
+function find_in_lib_delivery() {
+    local TABLE TARGET
+    local LIBHITS
+    local PUBHITS
+    TABLE=$1
+    TARGET=$2
+
+    LIBHITS=($(grep "${TARGET}" "${TABLE}"))
+    PUBTGT=$(echo ${TARGET} | tr '-' '/')
+    PUBHITS=($(grep "${PUBTGT}" "${PUBTABLE}"))
+    for hit in ${LIBHITS[*]}; do
+        if [ $(echo $hit | awk -F/ '{print $NF}') = "${TARGET}" ]; then
+            LIBCOLL=$(echo ${hit} | cut -f 1 -d /)
+            DISK=$(echo ${hit} | cut -f 3 -d /)
+            if [ $(echo "$hit" | awk -F/ '{print NF}') = 5 ]; then
+                SUBDIR=$(echo ${hit} | cut -f 4 -d /)
+            fi
+            echo "${TARGET} delivered:"
+            echo -en "\t${LIBCOLL}, ${DISK}"
+            if [ "${SUBDIR:=0}" != 0 ]; then
+                echo -en ", ${SUBDIR}"
+            fi
+            echo
+            echo -e "\t/dc/$hit"
+            for pub in ${PUBHITS[*]}; do
+                echo "${TARGET} published:"
+                PUBCOLL=$(echo "${pub}" | cut -f 1 -d /)
+                echo -e "\t${PUBCOLL}"
+            done
+        fi
+    done
+}
+
+case $(echo "${TARGET}" | cut -c 1-3) in
+    hin)
+        find_in_lib_delivery ${HINTABLE} ${TARGET}
+        ;;
+    den)
+        find_in_lib_delivery ${DENTABLE} ${TARGET}
+        ;;
+    ned)
+        find_in_lib_delivery ${NEDTABLE} ${TARGET}
+        ;;
+    *)
+        echo >&2 "Book ID ${TARGET} unrecognised"
+        exit 1
+        ;;
+esac

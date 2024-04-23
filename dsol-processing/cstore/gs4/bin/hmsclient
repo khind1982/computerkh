@@ -1,0 +1,144 @@
+#!/usr/bin/env python2.7
+# -*- mode: python -*-
+
+'''Command line tool for loading objects to the HMS data store.
+'''
+
+import json
+import logging
+import mimetypes
+import os
+import sys
+import time
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
+
+import hmslib
+
+logging.basicConfig(filename='/var/tmp/hms.log', level=logging.DEBUG)
+
+
+
+# workflow.
+#
+# for now, just load one item at a time.
+# can we rely on detecting mimetype to determine which recipe to use?
+# For now, yes - we're only loading PDFs and a small number of other types
+# (audio/mp3 for DNSA, and image/jpeg for CSP and Cecil)
+
+# Lookup to check if the object already exists,
+# If yes, save the response document.
+# If not, use SimplePDF or SimpleObject to store the object asynchronously.
+#    followed shortly after by a Status query. If that works, save the document
+
+def main(args):
+    try:
+        env = args[1]  # the HMS instance to use (dev, pre or prod)
+        product = args[2]
+        subject = args[3]
+        location = args[4]
+    except IndexError:
+        print >> sys.stderr, "Usage: %s <env> <product> <filename> <http location>" % sys.argv[0]
+        sys.exit(1)
+
+    # This is a bit clunky - it requires both the local filename and the URL of the
+    # file on the deliver host.
+
+    subj_mimetype = mimetypes.guess_type(subject)[0]
+    uniqueId = '%s-%s' % (product, os.path.basename(subject))
+
+    lookup = hmslib.Lookup(uniqueId, clientId='CH', instance=env).run()
+    if lookup.status_code == 500:
+        logging.info("%s: got 500 from server on Lookup. Going to do Status...", uniqueId)
+        print >> sys.stderr, "%s: Got 500 from server on Lookup. Going to Status..." % uniqueId
+        # This, rather idiotically, indicates that the load is in progress, and that
+        # in order to get any information about the object, you need to do a Status
+        # request...
+        lookup = hmslib.Status(uniqueId, clientId='CH', instance=env).run()
+    #print lookup.status_code
+    try:
+        lookup_json = lookup.json()
+    except ValueError:
+        print >> sys.stderr, "%s: No JSON to decode in response. (HMS status '%s', '%s')" % (
+            uniqueId, lookup.status_code, lookup.content)
+        logging.error("%s: No JSON in response. HMS status: %s, HMS message: %s",
+                      uniqueId, lookup.status_code, lookup.content)
+        sys.exit(1)
+    if lookup_json:
+    #try:
+        # We got back some JSON indicating the requested object has been loaded
+        # Save the response and exit.
+        print json.dumps(lookup.json())
+        logging.info("%s: Already loaded. Saving Lookup result.", uniqueId)
+        print >> sys.stderr, "%s: Already loaded." % uniqueId
+    #except ValueError:
+    else:
+        logging.info("%s: No JSON in Lookup result. Trying to load object...", uniqueId)
+        print >> sys.stderr, "%s: No JSON in lookup object. Loading object..." % uniqueId
+        # Object not loaded. Send a request now.
+        hms = get_client_class(subj_mimetype)(
+            uniqueId, clientId='CH', instance=env, file_name=subject, objectLoc=location)
+        #print >> sys.stderr, "HMS=== %s" % hms
+        #print >> sys.stderr, dir(hms)
+        #print >> sys.stderr, hms.params
+        #print >> sys.stderr, hms.
+        #sys.exit(1)
+        resp = hms.run()
+        if resp.status_code in [200, 204]:
+            logging.info("%s: Got %s from load request. Sending Status request...", uniqueId, str(resp.status_code))
+            print >> sys.stderr, "%s: Got %s from load request. Getting Status..." % (uniqueId, str(resp.status_code))
+            interval = 1
+            attempt = 0
+            while attempt < 10:
+                if interval > 128:
+                    interval = 1
+                else:
+                    interval = interval * 2
+                #print >> sys.stderr, "Sleeping %s seconds..." % interval
+                logging.info("%s: Running Status request attempt no. %s (wait %s)",
+                             uniqueId, attempt + 1, interval)
+                time.sleep(interval)
+                status = hmslib.Status(uniqueId, clientId='CH', instance=env).run()
+                if status.status_code == 500:
+                    logging.error("%s: Error loading object. Giving up.", uniqueId)
+                    break
+                if status.status_code in [400, 404]:
+                    # Status has gone away, because the f***ing doc has loaded
+                    # already. Suck. Suck, suck suck.
+                    lookup = hmslib.Lookup(uniqueId, clientId='CH', instance=env).run()
+                    if lookup.json():
+                        print json.dumps(lookup.json())
+                        logging.info("%s: Got confirmation of success on Lookup.", uniqueId)
+                        print >> sys.stderr, "%s: Got confirmation of success (Lookup)." % uniqueId
+                        break
+                try:
+                    if status.json():
+                        print json.dumps(status.json())
+                        logging.info("%s: Status: Load confirmed", uniqueId)
+                        print >> sys.stderr, "%s: Status: Load confirmed" % uniqueId
+                except:
+                    attempt = attempt + 1
+                    continue
+                break
+            else:
+                logging.warning("%s: Got no Status object after 10 attempts. Giving up.", uniqueId)
+        else:
+            print >> sys.stderr, "This shouldn't happen..."
+            print >> sys.stderr, resp.status_code
+            print >> sys.stderr, dir(resp)
+            print >> sys.stderr, resp.reason
+            print >> sys.stderr, resp.text
+            print >> sys.stderr, dir(resp.request)
+            print >> sys.stderr, resp.request.url
+
+def get_client_class(mimetype):
+    if mimetype in ['application/pdf']:
+        return hmslib.StoreSimplePDF
+    elif mimetype in ['audio/mpeg', 'image/jpeg', 'text/xml']:
+        return hmslib.StoreSimpleObject
+    else:
+        raise NotImplementedError("Cannot handle files of type '%s'" % mimetype)
+
+
+if __name__ == '__main__':
+    main(sys.argv)

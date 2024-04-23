@@ -1,0 +1,15 @@
+#!/usr/local/bin/python2.5
+
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+
+from strip_string import stripString
+
+if __name__ == '__main__':
+    if len(sys.argv) == 4:
+        stripString(sys.argv[1], sys.argv[2], sys.argv[3])
+    elif len(sys.argv) == 3:
+        stripString(sys.argv[1], sys.argv[2])
+    else:
+        sys.stderr.write("Wrong number of arguments")
+        exit(1)

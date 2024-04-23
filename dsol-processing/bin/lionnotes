@@ -1,0 +1,41 @@
+#!/usr/local/bin/python2.6
+# -*- mode: python -*-
+
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../lib/python'))
+
+import time
+import optparse
+
+
+usage = "Usage: %s -d <directory> <startnumber> <startprefix>" % os.path.basename(__file__)
+
+opts = optparse.OptionParser(usage)
+opts.add_option("-d", "--dir", action="store", dest="directory", default=None)
+
+(options, args) = opts.parse_args()
+
+try:
+    startnumber = int(sys.argv[1])
+    startprefix = sys.argv[2]
+except IndexError:
+    print >> sys.stderr, (usage)
+    exit(1)
+
+if options.directory is None:
+    print >> sys.stderr, ("No directory specified. Assuming 'notes'")
+    print >> sys.stderr, ("Hit CTRL-C NOW if you want to specify a different one with -d")
+    
+    options.directory = 'notes'
+    time.sleep(5)
+    
+# Nasty, but if we are going to die, we should do so as soon as possible. This module
+# takes a long time to load, and it's annoying to wait for that only to be told you
+# passed invalid arguments.
+import lion.runon
+
+try:
+    lion.runon.parseNotes(options.directory, startnumber, startprefix)
+except OSError as e:
+    print >> sys.stderr, (e)
+    exit(1)

@@ -1,0 +1,267 @@
+DateConverter test suite
+
+The DateConverter module provides functions for handling date format conversions
+for the Darkstar project.
+
+It imports several other modules when it is loaded.
+
+    >>> import DateConverter
+    >>> type(DateConverter.month)
+    <type 'module'>
+    >>> type(DateConverter.base)
+    <type 'module'>
+    >>> type(DateConverter.simpleConversion)
+    <type 'module'>
+    >>> DateConverter.name_to_num #doctest: +ELLIPSIS
+    <function name_to_num ...>
+    >>> type(DateConverter.date_with_month)
+    <type 'module'>
+
+MODULES
+=======
+"base"
+-------
+
+The 'base' module itself only defines 3 lambda functions which will be used
+extensively throughout the suite.
+    
+    ds_trim() removes trailing fullstops and commas from its input:
+    >>> DateConverter.ds_trim('01.')
+    '01'
+    >>> DateConverter.ds_trim('01')
+    '01'
+    >>> DateConverter.ds_trim('Jan.,')
+    'Jan'
+    
+    zero_trim() removes any leading zero from a numerical argument:
+    >>> for num in ['01', '10']:
+    ...   DateConverter.zero_trim(num)
+    '1'
+    '10'
+    
+    zero_pad() does the opposite - it pads a single digit with a leading zero
+    and returns it as a string:
+    >>> for num in [1, '1', '01', 11, '11']:
+    ...   DateConverter.zero_pad(num)
+    '01'
+    '01'
+    '01'
+    '11'
+    '11'
+    
+"month"
+-------
+
+The 'month' module defines three public functions:
+    
+    num_to_name() converts a numerical month representation to the month's full
+    name:
+    >>> for num in range(1, 13):
+    ...   DateConverter.num_to_name(num)
+    'January'
+    'February'
+    'March'
+    'April'
+    'May'
+    'June'
+    'July'
+    'August'
+    'September'
+    'October'
+    'November'
+    'December'
+    
+    num_to_abbrev() takes a numerical month representation and returns the month's
+    ProQuest standard abbreviated name:
+    >>> numeric = range(1, 13)
+    >>> for number in numeric:
+    ...   DateConverter.num_to_abbrev(number)
+    'Jan'
+    'Feb'
+    'Mar'
+    'Apr'
+    'May'
+    'Jun'
+    'Jul'
+    'Aug'
+    'Sep'
+    'Oct'
+    'Nov'
+    'Dec'
+    
+    name_to_num() takes either a month's full name or its standard abbreviated form
+    and returns its two-digit numerical representation:
+    >>> months = []
+    >>> for num in range(1, 13):
+    ...   months.append(DateConverter.num_to_abbrev(num))
+    >>> for mon in months:  #doctest: +ELLIPSIS
+    ...   DateConverter.name_to_num(mon)
+    '01'
+    '02'
+    '03'
+    ...
+    '10'
+    '11'
+    '12'
+    
+"simpleConversion"
+------------------
+
+The simpleConversion module provides functions to convert a 6 or 8 digit date
+string to the ProQuest standard alphanumeric (PQAN) or numerical (PQDEF)
+representation.
+
+    EUdate2pqan(), USdate2pqan() take a datestring and return the PQAN representation:
+    >>> DateConverter.EUdate2pqan('20021201')
+    'Jan 12, 2002'
+    >>> DateConverter.USdate2pqan('20021201')
+    'Dec 1, 2002'
+    >>> DateConverter.EUdate2pqan('20020101')
+    'Jan 1, 2002'
+    
+    There is a private helper function which breaks the datestring into three
+    parts:
+    >>> DateConverter.simpleConversion._split_datestring('20020101')
+    ['2002', '01', '01']
+    
+    EUdate2pqdef(), USdate2pqdef() take a datestring and return the PQDEF
+    representation. USdate2pqdef just returns the string that was passed to it.
+    >>> DateConverter.EUdate2pqdef('20021201')
+    '20020112'
+    >>> DateConverter.USdate2pqdef('20021201')
+    '20021201'
+    
+    pqan2pqdef() takes a PQAN date and returns a PQDEF date:
+    >>> DateConverter.pqan2pqdef('Jan 12, 2002') #doctest: +SKIP
+    '20020112'
+    pqdef2pqan() takes a PQDEF date and returns a PQAN date:
+    >>> DateConverter.pqdef2pqan('20020112')
+    'Jan 12, 2002'
+    
+"date_with_month"
+-----------------
+
+The date_with_month module handles dates with the month name, either in full or 
+abbreviated form. In each case, return the PQDEF format.
+
+    conv_mdy() takes a date like "Jan. 12, 2002":
+    >>> DateConverter.conv_mdy('Jan. 12, 2002')
+    '20020112'
+    >>> DateConverter.conv_mdy('January 12, 2002')
+    '20020112'
+    
+    conv_dmy() takes a date like "12 Jan, 2002":
+    >>> DateConverter.conv_dmy('12 Jan, 2002')
+    '20020112'
+    >>> DateConverter.conv_dmy('12 January, 2002')
+    '20020112'
+    >>> DateConverter.conv_dmy('1 January, 2002')
+    '20020101'
+    
+    conv_my() takes a date like "Jan 2002"
+    >>> DateConverter.conv_my('Jan., 2002')
+    '20020101'
+    >>> DateConverter.conv_my('January, 2002')
+    '20020101'
+    
+    conv_slash_mdy() takes a date like '1/12/2002'
+    >>> DateConverter.conv_slash_mdy('1/12/2002')
+    '20020112'
+    
+    conv_slash_dmy() takes a European format slashed date:
+    >>> DateConverter.conv_slash_dmy('1/12/2002')
+    '20021201'
+    
+    conv_mdy_pqan() takes a text date string and returns a PQAN format normalized
+    representation:
+    >>> DateConverter.conv_mdy_pqan('January, 12, 2002')
+    'Jan 12, 2002'
+    >>> DateConverter.conv_mdy_pqan('July 03 2002')
+    'Jul 3, 2002'
+    
+    conv_dmy_pqan() takes a European style date and returns a PQAN string
+    >>> DateConverter.conv_dmy_pqan('3, January, 2002')
+    'Jan 3, 2002'
+    
+    conv_slash_mdy_pqan() takes a slashed date string and returns its PQAN
+    >>> DateConverter.conv_slash_mdy_pqan('1/2/2002')
+    'Jan 2, 2002'
+    >>> DateConverter.conv_slash_mdy_pqan('10/23/2002')
+    'Oct 23, 2002'
+    
+    conv_slash_dmy_pqan() as above, but takes a European format slashed date
+    >>> DateConverter.conv_slash_dmy_pqan('1/12/2002')
+    'Dec 1, 2002'
+    >>> DateConverter.conv_slash_dmy_pqan('01/01/2002')
+    'Jan 1, 2002'
+    
+    conv_my_pqan() takes 'mmm yyyy' and returns the normalized PQAN format
+    >>> DateConverter.conv_my_pqan('January, 2002')
+    'Jan 2002'
+    >>> DateConverter.conv_my_pqan('Jan., 2002')
+    'Jan 2002'
+    
+"seasonalDate"
+--------------
+>>> import DateConverter.seasonalDate
+
+The seasonalDate module handles publication data in the format "Season yyyy"
+
+    conv_season() takes a format like "Spring 2002" and returns a normalized
+    date based on the rules:
+    
+        Winter begins Jan 1 (0101)
+        Spring begins Apr 1 (0401)
+        Summer begins Jul 1 (0701)
+        Autumn begins Oct 1 (1001) (Fall is a synonym for Autumn)
+    
+    >>> DateConverter.conv_season('Winter 2002')
+    '20020101'
+    >>> DateConverter.conv_season('Spring 2002')
+    '20020401'
+    >>> DateConverter.conv_season('Summer 2002')
+    '20020701'
+    >>> DateConverter.conv_season('Autumn 2002')
+    '20021001'
+    >>> DateConverter.conv_season('Fall 2002')
+    '20021001'
+    
+    conv_season_double() takes a double issue date and returns the first, defaulted
+    according to the rules above.
+    >>> DateConverter.conv_season_double('Autumn 2002/Winter 2003')
+    '20021001'
+    >>> DateConverter.conv_season_double('Spring/Summer 2002')
+    '20020401'
+    
+    conv_season_multiple() takes a multiple issue date ("Spring 2002-Summer 2002") and
+    returns the normalised form
+    >>> DateConverter.conv_season_multiple('Spring 2002-Summer 2002')
+    '20020401'
+    
+    conv_season2pqan() takes a format like "Spring 2002", and returns a normalized
+    version of the same string (removes extraneous punctuation, ensures correct
+    capitalisation, etc)
+    >>> DateConverter.conv_season2pqan('spring, 2002')
+    'Spring 2002'
+    
+    conv_season_multiple2pqan() returns a normalized version of the multiple
+    season format:
+    >>> DateConverter.conv_season_multiple2pqan('Spring 2003-Autumn 2003')
+    'Spring 2003-Autumn 2003'
+    >>> DateConverter.conv_season_multiple2pqan('spring 2003 - Autumn 2003')
+    'Spring 2003-Autumn 2003'
+    
+"year_only_dates"
+-----------------
+
+>>> import DateConverter.year_only_dates
+
+For those cases where the input data only has a year for publication date,
+the year_only_dates module will simply return the year, followed by defaulted
+month and day. This may be subject to change.
+
+    >>> DateConverter.year_only('2002')
+    '20020101'
+    >>> DateConverter.year_only('2002/2003')
+    '20020101'
+    

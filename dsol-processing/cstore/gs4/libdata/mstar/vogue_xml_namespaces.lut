@@ -1,0 +1,12 @@
+# 'x' is the default case for unqualified elements.
+x|http://www.w3.org/1999/xhtml
+cnp|http://www.condenast.com
+dc|http://purl.org/dc/elements/1.1/
+dcterms|http://purl.org/dc/terms/
+pam|http://prismstandard.org/namespaces/pam/2.0/
+pim|http://prismstandard.org/namespaces/pim/2.0/
+pq|http://www.proquest.co.uk
+prism|http://prismstandard.org/namespaces/basic/2.0/
+prl|http://prismstandard.org/namespaces/prl/2.0/
+pur|http://prismstandard.org/namespaces/prismusagerights/2.1/
+xsi|http://www.w3.org/2001/XMLSchema-instance

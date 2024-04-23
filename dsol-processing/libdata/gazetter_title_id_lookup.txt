@@ -1,0 +1,2981 @@
+Abbeyfeale|058/0000001
+Abbeyleix|058/0000002
+Abbots Langley|058/0000003
+Aberaeron|058/0000004
+Aberdare (town)|058/0000005
+Aberdeen|058/0000006
+Aberdeen City|058/0000007
+Aberdeenshire|058/0000008
+Aberdovey|058/0000009
+Aber Falls|058/0000010
+Aberfan|058/0000011
+Aberfeldy|058/0000012
+Aberfoyle|058/0000013
+Abergavenny|058/0000014
+Abergele|058/0000015
+Abernethy|058/0000016
+Abertawe|058/0000017
+Abertillery|058/0000018
+Aberystwyth|058/0000019
+Abingdon|058/0000020
+Abinger Common|058/0000021
+Accrington|058/0000022
+Achill Island|058/0000023
+Addiscombe|058/0000024
+Adelphi|058/0000025
+Adwick le Street|058/0000026
+Ailsa Craig|058/0000027
+Airdrie|058/0000028
+Aire|058/0000029
+Alba|058/0000030
+Albury (UK)|058/0000031
+Aldborough|058/0000032
+Aldeburgh|058/0000033
+Alderley Edge|058/0000034
+Aldermaston|058/0000035
+Alderney|058/0000036
+Aldersgate|058/0000037
+Aldershot|058/0000038
+Aldgate|058/0000039
+Aldridge|058/0000040
+Aldwych|058/0000041
+Alexandria (Scotland)|058/0000042
+Alford (Aberdeenshire)|058/0000043
+Alford (Lincolnshire)|058/0000044
+Alfreton|058/0000045
+Allen, Bog of|058/0000046
+Allen, Lough|058/0000047
+Alloa|058/0000048
+Alloway|058/0000049
+Aln|058/0000050
+Alness|058/0000051
+Alnwick|058/0000052
+Alsager|058/0000053
+Alston|058/0000054
+Althorp|058/0000055
+Alton (Hampshire)|058/0000056
+Alton Towers|058/0000057
+Altrincham|058/0000058
+Alva|058/0000059
+Alwen|058/0000060
+Alyn|058/0000061
+Alyth|058/0000062
+Amble|058/0000063
+Ambleside|058/0000064
+Amersham|058/0000065
+Amesbury|058/0000066
+Amlwch|058/0000067
+Ammanford|058/0000068
+Ampthill|058/0000069
+Ancaster|058/0000070
+Ancrum|058/0000071
+Andover|058/0000072
+Anglesey (Wales)|058/0000073
+Angus|058/0000074
+Annan (river)|058/0000075
+Annan (town)|058/0000076
+Anstruther|058/0000077
+An Teallach|058/0000078
+Antrim (county)|058/0000079
+Antrim (town)|058/0000080
+Antrim (region)|058/0000081
+Appin|058/0000082
+Appleby|058/0000083
+Applecross|058/0000084
+Aran Islands|058/0000085
+Arbroath|058/0000086
+Ardagh (County Limerick)|058/0000087
+Ardagh (County Longford)|058/0000088
+Ardee|058/0000089
+Arden, Forest of|058/0000090
+Ardfert|058/0000091
+Ardglass|058/0000092
+Ardingly|058/0000093
+Ardmore|058/0000094
+Ardnacrusha|058/0000095
+Ardrishaig|058/0000096
+Ardrossan|058/0000097
+Ards|058/0000098
+Ardyne Point|058/0000099
+Argyll and Bute|058/0000100
+Argyllshire|058/0000101
+Arklow|058/0000102
+Armadale|058/0000103
+Armagh (county)|058/0000104
+Armagh (city)|058/0000105
+Armagh (region)|058/0000106
+Arnold|058/0000107
+Arran|058/0000108
+Arrochar|058/0000109
+Arthur's Seat|058/0000110
+Arun|058/0000111
+Arundel|058/0000112
+Ascot|058/0000113
+Ashbourne|058/0000114
+Ashburton|058/0000115
+Ashby-de-la-Zouch|058/0000116
+Ashdown|058/0000117
+Ashdown Forest|058/0000118
+Ashford|058/0000119
+Ashingdon|058/0000120
+Ashington|058/0000121
+Ashover|058/0000122
+Ashridge Park|058/0000123
+Ashtead|058/0000124
+Ashton-under-Lyne|058/0000125
+Askeaton|058/0000126
+Askern|058/0000127
+Aspatria|058/0000128
+Assynt, Loch|058/0000129
+Athboy|058/0000130
+Athenry|058/0000131
+Atherstone|058/0000132
+Atherton|058/0000133
+Athlone|058/0000134
+Atholl, Forest of|058/0000135
+Athy|058/0000136
+Attleborough|058/0000137
+Auburn (Ireland)|058/0000138
+Auchinleck|058/0000139
+Auchterarder|058/0000140
+Auchtermuchty|058/0000141
+Aughrim (County Wicklow)|058/0000142
+Aultbea|058/0000143
+Aurigny|058/0000144
+Aviemore|058/0000145
+Avoca (village)|058/0000146
+Avon (county)|058/0000147
+Avon (Northamptonshire, Warwickshire)|058/0000148
+Avonmouth|058/0000149
+Avon Water|058/0000150
+Awe (river)|058/0000151
+Awe, Loch|058/0000152
+Axbridge|058/0000153
+Axe (Dorset and Devon)|058/0000154
+Axe (Somerset)|058/0000155
+Axholme, Isle of|058/0000156
+Axminster|058/0000157
+Aylesbury|058/0000158
+Aylesford|058/0000159
+Aylesham|058/0000160
+Aylsham|058/0000161
+Ayot St Lawrence|058/0000162
+Ayr|058/0000163
+Ayr (river)|058/0000164
+Ayrshire|058/0000165
+Babbacombe|058/0000166
+Backs, The|058/0000167
+Bacup|058/0000168
+Badminton|058/0000169
+Bagshot|058/0000170
+Baildon|058/0000171
+Baile &Aacute;tha Cliath|058/0000172
+Bakewell|058/0000173
+Bala|058/0000174
+Bala Lake|058/0000175
+Balbriggan|058/0000176
+Baldock|058/0000177
+Ballantrae|058/0000178
+Ballater|058/0000179
+Ballina|058/0000180
+Ballinasloe|058/0000181
+Ballinrobe|058/0000182
+Balloch|058/0000183
+Ballybay|058/0000184
+Ballybunion|058/0000185
+Ballycastle|058/0000186
+Ballyclare|058/0000187
+Ballycotton|058/0000188
+Ballymahon|058/0000189
+Ballymena (town)|058/0000190
+Ballymena (region)|058/0000191
+Ballymoney (town)|058/0000192
+Ballymoney (region)|058/0000193
+Ballymote|058/0000194
+Ballynahinch (County Down)|058/0000195
+Ballynahinch (County Galway)|058/0000196
+Ballyshannon|058/0000197
+Balquhidder|058/0000198
+Baltimore (Republic of Ireland)|058/0000199
+Baltinglass|058/0000200
+Bamburgh Castle|058/0000201
+Bampton|058/0000202
+Banagher|058/0000203
+Banbridge (town)|058/0000204
+Banbridge (region)|058/0000205
+Banbury|058/0000206
+Banchory|058/0000207
+Bandon (river)|058/0000208
+Bandon (town)|058/0000209
+Banff|058/0000210
+Banffshire|058/0000211
+Bangor (Northern Ireland)|058/0000212
+Bangor (Wales)|058/0000213
+Bann|058/0000214
+Bannockburn|058/0000215
+Banstead|058/0000216
+Bantry|058/0000217
+Bardsey Island|058/0000218
+Barfreston|058/0000219
+Barking and Dagenham|058/0000220
+Barkway|058/0000221
+Barmouth|058/0000222
+Barnet|058/0000223
+Barnsley|058/0000224
+Barnstaple|058/0000225
+Baronscourt|058/0000226
+Barra|058/0000227
+Barrhead|058/0000228
+Barrow (river)|058/0000229
+Barrow-in-Furness|058/0000230
+Barrow-on-Humber|058/0000231
+Barry (town)|058/0000232
+Barry Links|058/0000233
+Barton-upon-Humber|058/0000234
+Barton-upon-Irwell|058/0000235
+Basildon|058/0000236
+Basingstoke|058/0000237
+Basingwerk|058/0000238
+Bassenthwaite|058/0000239
+Bass Rock|058/0000240
+Bath|058/0000241
+Bath and North East Somerset|058/0000242
+Bathgate|058/0000243
+Batley|058/0000244
+Battersea|058/0000245
+Battle|058/0000246
+Bawtry|058/0000247
+Bayswater|058/0000248
+Beachy Head|058/0000249
+Beaconsfield (town)|058/0000250
+Beaminster|058/0000251
+Beattock|058/0000252
+Beaulieu|058/0000253
+Beauly (town)|058/0000254
+Beauly Firth|058/0000255
+Beaumaris|058/0000256
+Bebington|058/0000257
+Beccles|058/0000258
+Bedale|058/0000259
+Beddgelert|058/0000260
+Beddington|058/0000261
+Bedford|058/0000262
+Bedfordshire|058/0000263
+Bedlington (town)|058/0000264
+Bedruthan Steps|058/0000265
+Beds|058/0000266
+Beeston and Stapleford|058/0000267
+Beith|058/0000268
+Belfast (city)|058/0000269
+Belfast (region)|058/0000270
+Belfast Lough|058/0000271
+Belford|058/0000272
+Belgravia|058/0000273
+Belleek|058/0000274
+Bellingham (UK)|058/0000275
+Bell Rock|058/0000276
+Bellshill and Mossend|058/0000277
+Belper|058/0000278
+Belturbet|058/0000279
+Benbecula|058/0000280
+Benbulben|058/0000281
+Ben Cruachan|058/0000282
+Benfleet|058/0000283
+Ben Lawers|058/0000284
+Ben Lomond|058/0000285
+Ben Macdhui|058/0000286
+Ben More|058/0000287
+Ben Nevis|058/0000288
+Bentley (Hampshire)|058/0000289
+Ben Venue|058/0000290
+Ben Vorlich|058/0000291
+Ben Wyvis|058/0000292
+Bere Ferrers|058/0000293
+Bere Island|058/0000294
+Berkeley (Gloucestershire)|058/0000295
+Berkhamsted|058/0000296
+Berks|058/0000297
+Berkshire|058/0000298
+Berwickshire|058/0000299
+Berwick-upon-Tweed|058/0000300
+Bessbrook|058/0000301
+Bethesda|058/0000302
+Betws-y-coed|058/0000303
+Beverley|058/0000304
+Bewdley|058/0000305
+Bexhill-on-Sea|058/0000306
+Bexley|058/0000307
+Bibury|058/0000308
+Bicester|058/0000309
+Biddenden|058/0000310
+Biddulph|058/0000311
+Bideford|058/0000312
+Biggar|058/0000313
+Biggleswade|058/0000314
+Bignor|058/0000315
+Billericay|058/0000316
+Billingham|058/0000317
+Billingsgate|058/0000318
+Bilston|058/0000319
+Bingley|058/0000320
+Birchington|058/0000321
+Birdcage Walk|058/0000322
+Birdoswald|058/0000323
+Birkenhead|058/0000324
+Birmingham (UK)|058/0000325
+Birr|058/0000326
+Bishop Auckland|058/0000327
+Bishop's Castle|058/0000328
+Bishop's Stortford|058/0000329
+Bishop's Waltham|058/0000330
+Bisley|058/0000331
+Blackburn (city)|058/0000332
+Blackburn with Darwen (authority)|058/0000333
+Black Country|058/0000334
+Blackfriars Bridge|058/0000335
+Blackheath|058/0000336
+Black Isle|058/0000337
+Black Mountain|058/0000338
+Black Mountains|058/0000339
+Blackpool (authority)|058/0000340
+Blackpool (town)|058/0000341
+Blackrock (Cork)|058/0000342
+Blackrock (County Louth)|058/0000343
+Blackrock (Dublin)|058/0000344
+Blacksod Bay|058/0000345
+Blackwall|058/0000346
+Blackwall Tunnel|058/0000347
+Blackwater (river, Northern Ireland)|058/0000348
+Blackwater (river, Republic of Ireland)|058/0000349
+Blaenau Ffestiniog|058/0000350
+Blaenau Gwent|058/0000351
+Blaenavon|058/0000352
+Blair Atholl|058/0000353
+Blairgowrie and Rattray|058/0000354
+Blakeney|058/0000355
+Blandford Forum|058/0000356
+Blantyre (Scotland)|058/0000357
+Blarney|058/0000358
+Blaskets|058/0000359
+Blaydon|058/0000360
+Blea Tarn|058/0000361
+Blessington|058/0000362
+Bletchingley|058/0000363
+Bletchley|058/0000364
+Bloomsbury|058/0000365
+Blue John Cavern|058/0000366
+Blyth (Northumberland)|058/0000367
+Blyth (Nottinghamshire)|058/0000368
+Bocking|058/0000369
+Boddam|058/0000370
+Bodiam|058/0000371
+Bodmin|058/0000372
+Bognor Regis|058/0000373
+Bolsover|058/0000374
+Bolt Head|058/0000375
+Bolton|058/0000376
+Bonchurch|058/0000377
+Bond Street|058/0000378
+Bo'ness|058/0000379
+Bonhill|058/0000380
+Bonnyrigg and Lasswade|058/0000381
+Bootle|058/0000382
+Borders|058/0000383
+Boroughbridge|058/0000384
+Borrowdale|058/0000385
+Borthwick Castle|058/0000386
+Boscastle|058/0000387
+Boscobel|058/0000388
+Bosham|058/0000389
+Boston (UK)|058/0000390
+Bothwell|058/0000391
+Botley|058/0000392
+Bourne|058/0000393
+Bournemouth (authority)|058/0000394
+Bournemouth (town)|058/0000395
+Bovey Tracey|058/0000396
+Bowdon|058/0000397
+Bowness-on-Windermere|058/0000398
+Bow Street|058/0000399
+Box Hill|058/0000400
+Boyle|058/0000401
+Boyne|058/0000402
+Brackley|058/0000403
+Bracknell|058/0000404
+Bracknell Forest|058/0000405
+Braco|058/0000406
+Bradfield|058/0000407
+Bradford|058/0000408
+Bradford-on-Avon|058/0000409
+Brading|058/0000410
+Braemar|058/0000411
+Braintree|058/0000412
+Bramber|058/0000413
+Brampton|058/0000414
+Brancaster|058/0000415
+Brandon (UK)|058/0000416
+Bray (England)|058/0000417
+Bray (Republic of Ireland)|058/0000418
+Breadalbane|058/0000419
+Brechin|058/0000420
+Breckland|058/0000421
+Brecknockshire|058/0000422
+Brecon|058/0000423
+Brecon Beacons|058/0000424
+Brendon Hills|058/0000425
+Brent|058/0000426
+Brentwood|058/0000427
+Bressay|058/0000428
+Brewood|058/0000429
+Bridgend (authority)|058/0000430
+Bridgend (town)|058/0000431
+Bridge of Allan|058/0000432
+Bridge of Weir|058/0000433
+Bridgewater Canal|058/0000434
+Bridgnorth|058/0000435
+Bridgwater|058/0000436
+Bridlington|058/0000437
+Bridport|058/0000438
+Brierley Hill|058/0000439
+Brigg|058/0000440
+Brightlingsea|058/0000441
+Brighton|058/0000442
+Brighton and Hove|058/0000443
+Brill (village in England)|058/0000444
+Bristol (UK)|058/0000445
+Bristol Channel|058/0000446
+Bristol City|058/0000447
+Britain|058/0000448
+Briton Ferry|058/0000449
+Brixham|058/0000450
+Brixton|058/0000451
+Broads, Norfolk|058/0000452
+Broadstairs|058/0000453
+Broadway|058/0000454
+Brodick|058/0000455
+Bromley|058/0000456
+Bromsgrove|058/0000457
+Bromyard|058/0000458
+Brora|058/0000459
+Brotton|058/0000460
+Brownhills|058/0000461
+Brownsea Island|058/0000462
+Brown Willy|058/0000463
+Broxburn|058/0000464
+Bruton|058/0000465
+Bryher|058/0000466
+Brynmawr|058/0000467
+Buchan Ness|058/0000468
+Buckfastleigh|058/0000469
+Buckhaven and Methil|058/0000470
+Buckie|058/0000471
+Buckingham|058/0000472
+Buckinghamshire|058/0000473
+Bucklersbury|058/0000474
+Buckley|058/0000475
+Bucks|058/0000476
+Bude|058/0000477
+Budleigh Salterton|058/0000478
+Builth Wells|058/0000479
+Bunclody|058/0000480
+Buncrana|058/0000481
+Bundoran|058/0000482
+Bungay|058/0000483
+Bunhill Fields|058/0000484
+Buntingford|058/0000485
+Bure|058/0000486
+Burford|058/0000487
+Burgess Hill|058/0000488
+Burghead|058/0000489
+Burnham Beeches|058/0000490
+Burnham-on-Sea|058/0000491
+Burnley|058/0000492
+Burntisland|058/0000493
+Burray|058/0000494
+Burren, the|058/0000495
+Burry Port|058/0000496
+Burslem|058/0000497
+Burton upon Trent|058/0000498
+Burwash|058/0000499
+Bury|058/0000500
+Bury St Edmunds|058/0000501
+Busby|058/0000502
+Bushey|058/0000503
+Bute|058/0000504
+Buttermere|058/0000505
+Buttevant|058/0000506
+Buxton|058/0000507
+Cadair Idris|058/0000508
+Cadoxton|058/0000509
+Caerdydd|058/0000510
+Caerfyrddin|058/0000511
+Caerlaverock Castle|058/0000512
+Caerleon|058/0000513
+Caernarfon|058/0000514
+Caernarfonshire|058/0000515
+Caerphilly (authority)|058/0000516
+Caerphilly (town)|058/0000517
+Caerwent|058/0000518
+Caher|058/0000519
+Caherciveen|058/0000520
+Cairngorm Mountains|058/0000521
+Caistor|058/0000522
+Calder (Cumbria)|058/0000523
+Calder (Lancashire)|058/0000524
+Calder (Lancashire and West Yorkshire)|058/0000525
+Calder (West Yorkshire)|058/0000526
+Caldey Island|058/0000527
+Caldicot|058/0000528
+Caledonian Canal|058/0000529
+Callan|058/0000530
+Callander|058/0000531
+Callanish|058/0000532
+Callington|058/0000533
+Calne|058/0000534
+Calton Hill|058/0000535
+Cam|058/0000536
+Camberley|058/0000537
+Camborne-Redruth|058/0000538
+Cambrian Mountains|058/0000539
+Cambridge (UK)|058/0000540
+Cambridgeshire|058/0000541
+Cambs|058/0000542
+Cambuslang|058/0000543
+Camden (UK)|058/0000544
+Camelford|058/0000545
+Campbeltown|058/0000546
+Campsie Fells|058/0000547
+Canary Wharf|058/0000548
+Cannock|058/0000549
+Canterbury|058/0000550
+Canvey Island|058/0000551
+Cape Wrath|058/0000552
+Cappoquin|058/0000553
+Carberry Hill|058/0000554
+Cardiff (authority)|058/0000555
+Cardiff (city)|058/0000556
+Cardigan (town)|058/0000557
+Cardigan Bay|058/0000558
+Cardiganshire|058/0000559
+Cardington|058/0000560
+Cardross|058/0000561
+Carfin|058/0000562
+Carisbrooke|058/0000563
+Carlingford|058/0000564
+Carlingford Lough|058/0000565
+Carlisle (UK)|058/0000566
+Carlow (county)|058/0000567
+Carlow (town)|058/0000568
+Carluke|058/0000569
+Carmarthen|058/0000570
+Carmarthen Bay|058/0000571
+Carmarthenshire|058/0000572
+Carnarvon|058/0000573
+Carnforth|058/0000574
+Carn M&oacute;r Dearg|058/0000575
+Carnoustie|058/0000576
+Carnwath|058/0000577
+Carrantuohill|058/0000578
+Carrickfergus (town)|058/0000579
+Carrickfergus (region)|058/0000580
+Carrickmacross|058/0000581
+Carrick-on-Shannon|058/0000582
+Carrick-on-Suir|058/0000583
+Carrigaline|058/0000584
+Carron|058/0000585
+Carse of Gowrie|058/0000586
+Carshalton|058/0000587
+Carstairs|058/0000588
+Cashel|058/0000589
+Casquets|058/0000590
+Castlebar|058/0000591
+Castleblayney|058/0000592
+Castle Cary|058/0000593
+Castlecary|058/0000594
+Castlecomer|058/0000595
+Castleconnell|058/0000596
+Castledermot|058/0000597
+Castle Donington|058/0000598
+Castle Douglas|058/0000599
+Castleford|058/0000600
+Castlepollard|058/0000601
+Castlereagh|058/0000602
+Castle Rising|058/0000603
+Castleton|058/0000604
+Castletown|058/0000605
+Castletownbere|058/0000606
+Catterick|058/0000607
+Cavan (county)|058/0000608
+Cavan (town)|058/0000609
+Celbridge|058/0000610
+Central|058/0000611
+Central Lowlands|058/0000612
+Ceredigion|058/0000613
+Chadderton|058/0000614
+Chalfont St Giles|058/0000615
+Chalford|058/0000616
+Chalgrove|058/0000617
+Chanctonbury Ring|058/0000618
+Channel Islands|058/0000619
+Chapel-en-le-Frith|058/0000620
+Chapelhall|058/0000621
+Chard|058/0000622
+Charing Cross|058/0000623
+Charmouth|058/0000624
+Charnwood Forest|058/0000625
+Chatham (UK)|058/0000626
+Chat Moss|058/0000627
+Chatteris|058/0000628
+Cheadle (Greater Manchester)|058/0000629
+Cheadle (Staffordshire)|058/0000630
+Cheapside|058/0000631
+Cheddar|058/0000632
+Chelmsford|058/0000633
+Chelsea|058/0000634
+Cheltenham|058/0000635
+Chepstow|058/0000636
+Cherhill|058/0000637
+Chertsey|058/0000638
+Cherwell|058/0000639
+Ches.|058/0000640
+Chesham|058/0000641
+Cheshire|058/0000642
+Cheshunt|058/0000643
+Chesil Beach|058/0000644
+Chester (UK)|058/0000645
+Chesterfield (town)|058/0000646
+Chesters|058/0000647
+Cheviot Hills|058/0000648
+Chichester|058/0000649
+Chiddingfold|058/0000650
+Chiddingstone|058/0000651
+Chigwell|058/0000652
+Chilham|058/0000653
+Chillingham|058/0000654
+Chiltern Hills|058/0000655
+Chingford|058/0000656
+Chippenham|058/0000657
+Chipping Campden|058/0000658
+Chipping Norton|058/0000659
+Chipping Sodbury|058/0000660
+Chirk|058/0000661
+Chislehurst|058/0000662
+Chiswick|058/0000663
+Chorley|058/0000664
+Christchurch (UK)|058/0000665
+Chudleigh|058/0000666
+Chulmleigh|058/0000667
+Church Stretton|058/0000668
+Cinderford|058/0000669
+Cirencester|058/0000670
+Cissbury Hill|058/0000671
+City of London|058/0000672
+Clackmannan|058/0000673
+Clackmannanshire|058/0000674
+Clacton-on-Sea|058/0000675
+Clapham Junction|058/0000676
+Clare|058/0000677
+Clare Island|058/0000678
+Clay Cross|058/0000679
+Clayton-le-Moors|058/0000680
+Clear Island|058/0000681
+Cleator Moor|058/0000682
+Cleckheaton|058/0000683
+Clee Hills|058/0000684
+Cleethorpes|058/0000685
+Cleland|058/0000686
+Clevedon|058/0000687
+Cleveland|058/0000688
+Clew Bay|058/0000689
+Clifden|058/0000690
+Clitheroe|058/0000691
+Clogheen|058/0000692
+Clogher|058/0000693
+Clonakilty|058/0000694
+Clonard|058/0000695
+Clones|058/0000696
+Clonfert|058/0000697
+Clonmacnoise|058/0000698
+Clonmel|058/0000699
+Clontarf|058/0000700
+Clovelly|058/0000701
+Cloyne|058/0000702
+Clwyd (former county)|058/0000703
+Clwyd (river)|058/0000704
+Clyde|058/0000705
+Clydebank|058/0000706
+Clydesdale|058/0000707
+Coalville|058/0000708
+Coatbridge|058/0000709
+Cobbler, The|058/0000710
+Cobh|058/0000711
+Cobham|058/0000712
+Cockenzie and Port Seton|058/0000713
+Cockermouth|058/0000714
+Coggeshall|058/0000715
+Colchester|058/0000716
+Coldingham|058/0000717
+Coldstream|058/0000718
+Coleford|058/0000719
+Coleraine (town)|058/0000720
+Coleraine (region)|058/0000721
+Coleshill|058/0000722
+Coll|058/0000723
+Colne (Essex)|058/0000724
+Colne (Lancashire)|058/0000725
+Colne (West Yorkshire)|058/0000726
+Colonsay|058/0000727
+Colwyn Bay|058/0000728
+Comber|058/0000729
+Comeragh Mountains|058/0000730
+Compton|058/0000731
+Comrie|058/0000732
+Congleton|058/0000733
+Conisbrough|058/0000734
+Coniston Water|058/0000735
+Connacht|058/0000736
+Connemara|058/0000737
+Conn, Lough|058/0000738
+Consett|058/0000739
+Conwy (authority)|058/0000740
+Conwy (port)|058/0000741
+Cookham-on-Thames|058/0000742
+Cookstown (town)|058/0000743
+Cookstown (region)|058/0000744
+Cooper's Hill|058/0000745
+Cootehill|058/0000746
+Copford Green|058/0000747
+Coquet|058/0000748
+Corbridge|058/0000749
+Corby|058/0000750
+Corfe Castle|058/0000751
+Cork (county)|058/0000752
+Cork (city)|058/0000753
+Cornhill|058/0000754
+Cornwall (UK)|058/0000755
+Corrib, Lough|058/0000756
+Corrievrechan|058/0000757
+Corsham|058/0000758
+Corwen|058/0000759
+Cotswold Hills|058/0000760
+County Hall|058/0000761
+Coupar Angus|058/0000762
+Courtmacsherry|058/0000763
+Covent Garden (square)|058/0000764
+Coventry|058/0000765
+Cowal|058/0000766
+Cowbridge|058/0000767
+Cowdenbeath|058/0000768
+Cowes|058/0000769
+Craigavon (city)|058/0000770
+Craigavon (region)|058/0000771
+Crail|058/0000772
+Cranborne|058/0000773
+Cranbrook|058/0000774
+Cranleigh|058/0000775
+Cranmere Pool|058/0000776
+Craven|058/0000777
+Craven Arms|058/0000778
+Crawley|058/0000779
+Crayford|058/0000780
+Crediton|058/0000781
+Creetown|058/0000782
+Crewe|058/0000783
+Crewkerne|058/0000784
+Criccieth|058/0000785
+Crickhowell|058/0000786
+Cricklade|058/0000787
+Crieff|058/0000788
+Crinan Canal|058/0000789
+Croagh Patrick|058/0000790
+Croke Park|058/0000791
+Cromarty|058/0000792
+Cromarty Firth|058/0000793
+Cromer|058/0000794
+Crookhaven|058/0000795
+Crookstown|058/0000796
+Cropredy|058/0000797
+Crosshaven|058/0000798
+Crouch|058/0000799
+Crowland|058/0000800
+Croydon|058/0000801
+Cruden Bay|058/0000802
+Crummock Water|058/0000803
+Cuckfield|058/0000804
+Cuddesdon|058/0000805
+Cuillin Hills|058/0000806
+Culham|058/0000807
+Cullen|058/0000808
+Culloden Muir|058/0000809
+Cullompton|058/0000810
+Culross|058/0000811
+Cumberland (UK)|058/0000812
+Cumbernauld|058/0000813
+Cumbrae, Great and Little|058/0000814
+Cumbria|058/0000815
+Cumbrian Mountains|058/0000816
+Cumnock|058/0000817
+Cumnor|058/0000818
+Cupar|058/0000819
+Curragh, the|058/0000820
+Cwmbran|058/0000821
+Dalbeattie|058/0000822
+Dale|058/0000823
+Dales|058/0000824
+Dalkeith|058/0000825
+Dalkey|058/0000826
+Dalmellington|058/0000827
+Dalmeny|058/0000828
+Dalry|058/0000829
+Dalston|058/0000830
+Dalswinton|058/0000831
+Dalton-in-Furness|058/0000832
+Darlington (authority)|058/0000833
+Darlington (town)|058/0000834
+Dart|058/0000835
+Dartford|058/0000836
+Dartmoor|058/0000837
+Dartmouth (UK)|058/0000838
+Darvel|058/0000839
+Darwen|058/0000840
+Daventry|058/0000841
+Dawlish|058/0000842
+Deal|058/0000843
+Dean, Forest of|058/0000844
+Dedham|058/0000845
+Dee (Scotland)|058/0000846
+Dee (Wales)|058/0000847
+Deerhurst|058/0000848
+Delamere Forest|058/0000849
+Denbigh|058/0000850
+Denbighshire|058/0000851
+Denny and Dunipace|058/0000852
+Denton (Manchester)|058/0000853
+Denton (Yorkshire)|058/0000854
+Deptford|058/0000855
+Derby|058/0000856
+Derby City|058/0000857
+Derbyshire|058/0000858
+Derg, Lough (County Clare)|058/0000859
+Derg, Lough (County Donegal)|058/0000860
+Derry|058/0000861
+Derwent (North Yorkshire)|058/0000862
+Derwentwater|058/0000863
+Devenish Island|058/0000864
+Deveron|058/0000865
+Devil's Bridge|058/0000866
+Devizes|058/0000867
+Devon|058/0000868
+Devon (river)|058/0000869
+Dewsbury|058/0000870
+Didcot|058/0000871
+Dingle|058/0000872
+Dingwall|058/0000873
+Dinton|058/0000874
+Diss|058/0000875
+Ditchling Beacon|058/0000876
+Dochart|058/0000877
+Docklands|058/0000878
+Dodman, the|058/0000879
+Dogs, Isle of|058/0000880
+Dolgellau|058/0000881
+Dollar (town)|058/0000882
+Don|058/0000883
+Don (Scotland)|058/0000884
+Donaghadee|058/0000885
+Doncaster|058/0000886
+Donegal|058/0000887
+Donegal (town)|058/0000888
+Doneraile|058/0000889
+Donnybrook (Republic of Ireland)|058/0000890
+Doon|058/0000891
+Doon, Loch|058/0000892
+Dorchester|058/0000893
+Dorchester-on-Thames|058/0000894
+Dorking|058/0000895
+Dornoch|058/0000896
+Dorset|058/0000897
+Douglas (Scotland)|058/0000898
+Douglas (town)|058/0000899
+Doune|058/0000900
+Doune Carloway|058/0000901
+Dounreay|058/0000902
+Dove|058/0000903
+Dover (UK)|058/0000904
+Dovercourt|058/0000905
+Dover, Strait of|058/0000906
+Dovey|058/0000907
+Dowlais|058/0000908
+Down (county)|058/0000909
+Down (region)|058/0000910
+Downham Market|058/0000911
+Downpatrick|058/0000912
+Downs, the|058/0000913
+Downs, North and South|058/0000914
+Downton|058/0000915
+Dreghorn|058/0000916
+Drogheda|058/0000917
+Droitwich|058/0000918
+Dromore|058/0000919
+Dronfield|058/0000920
+Droylsden|058/0000921
+Drumcliff|058/0000922
+Drumcolliher|058/0000923
+Drury Lane|058/0000924
+Dublin (county)|058/0000925
+Dublin (city)|058/0000926
+Duddingston|058/0000927
+Duddon|058/0000928
+Dudley|058/0000929
+Dufftown|058/0000930
+Dukeries|058/0000931
+Dukinfield|058/0000932
+Dulverton|058/0000933
+Dulwich|058/0000934
+Dumbarton|058/0000935
+Dumfries|058/0000936
+Dumfries and Galloway|058/0000937
+Dumfriesshire|058/0000938
+Dunbartonshire|058/0000939
+Dunblane|058/0000940
+Duncansby Head|058/0000941
+Dundalk|058/0000942
+Dundas Castle|058/0000943
+Dundee|058/0000944
+Dundee City|058/0000945
+Dundonald|058/0000946
+Dundrennan|058/0000947
+Dundrum|058/0000948
+Dunfermline|058/0000949
+Dungannon|058/0000950
+Dungannon and South Tyrone|058/0000951
+Dungarvan|058/0000952
+Dungeness|058/0000953
+Dungiven|058/0000954
+Dunglas|058/0000955
+Dunkeld|058/0000956
+Dunkery Beacon|058/0000957
+D&uacute;n Laoghaire|058/0000958
+Dunleer|058/0000959
+Dunlop (village)|058/0000960
+Dunmanway|058/0000961
+Dunmore East|058/0000962
+Dunnet Head|058/0000963
+Dunnose|058/0000964
+Dunoon|058/0000965
+Dunrossness|058/0000966
+Duns|058/0000967
+Dunscore|058/0000968
+Dunsinane|058/0000969
+Dunsink|058/0000970
+Dunstable|058/0000971
+Dunstaffnage|058/0000972
+Dunstanburgh Castle|058/0000973
+Dunster|058/0000974
+Dunure|058/0000975
+Dunwich|058/0000976
+Durham (UK city)|058/0000977
+Durham (UK county)|058/0000978
+Dursley|058/0000979
+Dyfed|058/0000980
+Dyfi|058/0000981
+Eaglesham|058/0000982
+Ealing|058/0000983
+Earls Barton|058/0000984
+Earlston|058/0000985
+Earn|058/0000986
+Earn, Loch|058/0000987
+Easington|058/0000988
+East Anglia|058/0000989
+East Ayrshire|058/0000990
+East Barnet|058/0000991
+Eastbourne|058/0000992
+East Dereham|058/0000993
+East Dunbartonshire|058/0000994
+East Grinstead|058/0000995
+East Ham|058/0000996
+East Kilbride|058/0000997
+Eastleigh|058/0000998
+East Linton|058/0000999
+East Lothian|058/0001000
+East Renfrewshire|058/0001001
+East Riding of Yorkshire|058/0001002
+East Sussex|058/0001003
+East Wemyss|058/0001004
+Eastwood|058/0001005
+Ebbw Vale|058/0001006
+Ecclefechan|058/0001007
+Eccles|058/0001008
+Ecclesfield|058/0001009
+Eckington|058/0001010
+Eday|058/0001011
+Eddystone Rocks|058/0001012
+Eden (river in Cumbria)|058/0001013
+Edenbridge|058/0001014
+Edenderry|058/0001015
+Edgbaston (suburb)|058/0001016
+Edgeworthstown|058/0001017
+Edinburgh|058/0001018
+Edinburgh City|058/0001019
+Edmonton (UK)|058/0001020
+Egham|058/0001021
+Egremont|058/0001022
+Eigg|058/0001023
+Elan|058/0001024
+Elgin (Scotland)|058/0001025
+Elie|058/0001026
+Elland|058/0001027
+Ellen's Isle|058/0001028
+Ellesmere Port|058/0001029
+Ellon|058/0001030
+Elphin|058/0001031
+Elstow|058/0001032
+Elstree|058/0001033
+Ely|058/0001034
+Ely, Isle of|058/0001035
+Enfield|058/0001036
+England|058/0001037
+English Channel|058/0001038
+Ennis|058/0001039
+Enniscorthy|058/0001040
+Enniskillen|058/0001041
+Ennistymon|058/0001042
+Epping|058/0001043
+Epping Forest|058/0001044
+Epsom|058/0001045
+Epworth|058/0001046
+Eriboll, Loch|058/0001047
+Ericht, Loch|058/0001048
+Eriskay|058/0001049
+Erith|058/0001050
+Erne, Lough|058/0001051
+Erskine Bridge|058/0001052
+Eryri|058/0001053
+Escomb|058/0001054
+Esher|058/0001055
+Esk|058/0001056
+Eskdale|058/0001057
+Eskdalemuir|058/0001058
+Esk, North and South|058/0001059
+Essex|058/0001060
+Etive|058/0001061
+Eton|058/0001062
+Etruria (UK)|058/0001063
+Ettrick|058/0001064
+Eversley|058/0001065
+Evesham|058/0001066
+Exe|058/0001067
+Exeter|058/0001068
+Exmoor|058/0001069
+Exmouth|058/0001070
+Eyam|058/0001071
+Eye|058/0001072
+Eyemouth|058/0001073
+Eynsford|058/0001074
+Failsworth|058/0001075
+Fairford|058/0001076
+Fairhead Head|058/0001077
+Fair Isle|058/0001078
+Fairlie|058/0001079
+Fakenham|058/0001080
+Falkirk (authority)|058/0001081
+Falkirk (town)|058/0001082
+Falkland|058/0001083
+Falmouth|058/0001084
+Fareham|058/0001085
+Faringdon|058/0001086
+Farnborough|058/0001087
+Farne Islands|058/0001088
+Farnham|058/0001089
+Farnworth|058/0001090
+Fastnet Rock|058/0001091
+Faversham|058/0001092
+Featherstone|058/0001093
+Felixstowe|058/0001094
+Felsted|058/0001095
+Fens, the|058/0001096
+Fenton|058/0001097
+Fenwick|058/0001098
+Fermanagh (county)|058/0001099
+Fermanagh (region)|058/0001100
+Fermoy|058/0001101
+Ferns|058/0001102
+Fethard|058/0001103
+Fetlar|058/0001104
+Ffestiniog|058/0001105
+Fife|058/0001106
+Filey|058/0001107
+Findon|058/0001108
+Fingal's Cave|058/0001109
+Fishguard|058/0001110
+Flamborough Head|058/0001111
+Flannan Islands|058/0001112
+Flatford|058/0001113
+Fleet Street|058/0001114
+Fleetwood|058/0001115
+Flint (Wales)|058/0001116
+Flintshire|058/0001117
+Flotta|058/0001118
+Flow Country|058/0001119
+Fochabers|058/0001120
+Folkestone|058/0001121
+Foreland, North and South|058/0001122
+Forfar|058/0001123
+Forfarshire|058/0001124
+Forres|058/0001125
+Fort Augustus|058/0001126
+Forteviot|058/0001127
+Forth|058/0001128
+Forth and Clyde Canal|058/0001129
+Fortrose|058/0001130
+Fort William|058/0001131
+Fotheringay Castle|058/0001132
+Foulness|058/0001133
+Fowey|058/0001134
+Foyle, Lough|058/0001135
+Foynes|058/0001136
+Framlingham|058/0001137
+Fraserburgh|058/0001138
+Freshwater|058/0001139
+Frinton-on-Sea|058/0001140
+Frome|058/0001141
+Furness|058/0001142
+Fyne, Loch|058/0001143
+Gads Hill|058/0001144
+Gaeltacht|058/0001145
+Gainsborough|058/0001146
+Gairloch|058/0001147
+Galashiels|058/0001148
+Galloway|058/0001149
+Galloway, Mull of|058/0001150
+Galston|058/0001151
+Galtee Mountains|058/0001152
+Galway (county)|058/0001153
+Galway (town)|058/0001154
+Gare Loch|058/0001155
+Garforth|058/0001156
+Garston|058/0001157
+Gateshead|058/0001158
+Gatwick|058/0001159
+Giant's Causeway|058/0001160
+Gillingham (Dorset)|058/0001161
+Gillingham (Kent)|058/0001162
+Girvan (river)|058/0001163
+Girvan (town)|058/0001164
+Glamorgan|058/0001165
+Glandore|058/0001166
+Glasgow|058/0001167
+Glasgow City|058/0001168
+Glasnevin|058/0001169
+Glastonbury|058/0001170
+Glastonbury lake village|058/0001171
+Glen Affric|058/0001172
+Glenalmond|058/0001173
+Glencoe|058/0001174
+Glendalough|058/0001175
+Gleneagles|058/0001176
+Glenfinnan|058/0001177
+Glengarriff|058/0001178
+Glengarry|058/0001179
+Glenlivet (valley)|058/0001180
+Glenrothes|058/0001181
+Glen Roy|058/0001182
+Glenroy, Parallel Roads of|058/0001183
+Glen Tilt|058/0001184
+Glos|058/0001185
+Glossop|058/0001186
+Gloucester (UK)|058/0001187
+Gloucestershire|058/0001188
+Glyders|058/0001189
+Glyncorrwg|058/0001190
+Godalming|058/0001191
+Godmanchester|058/0001192
+Godstone|058/0001193
+Gog Magog Hills|058/0001194
+Goil, Loch|058/0001195
+Golspie|058/0001196
+Goodrich|058/0001197
+Goodwin Sands|058/0001198
+Goole|058/0001199
+Gorbals|058/0001200
+Gorey (Republic of Ireland)|058/0001201
+Gorhambury|058/0001202
+Goring|058/0001203
+Gorleston|058/0001204
+Gosforth|058/0001205
+Gosport|058/0001206
+Goudhurst|058/0001207
+Gougane Barra|058/0001208
+Gourock|058/0001209
+Govan|058/0001210
+Gower Peninsula|058/0001211
+Grampian|058/0001212
+Grampian Mountains|058/0001213
+Granard|058/0001214
+Grand Union Canal|058/0001215
+Grangemouth|058/0001216
+Grange-over-Sands|058/0001217
+Grantham|058/0001218
+Granton|058/0001219
+Grasmere|058/0001220
+Grassholm|058/0001221
+Gravesend|058/0001222
+Great Britain|058/0001223
+Great Driffield|058/0001224
+Great Dunmow|058/0001225
+Great Gable|058/0001226
+Great Glen|058/0001227
+Great Malvern|058/0001228
+Great Orme's Head|058/0001229
+Great Rollright|058/0001230
+Great Tew|058/0001231
+Great Torrington|058/0001232
+Great Yarmouth|058/0001233
+Greenhithe|058/0001234
+Greenlaw|058/0001235
+Greenock|058/0001236
+Greenore|058/0001237
+Greensted-juxta-Ongar|058/0001238
+Greenwich (UK)|058/0001239
+Greystones|058/0001240
+Grimsby|058/0001241
+Guernsey|058/0001242
+Guildford|058/0001243
+Guildhall|058/0001244
+Guisborough|058/0001245
+Guiseley|058/0001246
+Gullane|058/0001247
+Gur, Lough|058/0001248
+Gwent|058/0001249
+Gwynedd|058/0001250
+Hackney|058/0001251
+Haddington|058/0001252
+Hadleigh|058/0001253
+Hadlow|058/0001254
+Hailsham|058/0001255
+Hale|058/0001256
+Halesowen|058/0001257
+Halesworth|058/0001258
+Halifax (UK)|058/0001259
+Halkirk|058/0001260
+Halstead|058/0001261
+Halton|058/0001262
+Haltwhistle|058/0001263
+Hambledon|058/0001264
+Hamilton (Scotland)|058/0001265
+Hammersmith and Fulham|058/0001266
+Hampshire|058/0001267
+Hampstead|058/0001268
+Handsworth|058/0001269
+Hanley|058/0001270
+Hants|058/0001271
+Harbledown|058/0001272
+Haringey|058/0001273
+Harlaw|058/0001274
+Harlech|058/0001275
+Harlow|058/0001276
+Harpenden|058/0001277
+Harris|058/0001278
+Harris, Sound of|058/0001279
+Harrogate|058/0001280
+Harrow|058/0001281
+Harting|058/0001282
+Hartland|058/0001283
+Hartlepool (authority)|058/0001284
+Hartlepool (town)|058/0001285
+Harwich|058/0001286
+Haslemere|058/0001287
+Haslingden|058/0001288
+Hastings|058/0001289
+Hatfield (Hertfordshire)|058/0001290
+Hatfield (Yorkshire)|058/0001291
+Hatfield Forest|058/0001292
+Hathersage|058/0001293
+Haulbowline Island|058/0001294
+Havant|058/0001295
+Haverfordwest|058/0001296
+Haverhill (UK)|058/0001297
+Havering|058/0001298
+Hawarden|058/0001299
+Hawes|058/0001300
+Haweswater|058/0001301
+Hawick|058/0001302
+Haworth|058/0001303
+Haydock|058/0001304
+Hayle|058/0001305
+Hay-on-Wye|058/0001306
+Haywards Heath|058/0001307
+Hazel Grove and Bramhall|058/0001308
+Heanor|058/0001309
+Heathrow|058/0001310
+Hebburn|058/0001311
+Hebden Bridge|058/0001312
+Hebrides|058/0001313
+Heckmondwike|058/0001314
+Hedon|058/0001315
+Helensburgh|058/0001316
+Helford|058/0001317
+Helston|058/0001318
+Helvellyn|058/0001319
+Hemel Hempstead|058/0001320
+Hemsworth|058/0001321
+Hendon|058/0001322
+Henley-in-Arden|058/0001323
+Henley-on-Thames|058/0001324
+Hereford|058/0001325
+Hereford and Worcester|058/0001326
+Herefordshire|058/0001327
+Herne Bay|058/0001328
+Herstmonceux|058/0001329
+Hertford|058/0001330
+Hertfordshire|058/0001331
+Herts|058/0001332
+Hessle|058/0001333
+Hetton-le-Hole|058/0001334
+Hever Castle|058/0001335
+Hexham|058/0001336
+Heysham|058/0001337
+Heywood|058/0001338
+Higham Ferrers|058/0001339
+High Force|058/0001340
+Highland|058/0001341
+Highland Region|058/0001342
+Highlands|058/0001343
+High Peak|058/0001344
+High Street|058/0001345
+High Willhays|058/0001346
+High Wycombe|058/0001347
+Hillingdon|058/0001348
+Hillsborough (Northern Ireland)|058/0001349
+Hinckley|058/0001350
+Hinderwell|058/0001351
+Hindhead|058/0001352
+Hindley|058/0001353
+Histon|058/0001354
+Hitchin|058/0001355
+Hoddesdon|058/0001356
+Hog's Back|058/0001357
+Holbeach|058/0001358
+Holderness|058/0001359
+Holland, parts of|058/0001360
+Holmfirth|058/0001361
+Holnicote Estate|058/0001362
+Holsworthy|058/0001363
+Holt|058/0001364
+Holycross|058/0001365
+Holyhead|058/0001366
+Holy Island|058/0001367
+Holy Island (Wales)|058/0001368
+Holy Loch|058/0001369
+Holywell|058/0001370
+Holywood|058/0001371
+Home Counties|058/0001372
+Honiton|058/0001373
+Hope|058/0001374
+Horley|058/0001375
+Horncastle|058/0001376
+Hornchurch|058/0001377
+Hornsea|058/0001378
+Horse Guards (building)|058/0001379
+Horsforth|058/0001380
+Horsham|058/0001381
+Horwich|058/0001382
+Houghton-le-Spring|058/0001383
+Hound|058/0001384
+Hounslow|058/0001385
+Hove|058/0001386
+Howden|058/0001387
+Howth|058/0001388
+Hoxton|058/0001389
+Hoy|058/0001390
+Hoylake|058/0001391
+Hoyland Nether|058/0001392
+Hucknall|058/0001393
+Huddersfield|058/0001394
+Hudnall Common|058/0001395
+Hughenden Valley|058/0001396
+Hugh Town|058/0001397
+Hull|058/0001398
+Humber|058/0001399
+Humberside|058/0001400
+Hungerford|058/0001401
+Hunstanton|058/0001402
+Huntingdon|058/0001403
+Huntingdonshire|058/0001404
+Huntingtower Castle|058/0001405
+Huntly|058/0001406
+Hurlford|058/0001407
+Hurst Castle|058/0001408
+Hurstmonceux|058/0001409
+Hurstpierpoint|058/0001410
+Hyde|058/0001411
+Hyde Park|058/0001412
+Hythe|058/0001413
+Ibstock|058/0001414
+Icknield Way|058/0001415
+Ightham|058/0001416
+Ilchester|058/0001417
+Ilford|058/0001418
+Ilfracombe|058/0001419
+Ilkeston|058/0001420
+Ilkley|058/0001421
+Ilminster|058/0001422
+Immingham|058/0001423
+Ince-in-Makerfield|058/0001424
+Inchcolm|058/0001425
+Inch Garvie|058/0001426
+Inchigeelagh|058/0001427
+Inchkeith|058/0001428
+Inchmahome|058/0001429
+Ingatestone|058/0001430
+Ingleborough|058/0001431
+Inishkeel|058/0001432
+Inishowen Head|058/0001433
+Inner Hebrides|058/0001434
+Innerleithen|058/0001435
+Inniscarra|058/0001436
+Innisfree|058/0001437
+Innishannon|058/0001438
+Inveraray|058/0001439
+Inverbervie|058/0001440
+Inverclyde|058/0001441
+Inveresk|058/0001442
+Invergordon|058/0001443
+Inverkeithing|058/0001444
+Inverlochy|058/0001445
+Inverness|058/0001446
+Inverness-shire|058/0001447
+Inverurie|058/0001448
+IOM|058/0001449
+Iona|058/0001450
+IOW|058/0001451
+Ipswich|058/0001452
+Ireland, Northern|058/0001453
+Irlam|058/0001454
+Ironbridge Gorge|058/0001455
+Irthlingborough|058/0001456
+Irvine|058/0001457
+Irvine (river)|058/0001458
+Irwell|058/0001459
+Isca Silurum|058/0001460
+Isis (river)|058/0001461
+Islandmagee|058/0001462
+Islay|058/0001463
+Isleham|058/0001464
+Isle of Man|058/0001465
+Isle of Wight|058/0001466
+Islington|058/0001467
+Ivel|058/0001468
+Ivinghoe|058/0001469
+Jarrow|058/0001470
+Jedburgh|058/0001471
+Jersey|058/0001472
+John o' Groats|058/0001473
+Johnstone|058/0001474
+Jura|058/0001475
+Kanturk|058/0001476
+Katrine, Loch|058/0001477
+Keady|058/0001478
+Kearsley|058/0001479
+Keighley|058/0001480
+Keimaneigh, Pass of|058/0001481
+Keith (town)|058/0001482
+Kells|058/0001483
+Kelso|058/0001484
+Kelty|058/0001485
+Kempston|058/0001486
+Kendal|058/0001487
+Kenilworth|058/0001488
+Kenmare|058/0001489
+Kensington and Chelsea|058/0001490
+Kent|058/0001491
+Kernow|058/0001492
+Kerry|058/0001493
+Kerry, Ring of|058/0001494
+Kesteven, Parts of|058/0001495
+Keswick|058/0001496
+Kettering|058/0001497
+Kew Gardens|058/0001498
+Keynsham|058/0001499
+Kidderminster|058/0001500
+Kidsgrove|058/0001501
+Kidwelly|058/0001502
+Kilbarchan|058/0001503
+Kilbirnie|058/0001504
+Kilburn High Road|058/0001505
+Kildare|058/0001506
+Kildare (town)|058/0001507
+Kilkee|058/0001508
+Kilkeel|058/0001509
+Kilkenny (county)|058/0001510
+Kilkenny (town)|058/0001511
+Kilkhampton|058/0001512
+Killala|058/0001513
+Killaloe|058/0001514
+Killarney|058/0001515
+Killiecrankie|058/0001516
+Killiney|058/0001517
+Killorglin|058/0001518
+Killybegs|058/0001519
+Killyleagh|058/0001520
+Kilmainham|058/0001521
+Kilmallock|058/0001522
+Kilmarnock|058/0001523
+Kilmartin|058/0001524
+Kilrush|058/0001525
+Kilsyth|058/0001526
+Kilwinning|058/0001527
+Kimbolton|058/0001528
+Kincardineshire|058/0001529
+Kinder Scout|058/0001530
+Kinghorn|058/0001531
+Kingsbridge|058/0001532
+Kingsclere|058/0001533
+King's County|058/0001534
+King's Langley|058/0001535
+King's Lynn|058/0001536
+King's Norton|058/0001537
+Kingston upon Hull (UK)|058/0001538
+Kingston upon Hull City|058/0001539
+Kingston upon Thames|058/0001540
+Kingstown (Ireland)|058/0001541
+Kingsway|058/0001542
+Kington|058/0001543
+Kingussie|058/0001544
+Kinlochleven|058/0001545
+Kinross|058/0001546
+Kinsale|058/0001547
+Kintore|058/0001548
+Kintyre|058/0001549
+Kinver Edge|058/0001550
+Kirkby|058/0001551
+Kirkby-in-Ashfield|058/0001552
+Kirkby Lonsdale|058/0001553
+Kirkby Moorside|058/0001554
+Kirkby Stephen|058/0001555
+Kirkcaldy|058/0001556
+Kirkcudbright|058/0001557
+Kirkcudbrightshire|058/0001558
+Kirkintilloch|058/0001559
+Kirklees Park|058/0001560
+Kirkliston|058/0001561
+Kirkoswald|058/0001562
+Kirkstall|058/0001563
+Kirkwall|058/0001564
+Kirriemuir|058/0001565
+Kishorn, Loch|058/0001566
+Kiveton Park|058/0001567
+Knaresborough|058/0001568
+Knebworth|058/0001569
+Knightsbridge|058/0001570
+Knock|058/0001571
+Knockmealdown Mountains|058/0001572
+Knottingley|058/0001573
+Knutsford|058/0001574
+Kyle of Lochalsh|058/0001575
+Kyles of Bute|058/0001576
+Lacock|058/0001577
+Ladybank|058/0001578
+Laggan, Loch|058/0001579
+Lake District|058/0001580
+Lamberhurst|058/0001581
+Lambeth|058/0001582
+Lamlash|058/0001583
+Lammermuir Hills|058/0001584
+Lampeter|058/0001585
+Lanark|058/0001586
+Lanarkshire|058/0001587
+Lancashire|058/0001588
+Lancaster (UK)|058/0001589
+Lanchester|058/0001590
+Lancing|058/0001591
+Lancs|058/0001592
+Land's End|058/0001593
+Lanesborough|058/0001594
+Langdale Pikes|058/0001595
+Langholm|058/0001596
+Langport|058/0001597
+Lansdown|058/0001598
+Laois|058/0001599
+Larbert|058/0001600
+Largs|058/0001601
+Larkhall|058/0001602
+Larne (town)|058/0001603
+Larne (region)|058/0001604
+Lauder (Scottish town)|058/0001605
+Laugharne|058/0001606
+Launceston (UK)|058/0001607
+Laurencekirk|058/0001608
+Lavenham|058/0001609
+Lea|058/0001610
+Leadenhall Market|058/0001611
+Leadhills|058/0001612
+Leamington Spa|058/0001613
+Leatherhead|058/0001614
+Ledbury|058/0001615
+Lee|058/0001616
+Leeds|058/0001617
+Leeds Castle|058/0001618
+Leek (town)|058/0001619
+Leicester|058/0001620
+Leicester City|058/0001621
+Leicestershire|058/0001622
+Leics|058/0001623
+Leigh|058/0001624
+Leighton Buzzard|058/0001625
+Leinster|058/0001626
+Leiston|058/0001627
+Leith|058/0001628
+Leith Hill|058/0001629
+Leitrim|058/0001630
+Leix|058/0001631
+Leixlip|058/0001632
+Lennoxtown|058/0001633
+Leominster (UK)|058/0001634
+Lerwick|058/0001635
+Leslie|058/0001636
+Letchworth|058/0001637
+Letterkenny|058/0001638
+Leuchars|058/0001639
+Levels, North, Middle, and South|058/0001640
+Leven|058/0001641
+Leven, Loch|058/0001642
+Lewes|058/0001643
+Lewis|058/0001644
+Lewisham|058/0001645
+Leyland|058/0001646
+Lichfield|058/0001647
+Liddesdale|058/0001648
+Liffey|058/0001649
+Lifford|058/0001650
+Limavady (town)|058/0001651
+Limavady (region)|058/0001652
+Limehouse|058/0001653
+Limerick (county)|058/0001654
+Limerick (town)|058/0001655
+Limpsfield|058/0001656
+Lincoln (UK)|058/0001657
+Lincolnshire|058/0001658
+Lincs|058/0001659
+Lindfield|058/0001660
+Lindisfarne|058/0001661
+Lingfield|058/0001662
+Linlithgow|058/0001663
+Linnhe, Loch|058/0001664
+Linton|058/0001665
+Linwood|058/0001666
+Lisburn (city)|058/0001667
+Lisburn (region)|058/0001668
+Lisdoonvarna|058/0001669
+Liskeard|058/0001670
+Lismore|058/0001671
+Lismore (Scotland)|058/0001672
+Lisnaskea|058/0001673
+Listowel|058/0001674
+Littleborough|058/0001675
+Little Dunmow|058/0001676
+Littlehampton|058/0001677
+Little Lever|058/0001678
+Little Solsbury Hill|058/0001679
+Liverpool|058/0001680
+Liversedge|058/0001681
+Livingston (town)|058/0001682
+Lizard Point|058/0001683
+Llanbedr|058/0001684
+Llanberis|058/0001685
+Llandaff|058/0001686
+Llandovery|058/0001687
+Llandrindod Wells|058/0001688
+Llandudno|058/0001689
+Llandybie|058/0001690
+Llanelli|058/0001691
+Llanfairfechan|058/0001692
+Llanfair P G|058/0001693
+Llangefni|058/0001694
+Llangollen|058/0001695
+Llanrwst|058/0001696
+Llantwit Major|058/0001697
+Lleyn Peninsula|058/0001698
+Loanhead|058/0001699
+Lochgelly|058/0001700
+Lochgilphead|058/0001701
+Lochmaben|058/0001702
+Loch Ness|058/0001703
+Lochy, Loch|058/0001704
+Lockerbie|058/0001705
+Loftus|058/0001706
+Lomond, Loch|058/0001707
+London (UK)|058/0001708
+London: architecture|058/0001709
+Londonderry (county)|058/0001710
+Londonderry (city)|058/0001711
+Londonderry (region)|058/0001712
+London, Greater|058/0001713
+London: history|058/0001714
+London Stone|058/0001715
+Long Eaton|058/0001716
+Longford|058/0001717
+Longford (town)|058/0001718
+Long, Loch|058/0001719
+Long Melford|058/0001720
+Longridge|058/0001721
+Longton|058/0001722
+Looe|058/0001723
+Lossiemouth|058/0001724
+Lostwithiel|058/0001725
+Lothian|058/0001726
+Loughborough|058/0001727
+Loughrea|058/0001728
+Louth|058/0001729
+Louth (village)|058/0001730
+Lower Largo|058/0001731
+Lowestoft|058/0001732
+Loweswater|058/0001733
+Lucan (Dublin)|058/0001734
+Luce Bay|058/0001735
+Ludlow|058/0001736
+Lugar|058/0001737
+Lulworth, West and East|058/0001738
+Lundy Island|058/0001739
+Lurgan|058/0001740
+Luton (authority)|058/0001741
+Luton (town)|058/0001742
+Lutterworth|058/0001743
+Luxulyan|058/0001744
+Lydd|058/0001745
+Lydford|058/0001746
+Lyme Regis|058/0001747
+Lymington|058/0001748
+Lymm|058/0001749
+Lympne|058/0001750
+Lyndhurst|058/0001751
+Lynmouth|058/0001752
+Lynton and Lynmouth|058/0001753
+Lytham St Anne's|058/0001754
+Mablethorpe and Sutton|058/0001755
+Macclesfield|058/0001756
+Macduff|058/0001757
+Macgillycuddy's Reeks|058/0001758
+Machynlleth|058/0001759
+Macroom|058/0001760
+Madley|058/0001761
+Maesteg|058/0001762
+Magherafelt (town)|058/0001763
+Magherafelt (region)|058/0001764
+Magna Carta Island|058/0001765
+Maidenhead|058/0001766
+Maidstone|058/0001767
+Mainland (Scotland)|058/0001768
+Malahide|058/0001769
+Malden and Coombe|058/0001770
+Malham|058/0001771
+Mallaig|058/0001772
+Mallow (town)|058/0001773
+Mall, The|058/0001774
+Malmesbury|058/0001775
+Maltby|058/0001776
+Malton|058/0001777
+Manacle Rocks|058/0001778
+Manchester (UK)|058/0001779
+Manchester, Greater|058/0001780
+Manchester Ship Canal|058/0001781
+Manifold Valley|058/0001782
+Man, Isle of|058/0001783
+Manningtree|058/0001784
+Manorhamilton|058/0001785
+Mansfield (UK)|058/0001786
+Mansfield Woodhouse|058/0001787
+Mar|058/0001788
+Marazion|058/0001789
+March|058/0001790
+Marches|058/0001791
+Maree, Loch|058/0001792
+Margate|058/0001793
+Market Bosworth|058/0001794
+Market Drayton|058/0001795
+Market Harborough|058/0001796
+Markinch|058/0001797
+Marlborough (UK)|058/0001798
+Marlow|058/0001799
+Marple|058/0001800
+Maryborough (Ireland)|058/0001801
+Maryport|058/0001802
+Masham|058/0001803
+Mask, Lough|058/0001804
+Matlock|058/0001805
+Mauchline|058/0001806
+Maybole|058/0001807
+Mayfair|058/0001808
+Mayfield|058/0001809
+May, Isle of|058/0001810
+Maynooth|058/0001811
+Mayo|058/0001812
+Meare|058/0001813
+Measham|058/0001814
+Meath|058/0001815
+Medmenham|058/0001816
+Medway|058/0001817
+Medway Towns|058/0001818
+Melbourne (UK)|058/0001819
+Melksham|058/0001820
+Melrose|058/0001821
+Meltham|058/0001822
+Melton Mowbray|058/0001823
+Menai Bridge|058/0001824
+Menai Strait|058/0001825
+Mendip Hills|058/0001826
+Menteith, Lake of|058/0001827
+Mentmore|058/0001828
+Merionethshire|058/0001829
+Merse|058/0001830
+Mersey|058/0001831
+Merseyside|058/0001832
+Merstham|058/0001833
+Merthyr Tydfil (authority)|058/0001834
+Merthyr Tydfil (town)|058/0001835
+Merton|058/0001836
+Methven|058/0001837
+Mevagissey|058/0001838
+Mexborough|058/0001839
+Mickle Fell|058/0001840
+Middleham|058/0001841
+Middlesbrough|058/0001842
+Middlesbrough (authority)|058/0001843
+Middlesex|058/0001844
+Middleton|058/0001845
+Middleton-in-Teesdale|058/0001846
+Middlewich|058/0001847
+Mid Glamorgan|058/0001848
+Midhurst|058/0001849
+Midlands|058/0001850
+Midleton|058/0001851
+Midlothian|058/0001852
+Midsomer Norton|058/0001853
+Mildenhall|058/0001854
+Mile End|058/0001855
+Milford Haven (port)|058/0001856
+Millennium Dome|058/0001857
+Millom|058/0001858
+Millport|058/0001859
+Milnrow|058/0001860
+Milton Abbas|058/0001861
+Milton Keynes|058/0001862
+Milton Keynes (authority)|058/0001863
+Minch|058/0001864
+Minchinhampton|058/0001865
+Minehead|058/0001866
+Minster in Sheppey|058/0001867
+Minster in Thanet|058/0001868
+Mirfield|058/0001869
+Missenden, Great|058/0001870
+Mis Tor, Great and Little|058/0001871
+Mitcham|058/0001872
+Mitchelstown|058/0001873
+Moate|058/0001874
+Moffat|058/0001875
+Moher, Cliffs of|058/0001876
+Mold|058/0001877
+Molesey, East and West|058/0001878
+Mona|058/0001879
+Monach Islands|058/0001880
+Monadhliath Mountains|058/0001881
+Monaghan (county)|058/0001882
+Monaghan (town)|058/0001883
+Monasterboice|058/0001884
+Monkton|058/0001885
+Monmouth (town)|058/0001886
+Monmouthshire|058/0001887
+Montgomeryshire|058/0001888
+Montrose|058/0001889
+Moorfoot Hills|058/0001890
+Moor Park (Hertfordshire)|058/0001891
+Morar, Loch|058/0001892
+Moray (unitary authority)|058/0001893
+Moray Firth|058/0001894
+Morayshire|058/0001895
+Morecambe|058/0001896
+Morecambe Bay|058/0001897
+Moriston|058/0001898
+Morley|058/0001899
+Morpeth|058/0001900
+Mossley|058/0001901
+Motherwell|058/0001902
+Mountain Ash|058/0001903
+Mountmellick|058/0001904
+Mountrath|058/0001905
+Mountsorrel|058/0001906
+Mourne Mountains|058/0001907
+Mow Cop|058/0001908
+Moyle|058/0001909
+Much Wenlock|058/0001910
+Muine Bheag|058/0001911
+Muirkirk|058/0001912
+Mull|058/0001913
+Mullingar|058/0001914
+Mumbles, The|058/0001915
+Mundesley|058/0001916
+Mungret|058/0001917
+Munster|058/0001918
+Musselburgh|058/0001919
+Mynydd Presceli|058/0001920
+Naas|058/0001921
+Nairn|058/0001922
+Nairnshire|058/0001923
+Nantgarw|058/0001924
+Nantwich|058/0001925
+Navan|058/0001926
+Naze, the|058/0001927
+Neagh, Lough|058/0001928
+Neath|058/0001929
+Neath Port Talbot|058/0001930
+Needles, the|058/0001931
+Neilston|058/0001932
+Nenagh|058/0001933
+Nene|058/0001934
+Ness, Loch|058/0001935
+Nether Stowey|058/0001936
+Netley|058/0001937
+Newark (UK)|058/0001938
+New Ash Green|058/0001939
+Newbridge|058/0001940
+Newbridge (Wales)|058/0001941
+Newburgh|058/0001942
+Newbury|058/0001943
+Newcastle (Northern Ireland)|058/0001944
+Newcastle-under-Lyme|058/0001945
+Newcastle upon Tyne|058/0001946
+Newcastle West|058/0001947
+New Forest|058/0001948
+Newham|058/0001949
+Newhaven|058/0001950
+Newlyn|058/0001951
+Newmains|058/0001952
+Newmarket|058/0001953
+Newmarket (Republic of Ireland)|058/0001954
+New Mills|058/0001955
+Newmilns|058/0001956
+New Pitsligo|058/0001957
+Newport (authority, Wales)|058/0001958
+Newport (Isle of Wight)|058/0001959
+Newport (Welsh city)|058/0001960
+Newport-on-Tay|058/0001961
+Newport Pagnell|058/0001962
+Newquay|058/0001963
+New Romney|058/0001964
+New Ross|058/0001965
+Newry|058/0001966
+Newry and Mourne|058/0001967
+New Scone|058/0001968
+Newstead (England)|058/0001969
+Newstead (Scotland)|058/0001970
+Newton Abbot|058/0001971
+Newton Aycliffe|058/0001972
+Newtongrange|058/0001973
+Newton-le-Willows|058/0001974
+Newton Stewart|058/0001975
+Newtown|058/0001976
+Newtownabbey|058/0001977
+Newtownabbey|058/0001978
+Newtownards|058/0001979
+Newtown St Boswells|058/0001980
+Newtownstewart|058/0001981
+Nidderdale|058/0001982
+Nigg|058/0001983
+Nith|058/0001984
+Nore, the|058/0001985
+Nore|058/0001986
+Norfolk (UK)|058/0001987
+Norfolk Broads|058/0001988
+Normanton|058/0001989
+Northallerton|058/0001990
+Northam (UK)|058/0001991
+Northampton|058/0001992
+Northamptonshire|058/0001993
+Northants|058/0001994
+North Ayrshire|058/0001995
+North Berwick|058/0001996
+Northd|058/0001997
+North Down|058/0001998
+North Downs|058/0001999
+North East Lincolnshire|058/0002000
+Northern Ireland|058/0002001
+North Esk|058/0002002
+Northfield|058/0002003
+Northfleet|058/0002004
+North Lanarkshire|058/0002005
+North Lincolnshire|058/0002006
+North Ronaldsay|058/0002007
+North Shields|058/0002008
+North Somerset|058/0002009
+North Uist|058/0002010
+Northumberland|058/0002011
+North Walsham|058/0002012
+Northwich|058/0002013
+North Yorkshire|058/0002014
+Norton (town)|058/0002015
+Norton Radstock|058/0002016
+Norwich (UK)|058/0002017
+Nottingham|058/0002018
+Nottingham City|058/0002019
+Nottinghamshire|058/0002020
+Notts|058/0002021
+Nuneaton|058/0002022
+Oakham|058/0002023
+Oban|058/0002024
+Ochil Hills|058/0002025
+Offaly|058/0002026
+Offa's Dyke|058/0002027
+Oich, Loch|058/0002028
+Oldbury|058/0002029
+Oldcastle|058/0002030
+Old Dailly|058/0002031
+Old Deer|058/0002032
+Old Fletton|058/0002033
+Oldham|058/0002034
+Oldmeldrum|058/0002035
+Olney|058/0002036
+Omagh (town)|058/0002037
+Omagh (region)|058/0002038
+Orkney Causeway|058/0002039
+Orkney Islands|058/0002040
+Orme's Head|058/0002041
+Ormskirk|058/0002042
+Oronsay|058/0002043
+Orpington|058/0002044
+Orrell|058/0002045
+Orwell|058/0002046
+Ossett|058/0002047
+Oswaldtwistle|058/0002048
+Oswestry|058/0002049
+Otford|058/0002050
+Otham|058/0002051
+Otley|058/0002052
+Otterburn|058/0002053
+Ottery St Mary|058/0002054
+Oulton|058/0002055
+Oulton Broad|058/0002056
+Oundle|058/0002057
+Ouse (Sussex)|058/0002058
+Ouse (Yorkshire)|058/0002059
+Ouse, Great|058/0002060
+Ouse, Little|058/0002061
+Outer Hebrides|058/0002062
+Oxford|058/0002063
+Oxfordshire|058/0002064
+Oxford Street|058/0002065
+Oxted|058/0002066
+Oystermouth|058/0002067
+Paddington|058/0002068
+Padiham|058/0002069
+Padstow|058/0002070
+Paignton|058/0002071
+Paisley|058/0002072
+Pall Mall|058/0002073
+Passage East|058/0002074
+Passage West|058/0002075
+Patcham|058/0002076
+Patrixbourne|058/0002077
+Peacehaven|058/0002078
+Peak District|058/0002079
+Peckham|058/0002080
+Peebles|058/0002081
+Peeblesshire|058/0002082
+Peel|058/0002083
+Pembrey|058/0002084
+Pembroke (town)|058/0002085
+Pembrokeshire|058/0002086
+Penarl&acirc;g|058/0002087
+Penarth|058/0002088
+Pendine|058/0002089
+Pendlebury|058/0002090
+Penistone|058/0002091
+Penkridge|058/0002092
+Penmaenmawr|058/0002093
+Penn|058/0002094
+Pennines, the|058/0002095
+Penrith|058/0002096
+Penryn|058/0002097
+Penshurst|058/0002098
+Pentland Firth|058/0002099
+Pentland Hills|058/0002100
+Penzance|058/0002101
+Perranporth|058/0002102
+Pershore|058/0002103
+Perth (Scotland)|058/0002104
+Perth and Kinross|058/0002105
+Perthshire|058/0002106
+Peterborough (UK authority)|058/0002107
+Peterborough (UK city)|058/0002108
+Peterhead|058/0002109
+Peterlee|058/0002110
+Petersfield|058/0002111
+Petticoat Lane|058/0002112
+Pettigo|058/0002113
+Petworth|058/0002114
+Pevensey|058/0002115
+Philiphaugh|058/0002116
+Piccadilly (London)|058/0002117
+Piccadilly (Manchester)|058/0002118
+Pickering|058/0002119
+Pimlico|058/0002120
+Pitlochry|058/0002121
+Pittenweem|058/0002122
+Plumpton|058/0002123
+Plymouth (UK city)|058/0002124
+Plymouth City|058/0002125
+Plymouth Sound|058/0002126
+Plympton|058/0002127
+Plymstock|058/0002128
+Plynlimon|058/0002129
+Pocklington|058/0002130
+Point Lynas|058/0002131
+Polesworth|058/0002132
+Pomfret|058/0002133
+Pontefract|058/0002134
+Pontrhydfendigaid|058/0002135
+Pontypool|058/0002136
+Pontypridd|058/0002137
+Poole (authority)|058/0002138
+Poole (port)|058/0002139
+Porlock|058/0002140
+Portadown|058/0002141
+Portarlington|058/0002142
+Portchester|058/0002143
+Port Ellen|058/0002144
+Port Glasgow|058/0002145
+Porthcawl|058/0002146
+Porthmadog|058/0002147
+Portishead|058/0002148
+Portland, Isle of|058/0002149
+Portlaoise|058/0002150
+Portmarnock|058/0002151
+Portmeirion|058/0002152
+Portobello|058/0002153
+Portree|058/0002154
+Portrush|058/0002155
+Portsea Island|058/0002156
+Portslade-by-Sea|058/0002157
+Portsmouth (UK)|058/0002158
+Portsmouth City|058/0002159
+Portstewart|058/0002160
+Port Sunlight|058/0002161
+Port Talbot|058/0002162
+Portumna|058/0002163
+Powys (authority)|058/0002164
+Prescot|058/0002165
+Preseli Hills|058/0002166
+Prestatyn|058/0002167
+Presteigne|058/0002168
+Preston|058/0002169
+Prestonpans|058/0002170
+Prestwich|058/0002171
+Prestwick|058/0002172
+Princetown|058/0002173
+Prudhoe|058/0002174
+Pudsey|058/0002175
+Puffin Island|058/0002176
+Pumlumon|058/0002177
+Punchestown|058/0002178
+Purbeck, Isle of|058/0002179
+Putney|058/0002180
+Pwllheli|058/0002181
+Pytchley|058/0002182
+Quantock Hills|058/0002183
+Queenborough|058/0002184
+Queensbury|058/0002185
+Queen's County|058/0002186
+Queensferry|058/0002187
+Queensferry, North|058/0002188
+Queenstown (Republic of Ireland)|058/0002189
+Raasay|058/0002190
+Radcliffe|058/0002191
+Radlett|058/0002192
+Radley|058/0002193
+Radnorshire|058/0002194
+Rainford|058/0002195
+Ramsbottom|058/0002196
+Ramsey (Cambridgeshire)|058/0002197
+Ramsey (Isle of Man)|058/0002198
+Ramsey Island|058/0002199
+Ramsgate|058/0002200
+Rannoch, Loch|058/0002201
+Ranworth|058/0002202
+Raphoe|058/0002203
+Rathdrum|058/0002204
+Rathfarnham|058/0002205
+Rathkeale|058/0002206
+Rathlin Island|058/0002207
+Rathluirc|058/0002208
+Rathmines|058/0002209
+Ravenglass|058/0002210
+Ravenscraig|058/0002211
+Rawmarsh|058/0002212
+Reading (authority)|058/0002213
+Reading (town, UK)|058/0002214
+Reay Forest|058/0002215
+Reculver|058/0002216
+Redbourn|058/0002217
+Redbridge|058/0002218
+Redcar|058/0002219
+Redcar and Cleveland|058/0002220
+Redditch|058/0002221
+Rede|058/0002222
+Redhill|058/0002223
+Redruth|058/0002224
+Ree, Lough|058/0002225
+Regent's Park|058/0002226
+Regent Street|058/0002227
+Reigate|058/0002228
+Renfrew|058/0002229
+Renfrewshire|058/0002230
+Renton|058/0002231
+Repton|058/0002232
+Retford|058/0002233
+Rhayader|058/0002234
+Rhondda|058/0002235
+Rhondda (river)|058/0002236
+Rhondda Cynon Taff|058/0002237
+Rhuddlan|058/0002238
+Rhyl|058/0002239
+Rhymney (river)|058/0002240
+Rhymney (town)|058/0002241
+Ribble|058/0002242
+Ribchester|058/0002243
+Richborough|058/0002244
+Richmond (UK)|058/0002245
+Richmond-upon-Thames|058/0002246
+Rickmansworth|058/0002247
+Riddings|058/0002248
+Riding|058/0002249
+Rineanna|058/0002250
+Ringwood|058/0002251
+Ripley (Derbyshire)|058/0002252
+Ripley (North Yorkshire)|058/0002253
+Ripon|058/0002254
+Ripponden|058/0002255
+Risca|058/0002256
+Rishton|058/0002257
+Robin Hood's Bay|058/0002258
+Rochdale|058/0002259
+Rochdale Canal|058/0002260
+Rochester|058/0002261
+Rochford|058/0002262
+Rockall|058/0002263
+Rockingham|058/0002264
+Rogerstone|058/0002265
+Romford|058/0002266
+Romney Marsh|058/0002267
+Romsey|058/0002268
+Rosapenna|058/0002269
+Roscommon|058/0002270
+Roscrea|058/0002271
+Rosehearty|058/0002272
+Rosevear|058/0002273
+Roslin|058/0002274
+Ross and Cromarty|058/0002275
+Rosscarbery|058/0002276
+Rossendale|058/0002277
+Rosses Point|058/0002278
+Rosslare Harbour|058/0002279
+Ross-on-Wye|058/0002280
+Rosyth|058/0002281
+Rotherham|058/0002282
+Rotherhithe Tunnel|058/0002283
+Rothes|058/0002284
+Rothesay|058/0002285
+Rothwell (Northamptonshire)|058/0002286
+Rothwell (Yorkshire)|058/0002287
+Rottingdean|058/0002288
+Roundwood|058/0002289
+Roxburghshire|058/0002290
+Royston (Hertfordshire)|058/0002291
+Royston (South Yorkshire)|058/0002292
+Ruabon|058/0002293
+Rugby|058/0002294
+Rugeley|058/0002295
+Rum|058/0002296
+Runcorn|058/0002297
+Rush|058/0002298
+Rushden|058/0002299
+Rutherglen|058/0002300
+Ruthin|058/0002301
+Ruthwell|058/0002302
+Rutland|058/0002303
+Ryan, Loch|058/0002304
+Rydal Water|058/0002305
+Ryde|058/0002306
+Rye|058/0002307
+Saddleback|058/0002308
+Saffron Walden|058/0002309
+St Abb's Head|058/0002310
+St Agnes (Cornwall)|058/0002311
+St Agnes (Scilly Islands)|058/0002312
+St Albans|058/0002313
+St Aldhelm's Head|058/0002314
+St Andrews|058/0002315
+St Asaph|058/0002316
+St Aubin's|058/0002317
+St Austell|058/0002318
+St Bees|058/0002319
+St Blazey|058/0002320
+St David's|058/0002321
+St David's Head|058/0002322
+St Fergus|058/0002323
+St George's Channel|058/0002324
+St Germans|058/0002325
+St Govan's Head|058/0002326
+St Helens (Merseyside, UK)|058/0002327
+St Helier|058/0002328
+St Ives|058/0002329
+St Ives (Cambridgeshire)|058/0002330
+St John's Wood|058/0002331
+St Just|058/0002332
+St Just in Roseland|058/0002333
+St Kilda|058/0002334
+St Leonards|058/0002335
+St Martin (Guernsey)|058/0002336
+St Martin's|058/0002337
+St Marylebone|058/0002338
+St Mary's|058/0002339
+St Mary's Loch|058/0002340
+St Mawes|058/0002341
+St Michael's Mount|058/0002342
+St Monans|058/0002343
+St Neot|058/0002344
+St Neots|058/0002345
+St Ouen|058/0002346
+St Peter Port|058/0002347
+St Sampson's|058/0002348
+Salcombe|058/0002349
+Salford|058/0002350
+Salisbury (UK)|058/0002351
+Salisbury Plain|058/0002352
+Salop|058/0002353
+Saltaire|058/0002354
+Saltash|058/0002355
+Saltburn-by-the-Sea|058/0002356
+Saltcoats|058/0002357
+Sandal Magna|058/0002358
+Sanday|058/0002359
+Sandbach|058/0002360
+Sandgate|058/0002361
+Sandhurst|058/0002362
+Sandown|058/0002363
+Sandwich|058/0002364
+Sandy|058/0002365
+Sanquhar|058/0002366
+Sark|058/0002367
+Sarum|058/0002368
+Saul (village)|058/0002369
+Savernake Forest|058/0002370
+Savile Row|058/0002371
+Sawbridgeworth|058/0002372
+Scafell Pike|058/0002373
+Scapa Flow|058/0002374
+Scarborough|058/0002375
+Schiehallion|058/0002376
+Schull|058/0002377
+Scilly, Isles of|058/0002378
+Scone|058/0002379
+Scotland|058/0002380
+Scottish Borders|058/0002381
+Scott Polar Research Institute|058/0002382
+Scrooby|058/0002383
+Scunthorpe|058/0002384
+Seaford|058/0002385
+Seaforth, Loch|058/0002386
+Seaham|058/0002387
+Seathwaite|058/0002388
+Seaton|058/0002389
+Sedbergh|058/0002390
+Sedgefield|058/0002391
+Sedgley|058/0002392
+Segontium|058/0002393
+Selborne|058/0002394
+Selby|058/0002395
+Selkirk|058/0002396
+Selkirkshire|058/0002397
+Selsey|058/0002398
+Serpentine|058/0002399
+Settle|058/0002400
+Seven Dials|058/0002401
+Sevenoaks|058/0002402
+Severn Bridge|058/0002403
+Shaftesbury|058/0002404
+Shanklin|058/0002405
+Shannon|058/0002406
+Shannon Airport|058/0002407
+Shap Fells|058/0002408
+Shapinsay|058/0002409
+Sharpness|058/0002410
+Sheerness|058/0002411
+Sheffield|058/0002412
+Shefford|058/0002413
+Shepperton|058/0002414
+Sheppey, Isle of|058/0002415
+Shepton Mallet|058/0002416
+Sherborne|058/0002417
+Sherburn in Elmet|058/0002418
+Sheriffmuir|058/0002419
+Sherwood Forest|058/0002420
+Shetland Islands|058/0002421
+Shiel, Loch|058/0002422
+Shifnal|058/0002423
+Shildon|058/0002424
+Shillelagh|058/0002425
+Shin, Loch|058/0002426
+Shipley|058/0002427
+Shoeburyness|058/0002428
+Shoreham-by-Sea|058/0002429
+Shottery|058/0002430
+Shotton|058/0002431
+Shotts|058/0002432
+Shrewsbury|058/0002433
+Shropshire|058/0002434
+Sidlaw Hills|058/0002435
+Sidmouth|058/0002436
+Silloth|058/0002437
+Singleton|058/0002438
+Sissinghurst|058/0002439
+Sittingbourne|058/0002440
+Six Counties|058/0002441
+Sizewell|058/0002442
+Skegness|058/0002443
+Skelligs, the|058/0002444
+Skelmersdale|058/0002445
+Skelmorlie|058/0002446
+Skelton|058/0002447
+Skerries|058/0002448
+Skerries, the|058/0002449
+Skerryvore|058/0002450
+Skewen|058/0002451
+Skibbereen|058/0002452
+Skiddaw|058/0002453
+Skipton|058/0002454
+Skokholm|058/0002455
+Skomer|058/0002456
+Skye|058/0002457
+Slane|058/0002458
+Slaney|058/0002459
+Sleaford|058/0002460
+Sleat, Sound of|058/0002461
+Sledmere|058/0002462
+Slieve Bloom|058/0002463
+Sligo (county)|058/0002464
+Sligo (town)|058/0002465
+Slough (authority)|058/0002466
+Slough (town)|058/0002467
+Sloy, Loch|058/0002468
+Smailholm Tower|058/0002469
+Smallhythe|058/0002470
+Smethwick|058/0002471
+Smithfield|058/0002472
+Smoo Cave|058/0002473
+Snaefell|058/0002474
+Sneem|058/0002475
+Snitterfield|058/0002476
+Snodland|058/0002477
+Snowdon|058/0002478
+Snowdonia|058/0002479
+Soar|058/0002480
+Soham|058/0002481
+Soho|058/0002482
+Solent, the|058/0002483
+Solihull|058/0002484
+Solway Firth|058/0002485
+Somersby|058/0002486
+Somerset (county)|058/0002487
+Somerton|058/0002488
+Sompting|058/0002489
+Sorbiodunum|058/0002490
+Sorn|058/0002491
+Southampton|058/0002492
+Southampton City|058/0002493
+Southampton Water|058/0002494
+South Ayrshire|058/0002495
+South Bank|058/0002496
+Southborough|058/0002497
+South Downs|058/0002498
+Southend (town)|058/0002499
+Southend-on-sea|058/0002500
+Southern Uplands|058/0002501
+South Esk|058/0002502
+South Foreland|058/0002503
+South Glamorgan|058/0002504
+South Gloucestershire|058/0002505
+South Kirkby|058/0002506
+South Lanarkshire|058/0002507
+South Molton|058/0002508
+Southport|058/0002509
+South Ronaldsay|058/0002510
+South Shields|058/0002511
+South Uist|058/0002512
+Southwark|058/0002513
+Southwell|058/0002514
+South Yorkshire|058/0002515
+Sowerby Bridge|058/0002516
+Spaghetti Junction|058/0002517
+Spalding|058/0002518
+Spennymoor|058/0002519
+Spey|058/0002520
+Spiddle|058/0002521
+Spike Island|058/0002522
+Spilsby|058/0002523
+Spitalfields|058/0002524
+Spithead|058/0002525
+Spurn Head|058/0002526
+Staffa|058/0002527
+Stafford|058/0002528
+Staffordshire|058/0002529
+Staffs|058/0002530
+Staines|058/0002531
+Stalbridge|058/0002532
+Stalybridge|058/0002533
+Stamford St John's (Lincolnshire)|058/0002534
+Stanley (Derbyshire)|058/0002535
+Stansted|058/0002536
+Stanton Drew|058/0002537
+Stenness|058/0002538
+Stepney|058/0002539
+Stevenage|058/0002540
+Stevenston|058/0002541
+Stewartby|058/0002542
+Stewarton|058/0002543
+Steyning|058/0002544
+Stirling (authority)|058/0002545
+Stirling (city)|058/0002546
+Stirlingshire|058/0002547
+Stockbridge|058/0002548
+Stockport|058/0002549
+Stocksbridge|058/0002550
+Stockton-on-Tees (authority)|058/0002551
+Stockton-on-Tees (town)|058/0002552
+Stoke-on-Trent|058/0002553
+Stoke-on-Trent City|058/0002554
+Stoke Poges|058/0002555
+Stokesley|058/0002556
+Stone (Kent)|058/0002557
+Stone (Staffordshire)|058/0002558
+Stonehaven|058/0002559
+Stonehouse (Gloucestershire)|058/0002560
+Stonehouse (Plymouth)|058/0002561
+Stonehouse (South Lanarkshire)|058/0002562
+Stony Stratford|058/0002563
+Stormont|058/0002564
+Stornoway|058/0002565
+Stour (Dorset)|058/0002566
+Stourbridge|058/0002567
+Stour, Great|058/0002568
+Stowmarket|058/0002569
+Stow-on-the-Wold|058/0002570
+Strabane (town)|058/0002571
+Strabane (region)|058/0002572
+Strait of Dover|058/0002573
+Strandhill|058/0002574
+Strand, The|058/0002575
+Strangford Lough|058/0002576
+Stranraer|058/0002577
+Stratford (London)|058/0002578
+Stratford-upon-Avon|058/0002579
+Strathaven|058/0002580
+Strathclyde|058/0002581
+Strathmore|058/0002582
+Strathpeffer|058/0002583
+Streatham|058/0002584
+Street|058/0002585
+Stretford|058/0002586
+Stromness|058/0002587
+Stronsay|058/0002588
+Strood|058/0002589
+Stroud|058/0002590
+Styal|058/0002591
+Sudbury (Suffolk)|058/0002592
+Suffolk|058/0002593
+Suir|058/0002594
+Sullom Voe|058/0002595
+Sunbury-on-Thames|058/0002596
+Sunderland|058/0002597
+Surbiton|058/0002598
+Surrey|058/0002599
+Sussex|058/0002600
+Sutherlandshire|058/0002601
+Sutton|058/0002602
+Sutton Bridge|058/0002603
+Sutton Coldfield|058/0002604
+Sutton-in-Ashfield|058/0002605
+Swadlincote|058/0002606
+Swaffham|058/0002607
+Swale|058/0002608
+Swaledale|058/0002609
+Swanage|058/0002610
+Swanscombe|058/0002611
+Swansea (authority)|058/0002612
+Swansea (city)|058/0002613
+Swilly, Lough|058/0002614
+Swindon|058/0002615
+Swindon (authority)|058/0002616
+Swinford|058/0002617
+Swinton (Manchester)|058/0002618
+Swinton (Yorkshire)|058/0002619
+Swords|058/0002620
+Tadcaster|058/0002621
+Taf|058/0002622
+Taff|058/0002623
+Tamar (river, UK)|058/0002624
+Tamworth (UK)|058/0002625
+Tanderagee|058/0002626
+Tankersley|058/0002627
+Tantallon Castle|058/0002628
+Tara Hill|058/0002629
+Tarbert|058/0002630
+Tarbolton|058/0002631
+Tattershall|058/0002632
+Taunton|058/0002633
+Tavistock|058/0002634
+Tavy|058/0002635
+Taw|058/0002636
+Tawe|058/0002637
+Tay|058/0002638
+Tay, Loch|058/0002639
+Tayport|058/0002640
+Tayside|058/0002641
+Teddington|058/0002642
+Tees|058/0002643
+Teesdale|058/0002644
+Teesside|058/0002645
+Teifi|058/0002646
+Teign|058/0002647
+Teignmouth|058/0002648
+Teith|058/0002649
+Telford|058/0002650
+Telford and Wrekin|058/0002651
+Templemore|058/0002652
+Tenby|058/0002653
+Tenterden|058/0002654
+Tern|058/0002655
+Test|058/0002656
+Tetbury|058/0002657
+Tettenhall|058/0002658
+Teviot|058/0002659
+Tewkesbury|058/0002660
+Thame|058/0002661
+Thames|058/0002662
+Thames Ditton|058/0002663
+Thames Tunnel|058/0002664
+Thanet, Isle of|058/0002665
+Thaxted|058/0002666
+Theobald's Park|058/0002667
+Thetford|058/0002668
+Thirlmere|058/0002669
+Thirsk|058/0002670
+Thornaby-on-Tees|058/0002671
+Thorne|058/0002672
+Thornhill|058/0002673
+Thornton Cleveleys|058/0002674
+Threadneedle Street|058/0002675
+Thurles|058/0002676
+Thurrock|058/0002677
+Thursley|058/0002678
+Thurso|058/0002679
+Tickhill|058/0002680
+Tideswell|058/0002681
+Tighnabruaich|058/0002682
+Tilbury|058/0002683
+Tillicoultry|058/0002684
+Tintagel|058/0002685
+Tipperary|058/0002686
+Tipperary (town)|058/0002687
+Tipton|058/0002688
+Tiptree|058/0002689
+Tiree|058/0002690
+Tissington|058/0002691
+Tiverton|058/0002692
+Tobermory|058/0002693
+Todmorden|058/0002694
+Tonbridge|058/0002695
+Tongue|058/0002696
+Tooting|058/0002697
+Torbay|058/0002698
+Torfaen|058/0002699
+Torness|058/0002700
+Torphichen|058/0002701
+Torquay|058/0002702
+Torridge|058/0002703
+Torridon|058/0002704
+Totnes|058/0002705
+Tottenham|058/0002706
+Tottington|058/0002707
+Towcester|058/0002708
+Tower Bridge|058/0002709
+Tower Hamlets|058/0002710
+Towy|058/0002711
+Trafalgar Square|058/0002712
+Tralee|058/0002713
+Tramore|058/0002714
+Tranent|058/0002715
+Tredegar|058/0002716
+Tregaron|058/0002717
+Trent|058/0002718
+Tresco|058/0002719
+Trevena|058/0002720
+Trim|058/0002721
+Tring|058/0002722
+Tristan da Cunha|058/0002723
+Troon|058/0002724
+Trossachs|058/0002725
+Trowbridge|058/0002726
+Truro|058/0002727
+Tryfan|058/0002728
+Tuam|058/0002729
+Tullamore|058/0002730
+Tullow|058/0002731
+Tummel|058/0002732
+Tummel, Loch|058/0002733
+Tunbridge Wells|058/0002734
+Tunstall|058/0002735
+Turnberry|058/0002736
+Turriff|058/0002737
+Tutbury|058/0002738
+Tweed|058/0002739
+Twickenham (district)|058/0002740
+Tyburn|058/0002741
+Tyldesley|058/0002742
+Tyne|058/0002743
+Tyne and Wear|058/0002744
+Tynedale|058/0002745
+Tynemouth|058/0002746
+Tyneside|058/0002747
+Tyrone|058/0002748
+Tywi|058/0002749
+Tywyn|058/0002750
+Uckfield|058/0002751
+Uist|058/0002752
+Ullapool|058/0002753
+Ullswater|058/0002754
+Ulster|058/0002755
+Ulverston|058/0002756
+Undercliff, the|058/0002757
+Unst|058/0002758
+Uphall|058/0002759
+Upnor|058/0002760
+Uppingham|058/0002761
+Ure|058/0002762
+Uriconium|058/0002763
+Urmston|058/0002764
+Usk (river)|058/0002765
+Usk (town)|058/0002766
+Uttoxeter|058/0002767
+Valentia|058/0002768
+Vale of Glamorgan|058/0002769
+Vale Royal|058/0002770
+Vannin, Ellan|058/0002771
+Ventnor|058/0002772
+Virginia Water|058/0002773
+Viroconium|058/0002774
+Vyrnwy|058/0002775
+Wadebridge|058/0002776
+Wainfleet|058/0002777
+Wakefield|058/0002778
+Walbrook|058/0002779
+Wales|058/0002780
+Wall|058/0002781
+Wallasey|058/0002782
+Wallingford|058/0002783
+Wallington|058/0002784
+Wallsend|058/0002785
+Walmer|058/0002786
+Walney Island|058/0002787
+Walsall|058/0002788
+Walsingham|058/0002789
+Waltham Abbey|058/0002790
+Waltham Cross|058/0002791
+Waltham Forest|058/0002792
+Walthamstow|058/0002793
+Walton-on-Thames|058/0002794
+Walton-on-the-Naze|058/0002795
+Wandsworth|058/0002796
+Wansbeck|058/0002797
+Wantage|058/0002798
+Wapping|058/0002799
+Ware|058/0002800
+Wareham|058/0002801
+Warkworth|058/0002802
+Warminster|058/0002803
+Warrenpoint|058/0002804
+Warrington (authority)|058/0002805
+Warrington (town)|058/0002806
+Warsop|058/0002807
+Warwick (UK)|058/0002808
+Warwickshire|058/0002809
+Wasdale|058/0002810
+Wash, the|058/0002811
+Washford|058/0002812
+Washington (UK)|058/0002813
+Watchet|058/0002814
+Waterford (county)|058/0002815
+Waterford (town)|058/0002816
+Waterloo Bridge|058/0002817
+Waterville|058/0002818
+Watford|058/0002819
+Wath upon Dearne|058/0002820
+Waveney|058/0002821
+Weald, the|058/0002822
+Wear|058/0002823
+Wear Valley|058/0002824
+Weaver|058/0002825
+Wedmore|058/0002826
+Wednesbury|058/0002827
+Wednesfield|058/0002828
+Welland|058/0002829
+Wellingborough|058/0002830
+Wellington (Somerset)|058/0002831
+Wells|058/0002832
+Wells-next-the-Sea|058/0002833
+Welshpool|058/0002834
+Welwyn|058/0002835
+Welwyn Garden City|058/0002836
+Wembley|058/0002837
+Wendover|058/0002838
+Wensleydale|058/0002839
+Weobley|058/0002840
+West Berkshire|058/0002841
+West Bromwich|058/0002842
+Westbury|058/0002843
+West Calder|058/0002844
+West Dunbartonshire|058/0002845
+West End|058/0002846
+Westerham|058/0002847
+Western Isles|058/0002848
+West Glamorgan|058/0002849
+West Hoathly|058/0002850
+Westhoughton|058/0002851
+West Kirby|058/0002852
+West Lothian|058/0002853
+Westmeath|058/0002854
+West Mersea|058/0002855
+West Midlands|058/0002856
+Westminster, City of|058/0002857
+Westminster Bridge|058/0002858
+Westminster Hall|058/0002859
+Westmorland|058/0002860
+Weston-super-Mare|058/0002861
+Westport|058/0002862
+Westray|058/0002863
+West Sussex|058/0002864
+Westward Ho&excl;|058/0002865
+West Yorkshire|058/0002866
+Wetherby|058/0002867
+Wexford (county)|058/0002868
+Wexford (town)|058/0002869
+Wey|058/0002870
+Weybridge|058/0002871
+Weymouth|058/0002872
+Whalley|058/0002873
+Whalsay|058/0002874
+Wharfedale|058/0002875
+Wheathampstead|058/0002876
+Whernside|058/0002877
+Whipsnade|058/0002878
+Whitburn|058/0002879
+Whitby|058/0002880
+Whitchurch (Hampshire)|058/0002881
+Whitchurch (Shropshire)|058/0002882
+Whitefield|058/0002883
+Whitehall|058/0002884
+Whitehaven|058/0002885
+Whithorn|058/0002886
+Whitstable|058/0002887
+Whittlesey|058/0002888
+Whitworth|058/0002889
+Wick|058/0002890
+Wicken Fen|058/0002891
+Wickford|058/0002892
+Wicklow (county)|058/0002893
+Wicklow (town)|058/0002894
+Widecombe-in-the-Moor|058/0002895
+Widnes|058/0002896
+Wigan|058/0002897
+Wight, Isle of|058/0002898
+Wigston|058/0002899
+Wigtownshire|058/0002900
+Willenhall|058/0002901
+Wilmcote|058/0002902
+Wilmington|058/0002903
+Wilmslow|058/0002904
+Wilton|058/0002905
+Wilts|058/0002906
+Wiltshire|058/0002907
+Wimbledon (district)|058/0002908
+Wimborne Minster|058/0002909
+Winchburgh|058/0002910
+Winchcombe|058/0002911
+Winchelsea|058/0002912
+Winchester (UK)|058/0002913
+Windermere|058/0002914
+Windscale|058/0002915
+Windsor (UK)|058/0002916
+Windsor and Maidenhead|058/0002917
+Winsford|058/0002918
+Winslow|058/0002919
+Wirksworth|058/0002920
+Wirral, the|058/0002921
+Wisbech|058/0002922
+Wisley|058/0002923
+Witham (river)|058/0002924
+Witham (town)|058/0002925
+Witney|058/0002926
+Wiveliscombe|058/0002927
+Woburn|058/0002928
+Woking|058/0002929
+Wokingham (authority)|058/0002930
+Wokingham (town)|058/0002931
+Wolf Rock|058/0002932
+Wolverhampton|058/0002933
+Wolverton|058/0002934
+Wombwell|058/0002935
+Woodbridge|058/0002936
+Wood Green|058/0002937
+Woodhall Spa|058/0002938
+Woodstock (Oxfordshire)|058/0002939
+Woolacombe|058/0002940
+Wooler|058/0002941
+Woolwich|058/0002942
+Worcester (UK)|058/0002943
+Worcestershire|058/0002944
+Worcs|058/0002945
+Workington|058/0002946
+Worksop|058/0002947
+Worsborough|058/0002948
+Worsley|058/0002949
+Worth|058/0002950
+Worthing|058/0002951
+Wrekin, the|058/0002952
+Wrexham (authority)|058/0002953
+Wrexham (town)|058/0002954
+Wrotham|058/0002955
+Wroxeter|058/0002956
+Wycombe, West|058/0002957
+Wye|058/0002958
+Wye (Buckinghamshire)|058/0002959
+Wye (Derbyshire)|058/0002960
+Wymondham|058/0002961
+Wyre|058/0002962
+Yardley|058/0002963
+Yare|058/0002964
+Yarmouth (Isle of Wight)|058/0002965
+Yarrow (river)|058/0002966
+Yatton|058/0002967
+Yeadon|058/0002968
+Yeavering|058/0002969
+Yell|058/0002970
+Yeo (Dorset and Somerset)|058/0002971
+Yeo (Somerset)|058/0002972
+Yeovil|058/0002973
+Ynys M&ocirc;n|058/0002974
+York (city, UK)|058/0002975
+York (UK authority)|058/0002976
+Yorks.|058/0002977
+Yorkshire|058/0002978
+Yorkshire Dales|058/0002979
+Youghal|058/0002980
+Zetland|058/0002981

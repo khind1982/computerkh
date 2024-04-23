@@ -1,0 +1,33 @@
+#!/bin/sh
+
+usage () {
+    echo "Usage: `basename $0` [product] [journalprefix]" >&2
+}
+
+die () {
+    echo "$1" >&2
+    usage
+    exit 1
+}
+
+product=${1}
+prefix=${2}
+
+if [ -z "$product" ]
+then
+    die "Please specify a product (Choose from bpc, bpd, via, wmb...)"
+fi
+
+
+if [ -z "$prefix" ]
+then
+    die "Please specify batch to return to editorial"
+fi
+
+for h in canopus capella pqsun103
+do
+for d in ${prefix}*
+do
+echo rsync --PQI ${d} ${h}:/images/${product}/${d}
+done
+done

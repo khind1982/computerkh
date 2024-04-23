@@ -1,0 +1,18 @@
+# -*- mode: shell-script -*-
+# Default shell aliases for bash
+#
+# These can be unset in each user's .bashrc if they get in the way.
+
+alias ls='gls -F --color=auto'
+alias ll='ls -l'
+
+# now we have /bin in our path before /usr/local/bin, we need to alias
+# Python so we don't by default pick up 2.4.4. This is a dirty hack,
+# we've got to do it...
+
+alias python='python2.5'
+
+# so anyone who uses screen(1) gets a TERM of xterm
+alias screen='screen -T xterm'
+
+alias h=history

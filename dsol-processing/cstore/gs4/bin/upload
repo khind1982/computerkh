@@ -1,0 +1,93 @@
+#!/bin/bash
+
+echo "DO NOT USE THIS SCRIPT!" >&2
+echo "Please use /packages/dsol/platform/bin/chsubmit instead" >&2
+
+exit 1
+
+# Upload a set of files to the steady state FTP drop point.
+
+# Use ncftpput for simplicity
+
+HOST="ftp.proquest.com"
+USER="chmstar"
+PASS="CHC0ntentFeed"
+
+DATADIR=/ss_prd/prod/CH
+
+PRODUCT=$1
+DATE=$2
+
+if [ "x$PRODUCT" = "x" ]
+then
+    echo "Usage: `basename $0` <productname> <date>"
+    exit 1
+fi
+
+#declare -a FILES
+
+build_file_list() {
+    DATAFILES=(/dc/dsol/steadystate/out/${PRODUCT}/*${DATE}*)
+}
+
+compress_files_if_necessary() {
+    echo "Checking that files are compressed..." >&2
+    for f in ${DATAFILES[@]}
+    do
+        if ! ( file $f | grep "gzip compressed data" 2>&1 > /dev/null )
+        then
+            echo -n "Compressing ${f}..." >&2
+            ZIP="true"
+            gzip "${f}"
+            echo " Done." >&2
+        fi
+    done
+    if [ "x${ZIP}" = "xtrue" ]
+    then
+        echo -n "Rebuilding file list..." >&2
+        build_file_list
+        echo " Done." >&2
+    else
+        echo " Yes" >&2
+    fi
+}
+
+upload_data() {
+    /usr/sfw/bin/ncftpput -u ${USER} -p ${PASS} ${HOST} ${DATADIR} "${DATAFILES[@]}"
+}
+
+build_file_list
+
+if [ -z ${DATAFILES[0]} ]
+then
+    echo "No files for $PRODUCT match $DATE"
+    exit 2
+elif [ ! -e ${DATAFILES[0]} ]
+then
+    echo "No files found"
+    exit 2
+else
+    echo "The following data files matched \"$PRODUCT\" and \"$DATE\":"
+    for f in ${DATAFILES[*]}
+    do
+        echo $(basename $f)
+    done
+    echo
+    echo
+    echo -n "Are these the files you want to upload? (Y/n): "
+    read
+    if [ "x$REPLY" = "x" ]
+    then
+        REPLY="y"
+    fi
+    case $REPLY in
+        [yY]|[yY][eE][sS])
+		compress_files_if_necessary
+                upload_data
+                ;;
+        *)
+                exit 3
+                ;;
+    esac
+fi
+

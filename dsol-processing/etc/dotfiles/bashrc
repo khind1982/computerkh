@@ -1,0 +1,13 @@
+# -*- mode: shell-script -*-
+
+if [ -f /packages/dsol/etc/bashrc.dsol ]
+then
+    . /packages/dsol/etc/bashrc.dsol
+fi
+
+if [ -f ~/.bash_${USER} ]
+then
+    . ~/.bash_${USER}
+fi
+
+## Don't change anything above this line!
