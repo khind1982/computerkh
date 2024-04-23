@@ -1,0 +1,176 @@
+#from helpers.gs4xmlhelper import GS4XMLHelper
+#set helper = GS4XMLHelper()
+  <ObjectInfo>
+    #if $productid
+    <LegacyProductMapping>
+      <GroupName>$productid</GroupName>
+    </LegacyProductMapping>
+    #end if
+    #echo helper.insert_source_types($source_types, $source_origin)
+    #for objectType in $searchObjectType
+    #if $searchObjectTypeOrigin
+    <ObjectType ObjectTypeOrigin="$searchObjectTypeOrigin">$objectType</ObjectType>
+    #else
+    <ObjectType>$objectType</ObjectType>
+    #end if
+    #end for
+    <Title>$title</Title>
+    #if $subtitle
+    <SubTitle>$subtitle</SubTitle>
+    #end if
+    #if $alternateTitle
+    <AlternateTitle>$alternateTitle</AlternateTitle>
+    #end if
+    #if $alternateTitles
+    #for alt_title in $alternateTitles
+    <AlternateTitle>$alt_title</AlternateTitle>
+    #end for
+    #end if
+    #if $unstructured
+    #echo helper.insertDate($numericStartDate, 'ObjectNumericDate', undated=$undated)
+    #if $numericObStartDate
+    #echo helper.insertDate($numericObStartDate, 'ObjectStartDate')
+    #end if
+    #echo helper.insertDate($rawObjectDate, 'ObjectRawAlphaDate', undated=$undated)
+    #end if
+    #if $pageCount
+    <PageCount>$pageCount</PageCount>
+    #end if
+    #for language in $languageData
+    <Language>
+      #echo helper.buildLanguageData(language)
+    </Language>
+    #end for
+    #if $copyrightData
+    <Copyright>
+      <CopyrightData>$copyrightData</CopyrightData>
+    </Copyright>
+    #end if
+    #if $pagination or $startpage or $doc_section
+    <PrintLocation>
+      #if $startpage
+      <StartPage>$startpage</StartPage>
+      #end if
+      #if $endpage
+      <EndPage>$endpage</EndPage>
+      #end if
+      #if $pagination
+      <Pagination>$pagination</Pagination>
+      #end if
+      #if $doc_section
+      <DocSection>$doc_section</DocSection>
+      #end if
+    </PrintLocation>
+    #end if
+    #if $peerReviewed
+    <PeerReviewed>$peerReviewed</PeerReviewed>
+    #end if
+    <ObjectIDs>
+      #for objid in $objectIDs
+      #echo helper.buildObjectID(objid)
+      #end for
+    </ObjectIDs>
+    #if $docFeatures
+    <DocFeatures>
+      #for feature in $docFeatures
+      <DocFeature>$feature</DocFeature>
+      #end for
+    </DocFeatures>
+    #end if
+    #if $contributors
+    #echo helper.buildContributors($contributors, $otherAuthors, $preformattedContributors)
+    #end if
+    #if $bio_dates
+    #if 'birthdate' in $bio_dates.keys
+    <DateInfo>
+      <Dates DateType="DateOfBirth">$bio_dates.birthdate</Dates>
+    </DateInfo>
+    #end if
+    #end if
+    #if $bio_dates
+    #if 'deathdate' in $bio_dates.keys
+    <DateInfo>
+      <Dates DateType="DateOfDeath">$bio_dates.deathdate</Dates>
+    </DateInfo>
+    #end if
+    #end if
+    #if $linkData
+    <Links>
+      #for link in $linkData
+      #echo helper.buildLink($link)
+      #end for
+    </Links>
+    #end if
+    #if $notesData
+    <Notes>
+      #for note in $notesData
+      #if 'HTMLContent' in $note.keys
+      <Note NoteType="$note['NoteType']" HTMLContent="$note['HTMLContent']"><![CDATA[
+      #else
+      <Note NoteType="$note['NoteType']">
+      #end if
+      $note['NoteText']
+      #if 'HTMLContent' in $note.keys
+      ]]>
+      #end if
+      </Note>
+      #end for
+    </Notes>
+    #end if
+    #if $ethnicity
+    <Ethnicity>$ethnicity</Ethnicity>
+    #end if
+    #if $terms
+    #echo helper.buildTerms($terms)
+    #end if
+    #if $abstract
+    <Abstract AbstractType="$abstract.abstractType">
+      #if 'HTMLContent' in $abstract.keys
+      <AbsText HTMLContent="$abstract.HTMLContent"><![CDATA[
+      #else
+      <AbsText>
+      #end if
+      $abstract.abstractText
+      #if 'HTMLContent' in $abstract.keys
+      ]]>
+      #end if
+      </AbsText>
+    </Abstract>
+    #end if
+    #if $textInfo
+    #echo helper.buildFullText($textInfo, $productid)
+    #end if
+    #if $fullText
+    #echo helper.renderFullText($fullText)
+    #end if
+    #if $hiddenPlainText
+    <TextInfo>
+      <HiddenText HTMLContent="false">
+        <![CDATA[
+        $hiddenPlainText
+        ]]>
+      </HiddenText>
+    </TextInfo>
+    #end if
+    #if $hiddenText
+    <TextInfo>
+      <HiddenText HTMLContent="true">
+        <![CDATA[
+        #for line in $hiddenText
+        <p>$line</p>
+        #end for
+        ]]>
+      </HiddenText>
+    </TextInfo>
+    #end if
+    #if $genericData
+    <GenericData GenericDataName="DocSortSeqNum">$genericData</GenericData>
+    #end if
+    #if $images
+    #if len($images) > 0
+    #for image in $images
+      #echo helper.renderImageInfo($image, $productID)
+    #end for
+    #end if
+    #end if
+  </ObjectInfo>

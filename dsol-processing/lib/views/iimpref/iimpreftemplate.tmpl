@@ -1,0 +1,88 @@
+#from helpers.gs4xmlhelper import GS4XMLHelper
+#set helper = GS4XMLHelper()
+<?xml version="1.0" encoding="UTF-8"?>
+<IngestRecord>
+  <ControlStructure>
+    <ActionCode>add</ActionCode>
+    <LegacyPlatform>CH</LegacyPlatform>
+    <LegacyID>$legacyID</LegacyID>
+    <LastLegacyUpdateTime>$lastUpdateTime</LastLegacyUpdateTime>
+    #if $xRefLinks
+    #for link in $xRefLinks
+    <RelatedLegacyID>
+      <LegacyPlatform>CH</LegacyPlatform>
+      <LegacyID>$link[0]</LegacyID>
+      <RelationshipType>SeeAlso</RelationshipType>
+    </RelatedLegacyID>
+    #end for
+    #end if
+    <PublicationInfo>
+      <LegacyPubID>$legacyPubID</LegacyPubID>
+    </PublicationInfo>
+    <Parent>
+      <ParentInfo>
+        <LegacyPlatform>CH</LegacyPlatform>
+        <Title>$pubTitle</Title>
+        <AlphaPubDate>$alphaPubDate</AlphaPubDate>
+        <NumericPubDate>$numericDate</NumericPubDate>
+      </ParentInfo>
+    </Parent>
+    #if $components
+    #for component in $components
+    #echo helper.buildComponent(component) 
+    #end for
+    #if $preformattedComponents
+    #for comp in $preformattedComponents
+    #echo $comp
+
+    #end for
+    #end if
+    #end if
+  </ControlStructure>
+  <RECORD>
+    <Version>Global_Schema_v4.0.xsd</Version>
+    <ObjectInfo>
+      <LegacyProductMapping>
+        <GroupName>IIMP Reference</GroupName>
+      </LegacyProductMapping>
+      #for objectType in $searchObjectType
+      <ObjectType>$objectType</ObjectType>
+      #end for
+      <Title>$title</Title>
+      <Language>
+        <RawLang>English</RawLang>
+        <ISO>
+          <ISOCode>ENG</ISOCode>
+        </ISO>
+      </Language>
+      <Copyright>
+        <CopyrightData>Naxos Music Library</CopyrightData>
+      </Copyright>
+      <ObjectIDs>
+        #for objid in $objectIDs
+        #echo helper.buildObjectID(objid)
+        #end for
+      </ObjectIDs>
+      #if $linkData
+      <Links>
+        #for link in $linkData
+        #echo helper.buildLink($link)
+        #end for
+      </Links>
+      #end if
+      #if $terms
+      #echo helper.buildTerms($terms)
+      #end if
+      #if $fullTextData
+      <TextInfo>
+        #if $pubTitle == "Glossary" or $pubTitle == "Opera Synopses" then '<Text HTMLContent="true">' else '<Text>'#
+        #if $pubTitle == "Glossary" or $pubTitle == "Opera Synopses" then '  <![CDATA[' else ''#
+ 
+          $fullTextData
+        #if $pubTitle == "Glossary" or $pubTitle == "Opera Synopses" then '  ]]>' else ''#
+        </Text>
+      </TextInfo>
+      #end if
+    </ObjectInfo>
+  </RECORD>
+</IngestRecord>

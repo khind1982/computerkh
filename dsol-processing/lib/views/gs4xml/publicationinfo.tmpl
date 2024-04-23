@@ -1,0 +1,31 @@
+  <PublicationInfo>
+    #if $publication_title
+    <PublicationTitle>$publication_title</PublicationTitle>
+    #end if
+    #if $volume
+    <Volume>$volume</Volume>
+    #end if
+    #if $issue
+    <Issue>$issue</Issue>
+    #end if
+    #if $build_locators
+    <Locators>
+      #if $issn
+      <LocatorID IDType="ISSN">$issn</LocatorID>
+      #end if
+      #if $eissn
+      <LocatorID IDType="ElecISSN">$eissn</LocatorID>
+      #end if
+    </Locators>
+    #end if
+    #if $publisher or $publisherCountry
+    <Publisher>
+      #if $publisher
+      <OrganizationName>$publisher</OrganizationName>
+      #end if
+      #if $publisherCountry
+      <CountryName>$publisherCountry</CountryName>
+      #end if
+    </Publisher>
+    #end if
+  </PublicationInfo>

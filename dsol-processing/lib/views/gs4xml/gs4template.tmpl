@@ -1,0 +1,11 @@
+#from helpers.gs4xmlhelper import GS4XMLHelper
+#set helper = GS4XMLHelper()
+#unless $out_as_in == True
+<?xml version='1.0' encoding='UTF-8'?>
+#end unless
+<IngestRecord>
+  <MinorVersion>$minorVersion</MinorVersion>
+  #include helper.template_path('controlstructure.tmpl')
+  #include helper.template_path('record.tmpl')
+</IngestRecord>
+

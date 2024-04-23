@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--W3C Schema created by C. L. Moore (c) ProQuest 2013-->
+<!-- Change Summary 
+
+-Add new article type Arts and Culture [Changed by Innodata 04.06.2013]
+
+-Add layout attribute to APS_page_image element [Changed by Innodata 04.06.2013]
+
+-Correct schema validation error in align and valign attributes [Changed by Innodata 04.06.2013] 
+	-Remove use="optional" attribute form align and valign  
+	-Remove duplicated valign attribute from <td> element   
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<!--Main record structure-->
+	<xs:element name="APS_article">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="APS_identifier"/>
+				<xs:element ref="APS_title"/>
+				<xs:element ref="APS_supplement" minOccurs="0"/>
+				<xs:element ref="APS_feature" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="APS_mattype"/>
+				<xs:element ref="APS_subhead" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="APS_author" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="APS_ident"/>
+				<xs:element ref="APS_issue_date"/>
+				<xs:element ref="APS_vendor"/>
+				<xs:element ref="APS_languages"/>
+				<xs:group ref="cobrand" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="APS_abstract" minOccurs="0"/>
+				<xs:element ref="APS_zone" maxOccurs="unbounded"/>
+				<xs:element ref="APS_body"/>
+			</xs:sequence>
+			<xs:attribute name="transaction" use="required"/>
+			<xs:attribute name="pmid" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="WWD001"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="type" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Accessories"/>
+						<xs:enumeration value="Advertisement"/>
+						<xs:enumeration value="Beauty"/>
+						<xs:enumeration value="Business"/>
+						<xs:enumeration value="Correspondence"/>
+						<xs:enumeration value="Eye"/>
+						<xs:enumeration value="Fashion"/>
+						<xs:enumeration value="Front Page"/>
+						<xs:enumeration value="Media"/>
+						<xs:enumeration value="Obituary"/>
+						<xs:enumeration value="Retail"/>
+						<xs:enumeration value="Runway"/>
+						<xs:enumeration value="Table Of Contents"/>
+						<xs:enumeration value="Arts and Culture"/>
+						<xs:enumeration value="Undefined"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="type2" use="optional">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Accessories"/>
+						<xs:enumeration value="Advertisement"/>
+						<xs:enumeration value="Beauty"/>
+						<xs:enumeration value="Business"/>
+						<xs:enumeration value="Correspondence"/>
+						<xs:enumeration value="Eye"/>
+						<xs:enumeration value="Fashion"/>
+						<xs:enumeration value="Front Page"/>
+						<xs:enumeration value="Media"/>
+						<xs:enumeration value="Obituary"/>
+						<xs:enumeration value="Retail"/>
+						<xs:enumeration value="Runway"/>
+						<xs:enumeration value="Table Of Contents"/>
+						<xs:enumeration value="Arts and Culture"/>
+						<xs:enumeration value="Undefined"/>
+						<xs:enumeration value=""/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="tape_id" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<!--Ordered simple/complex elements-->
+	<xs:element name="APS_identifier"/>
+	<xs:element name="APS_title"/>
+	<xs:element name="APS_supplement"/>
+	<xs:element name="APS_mattype">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="issue"/>
+				<xs:enumeration value="supplement"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="APS_feature">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="Cartoons"/>
+				<xs:enumeration value="Diagrams"/>
+				<xs:enumeration value="Graphs"/>
+				<xs:enumeration value="Illustrations"/>
+				<xs:enumeration value="Photographs"/>
+				<xs:enumeration value="References"/>
+				<xs:enumeration value="Tables"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="APS_subhead"/>
+	<xs:element name="APS_author"/>
+	<xs:element name="APS_ident">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="APS_volume"/>
+				<xs:element ref="APS_issue"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="APS_volume"/>
+	<xs:element name="APS_issue"/>
+	<xs:element name="APS_issue_date">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="APS_printed_date"/>
+				<xs:element ref="APS_date_8601"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="APS_printed_date" type="xs:string"/>
+	<xs:element name="APS_date_8601">
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:pattern value="[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="APS_vendor"/>
+	<xs:element name="APS_languages">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="APS_language"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="APS_language"/>
+	<xs:element name="APS_company"/>
+	<xs:element name="APS_brand"/>
+	<xs:group name="cobrand">
+		<xs:sequence>
+			<xs:element ref="APS_company" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="APS_brand" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:group>
+	<xs:element name="APS_abstract"/>
+	<xs:element name="APS_zone">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="APS_page_image"/>
+				<xs:element ref="APS_content"/>
+			</xs:sequence>
+			<xs:attribute name="type" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="header"/>
+						<xs:enumeration value="text"/>
+						<xs:enumeration value="image"/>
+						<xs:enumeration value="caption"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="APS_page_image">
+		<xs:complexType mixed="true">
+			<xs:attribute name="layout" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="r"/>
+						<xs:enumeration value="v"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="APS_content">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="APS_word" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="APS_zone_caption" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="APS_zone_imagetype" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="APS_zone_credit" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="APS_zone_location"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="APS_word">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="APS_text"/>
+				<xs:element ref="APS_wc"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="APS_text"/>
+
+	<xs:element name="APS_wc">
+		<xs:complexType>
+			<xs:attribute name="uly" use="required"/>
+			<xs:attribute name="ulx" use="required"/>
+			<xs:attribute name="lry" use="required"/>
+			<xs:attribute name="lrx" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="APS_zone_caption"/>
+	<xs:element name="APS_zone_imagetype">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="Cartoons"/>
+				<xs:enumeration value="Diagrams"/>
+				<xs:enumeration value="Graphs"/>
+				<xs:enumeration value="Illustrations"/>
+				<xs:enumeration value="Photographs"/>
+				<xs:enumeration value="References"/>
+				<xs:enumeration value="Tables"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="APS_zone_credit"/>
+	<xs:element name="APS_zone_location">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="APS_zone_pagenumber"/>
+				<xs:element ref="APS_page_sequence"/>
+				<xs:element ref="APS_zone_coord"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="APS_zone_pagenumber"/>
+	<xs:element name="APS_page_sequence"/>
+	<xs:element name="APS_zone_coord">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="APS_ULX"/>
+				<xs:element ref="APS_ULY"/>
+				<xs:element ref="APS_LRX"/>
+				<xs:element ref="APS_LRY"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="APS_ULY"/>
+	<xs:element name="APS_ULX"/>
+	<xs:element name="APS_LRY"/>
+	<xs:element name="APS_LRX"/>
+	<xs:element name="APS_body">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:group ref="bodytext" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:group name="bodytext">
+		<xs:choice>
+			<xs:element ref="p"/>
+			<xs:element ref="table"/>
+		</xs:choice>
+	</xs:group>
+	<xs:element name="p"/>
+	<xs:element name="table">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tr" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="border" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="tr">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="th" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="td" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="align" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="th">
+		<xs:complexType mixed="true">
+			<xs:attribute ref="align"/>
+			<xs:attribute ref="valign"/>
+			<xs:attribute name="colspan" use="optional"/>
+			<xs:attribute name="rowspan" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="td">
+		<xs:complexType mixed="true">
+			<xs:attribute ref="align"/>
+			<xs:attribute ref="valign"/>
+			<xs:attribute name="colspan" use="optional"/>
+			<xs:attribute name="rowspan" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attribute name="align">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="left"/>
+				<xs:enumeration value="center"/>
+				<xs:enumeration value="right"/>
+				<xs:enumeration value="justify"/>
+				<xs:enumeration value="char"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="valign">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="top"/>
+				<xs:enumeration value="middle"/>
+				<xs:enumeration value="bottom"/>
+				<xs:enumeration value="baseline"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+</xs:schema>

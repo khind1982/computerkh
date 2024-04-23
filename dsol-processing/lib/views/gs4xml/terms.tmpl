@@ -1,0 +1,16 @@
+<Terms>
+#for term in $terms
+#set $termName = $term['TermType']
+#set $attributes = ''
+#for $attr, $val in $term['attrs'].items()
+#set $attributes += ' ' + $attr + '="' + $val +'"'
+#end for
+#set $elems = ''
+#for $key, $value in $term['values'].items()
+#set $elems += '<' + $key + '>' + $value + '</' + $key + '>'
+#end for
+  <$termName $attributes>
+    $elems
+  </$termName>
+#end for
+</Terms>

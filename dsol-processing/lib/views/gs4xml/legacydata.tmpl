@@ -1,0 +1,10 @@
+<LegacyData>
+  <CH>
+    #if $legacyData.has_key('illustrationData')
+    <CH-Markup CH-MarkupInd="DocFeatures">$legacyData.illustrationData</CH-Markup>
+    #end if
+    #if $legacyData.has_key('publicationFrequency')
+    <CH-Markup CH-MarkupInd="Frequency">$legacyData.publicationFrequency</CH-Markup>
+    #end if
+  </CH>
+</LegacyData>

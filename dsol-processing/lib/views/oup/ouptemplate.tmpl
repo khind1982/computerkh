@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IngestRecord xsi:noNamespaceSchemaLocation="Ingest_v4.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+     <MinorVersion>18</MinorVersion>
+     <ControlStructure>
+        <ActionCode>add</ActionCode>
+        <LegacyPlatform>CH</LegacyPlatform>
+        ##<!--the following  sectiom might be excluded ...if there is no legacy data-->
+        <LegacyID>$legacyId</LegacyID>
+        <LastLegacyUpdateTime>$uptime</LastLegacyUpdateTime>
+        <PublicationInfo>
+            <LegacyPubID>??</LegacyPubID>
+        </PublicationInfo>
+        <Parent>
+            <ParentInfo></ParentInfo>
+        </Parent>
+        ##<!-- end section   -->
+        <Component ComponentType="Citation">
+	    <Representation RepresentationType="Citation">
+		<MimeType>text/xml</MimeType>
+		<Resides>FAST</Resides>
+	    </Representation>
+	</Component>
+        <Component ComponentType="FullText">
+            <Representation RepresentationType="Text">
+                <MimeType>text/xml</MimeType>
+                <Resides>FAST</Resides>
+            </Representation>
+        </Component>
+    </ControlStructure>
+    <RECORD>
+        <Version>Global_Schema_v4.0.xsd</Version>
+        <ObjectInfo>
+            ##<!--this  sectiom may be excluded  if there is no legacy data-->
+            <LegacyProductMapping>
+                <GroupName>???</GroupName>
+            </LegacyProductMapping>
+            ##<!-- end excluded section-->
+            <SourceType>Encyclopedias and Reference Works</SourceType>
+            <ObjectType>Reference Work</ObjectType>
+            <Title>$entry</Title>
+            <Language>
+                <RawLang>English</RawLang>
+                <ISO>
+                     <ISOCode>ENG</ISOCode>
+                </ISO>
+            </Language>
+            <ObjectIDs>
+		<ObjectID IDOrigin="CH" IDType="CHLegacyID">$legacyId</ObjectID>
+		<ObjectID IDOrigin="CH" IDType="CHOriginalLegacyID">$eid</ObjectID>
+	    </ObjectIDs>
+            #if $author
+            <Contributors>
+            #for $contr in $author
+            #set $c_values=$contr.split('|')
+            #if $c_values[2]!=''
+                <Contributor ContribOrder="$c_values[0]" ContribRole="$c_values[1]">$c_values[2]</Contributor
+            #end if
+            #end for 
+            </Contributors>
+            #end if
+            <TextInfo>
+                <Text>
+                $fulltext
+                ##<!--we do not know yet if  bibliography will go to a different tag in the meantime we will add it to full text-->
+                </Text>
+            </TextInfo>
+        </ObjectInfo>
+    </RECORD>
+</IngestRecord>
+

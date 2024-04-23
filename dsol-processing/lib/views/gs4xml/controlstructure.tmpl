@@ -1,0 +1,90 @@
+#from helpers.gs4xmlhelper import GS4XMLHelper
+#set helper = GS4XMLHelper()
+<ControlStructure>
+  <ActionCode>$action</ActionCode>
+  <LegacyPlatform>$legacy_platform</LegacyPlatform>
+  <LegacyID>$legacyID</LegacyID>
+  <LastLegacyUpdateTime>$lastUpdateTime</LastLegacyUpdateTime>
+  #if $cover
+  <Cover>$cover</Cover>
+  #end if
+  #if $relatedLegacyID
+  <RelatedLegacyID>
+    <LegacyPlatform>$relatedLegacyPlatform</LegacyPlatform>
+    <LegacyID>$relatedLegacyID</LegacyID>
+    <RelationshipType>DerivedFrom</RelationshipType>
+  </RelatedLegacyID>
+  #end if
+  #if $relatedLegacyIDs
+  #for relatedid in $relatedLegacyIDs
+  <RelatedLegacyID>
+    <LegacyPlatform>$relatedid[0]</LegacyPlatform>
+    <LegacyID>$relatedid[1]</LegacyID>
+    <RelationshipType>$relatedid[2]</RelationshipType>
+  </RelatedLegacyID>
+  #end for
+  #end if
+  <PublicationInfo>
+    <LegacyPubID>$journalID</LegacyPubID>
+  </PublicationInfo>
+  #if not $unstructured
+  <Parent>
+    <ParentInfo>
+      <LegacyPlatform>$legacy_platform</LegacyPlatform>
+      #if $legacyParentID
+      <LegacyID>$legacyParentID</LegacyID>
+      #end if
+      #if $pubTitle
+      <Title>$pubTitle</Title>
+      #end if
+      #if $normalisedAlphaNumericDate
+      #echo helper.insertDate($normalisedAlphaNumericDate, 'AlphaPubDate', 6, $undated)
+      #end if
+      #if $rawPubDate
+      <RawPubDate>$rawPubDate</RawPubDate>
+      #end if
+      #echo helper.insertDate($numericStartDate, 'NumericPubDate', 6, $undated)
+      #if $undated == False
+      <StartDate>$numericStartDate</StartDate>
+      #end if
+      #if $series
+      <Series>$series</Series>
+      #end if
+      #if $volume
+      <Volume>$volume</Volume>
+      #end if
+      #if $issue
+      <Issue>$issue</Issue>
+      #end if
+      #if $parentInfoPart
+      <Part>$parentInfoPart</Part>
+      #end if
+      #if $parentInfoSupplement
+      <Supplement>$parentInfoSupplement</Supplement>
+      #end if
+      #if $nonStandardCitation
+      <NonStdCit>$nonStandardCitation</NonStdCit>
+      #end if
+      #if $brandingInstitution
+      <BrandingInstitution>$brandingInstitution</BrandingInstitution>
+      #end if
+    </ParentInfo>
+  </Parent>
+  #end if
+  #if $objectBundleData
+  #for bundle in $objectBundleData
+  #echo helper.buildObjectBundleData(bundle)
+  #end for
+  #end if
+  #if $components
+  #for component in $components
+  #echo helper.buildComponent(component)
+  #end for
+  #if $preformattedComponents
+  #for comp in $preformattedComponents
+  #echo $comp
+
+  #end for
+  #end if
+  #end if
+</ControlStructure>

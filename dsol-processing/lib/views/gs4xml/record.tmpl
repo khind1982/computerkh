@@ -1,0 +1,18 @@
+#from helpers.gs4xmlhelper import GS4XMLHelper
+#set helper = GS4XMLHelper()
+<RECORD>
+  <Version>$global_schema_version</Version>
+  #include helper.template_path('objectinfo.tmpl')
+  #if $product
+  #include helper.template_path('product.tmpl')
+  #end if
+  #if $product_xml_fragment
+  $product_xml_fragment
+  #end if
+  #if $publisher_info
+  #include helper.template_path('publicationinfo.tmpl')
+  #end if
+  #if $legacyData
+  #include helper.template_path('legacydata.tmpl')
+  #end if
+</RECORD>
