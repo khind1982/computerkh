@@ -1,0 +1,656 @@
+#!/usr/bin/env python2.7
+# -*- mode: python -*-
+# pylint:disable=C0103,R0903,W0201,W0212
+
+import codecs
+import os
+import re
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib'))
+sys.path.append('../lib')
+
+from optparse import OptionParser, OptionValueError
+
+#from streams.etreestream import EtreeStream as TextStream
+from commonUtils import textUtils
+from messagequeue import MessageQueue
+from streams.textstream import TextStream
+
+# http://wiki.python.org/moin/PythonSpeed/PerformanceTips,
+# "Do Stuff Less Often" suggests increasing setcheckinterval.
+# So, here goes...
+sys.setcheckinterval(10000)
+
+
+# A message queue so we can notify the operator if something needs their
+# attention
+MSQ = MessageQueue()
+
+# Extract information from xml files to build threading files and
+# word coordinates and index files.
+
+# Build a lookup dict of image names and resizing factor from the list at
+# /dc/vogue-stamp/resize.list
+RESIZE_FACTORS = {}
+RESIZE_FACTORS_HH = {}
+
+def get_resize_factors(file_path, resize_dict):
+    ''' Calculate the factor by which images have been resized. These
+    values are stored and used later to calculate the correct values
+    for the coordinate points. '''
+    with open(file_path) as resize:
+        for line in [line.strip() for line in resize]:
+            try:
+                filename, original, new = line.split()
+                resize_dict[filename.split('/')[-1].split('.')[0]] = \
+                  float(original)/float(new)
+            except ValueError:
+                pass # put in some logging here.
+
+# Some utility methods that can be used by the concrete classes.
+# Note that `text' must be an array of lines of text, not simply the text
+# as a string.
+
+class UtilHelpers(object):
+    ''' Some simple functions to extract values from the data. '''
+    def __init__(self, text):
+        self.text = text
+
+    def get_line(self, tag):
+        ''' Fetch the first line that matches the passed in tag. '''
+        for line in self.text:
+            match = re.search(r"<(?P<tag>%s).*>(.*)</(?P=tag)>" % tag, line)
+            if match is not None:
+                return match.group(2)
+
+    def get_attributes(self, elem, attrs):
+        ''' Return a dict of the named attributes from the named tag. '''
+        return_values = {}
+        for line in self.text:
+            if re.search(r'<%s .*>' % elem, line):
+                for attr in attrs:
+                    if ':' in attr:
+                        key = attr.split(':')[1]
+                    else:
+                        key = attr
+                    return_values[key] = re.search(
+                        r'.*%s="(.*?)".*' % attr, line).group(1)
+        return return_values
+
+    def fetch_block(self, tag, keep_tag = False):
+        ''' Fetch a container tag's contents. If keep_tag is False, the
+        container tag itself is omitted from the returned list. If True,
+        the container tag is preserved. Calls fetch_blocks_as_list, and
+        returns its first element. '''
+        return self.fetch_blocks_as_list(tag, keep_tag)[0]
+
+    def fetch_blocks_as_list(self, tag, keep_tag = False):
+        ''' Fetch all container tag's contents, as a list. keep_tag
+        semantics are the same as above. '''
+        inside_tag = False
+        lists = []
+        tmp = []
+        for line in self.text:
+            if re.search(r'<%s' % tag, line):
+                inside_tag = True
+                if keep_tag == True:
+                    tmp.append(line)
+            elif re.search(r'</%s>' % tag, line):
+                inside_tag = False
+                if keep_tag == True:
+                    tmp.append(line)
+                lists.append(tmp)
+                tmp = []
+            elif inside_tag == True:
+                tmp.append(line)
+        return lists
+
+class VogueMetaMapping(object):
+    ''' A container object to coordinate the extraction and
+    formatting of metadata files. '''
+    def __init__(self, record):
+        self.src_filename = record._cfg['filename']
+        self.dest_root = record._cfg['dest_root']
+        self.raw_record = record.data
+        self.split_data = self.raw_record.split('\n')
+        self.data_helper = UtilHelpers(self.split_data)
+        self.identifier = self.data_helper.get_line('dc:identifier')
+        self.pc_id = self.identifier[0:8].zfill(15)
+        try:
+            self.title = textUtils.cleanAndEncode(self.data_helper.get_line('dc:title'))
+        except TypeError:
+            print >> sys.stderr, "Error in record %s, in file %s" % \
+                (self.identifier, self.src_filename)
+            raise
+        self.title = re.sub(u'\u2014', '', self.title)
+        # This is for the VOGUE zonemap files.
+        # REMOVE IT when the real data is in!
+        if self.title == ' ':
+            self.title = 'placeholder %s' % self.identifier
+
+#        setattr(self, 'cover_date', self.identifier[0:6])
+        self.cover_date = self.identifier[0:6]
+        self.issue_path = os.path.join(
+            self.dest_root, self.cover_date[0:4], self.cover_date[-2:])
+
+    def do_coords(self):
+        ''' Generate the word coordinates data. '''
+        self.ocr_content = self.data_helper.fetch_block('ocr_content')
+        self.ocr_pages = OCRPages(self.ocr_content).pages
+        self.write_coords_data()
+
+    def do_threading(self):
+        ''' Generate the threading data. '''
+        self.threadingmap = ThreadingMap(self.split_data).pages
+        self.write_threading_data()
+
+    def do_zonemap(self):
+        ''' Generate the zone map data. '''
+        self.zone_maps = ZoneMaps(self.data_helper)
+        self.write_zone_data()
+
+    def ocr_page_count(self):
+        ''' Return the number of ocr pages in document. '''
+        return len(self.ocr_pages)
+
+    def threading_data(self):
+        ''' Fetch and return the threading information for document. '''
+        ret = ''
+        for image in [page.image for page in self.threadingmap]:
+            ret += "%s\t%s\n" % (self.identifier, image)
+        return ret
+
+    def write_zone_data(self):
+        ''' Write out the zone map data. '''
+        for zone in self.zone_maps.maps:
+            zm_file = ZoneMapFile(self.issue_path, zone.image, self.pc_id)
+            try:
+                zm_file.write(
+'''  <Zone>
+    <DocId>%s</DocId>
+    <Title>%s</Title>
+    <Blocked>false</Blocked>
+    <Top>%i</Top>
+    <Left>%i</Left>
+    <Bottom>%i</Bottom>
+    <Right>%i</Right>
+  </Zone>\n''' % (self.identifier, self.title,
+                  zone.top, zone.left, zone.bottom, zone.right))
+            except UnicodeEncodeError:
+                print "%s" % self.identifier
+                raise
+
+    def write_threading_data(self):
+        ''' Write out the threading data. '''
+        tf_file = ThreadingFile(self.issue_path, self.cover_date)
+        tf_file.write(self.threading_data())
+
+    def write_coords_data(self):
+        ''' Write out the word coordinates data. '''
+        word_offsets = {}
+        page_offsets = ['0']
+        page_count = 0
+        wcf = WordCoordsFile(self.issue_path, self.identifier)
+        for page in self.ocr_pages:
+            page_count += 1
+            if len(page.words) > 0:
+                for word in page.words:
+                    if not word.value.strip() == '':
+                        offset = str(int(wcf.tell()))
+                        try:
+                            word_offsets[word.value].append(offset)
+                        except KeyError:
+                            word_offsets[word.value] = [offset]
+                        wcf.write("%s\n" % word.word_coordinates())
+            page_offsets.append(str(int(wcf.tell())))
+
+        # This if block needs to be at the same indent level as the
+        # outer for block above (i.e. for page in self.ocr_pages)
+        if len(page_offsets) > 1:
+            offsets_for_all_pages = (':').join(page_offsets)
+            wci = WordCoordsIndex(self.issue_path, self.identifier)
+            wci.write("%s:%s:\n" % (str(page_count), offsets_for_all_pages))
+            for word in sorted(word_offsets.keys()):
+                offsets = (':').join(word_offsets[word])
+                wci.write("%s:%s\n" % (word, offsets))
+
+class ZoneMaps(object):
+    ''' A container holding all ZoneMap instances for the current article. '''
+    def __init__(self, zones):
+        self.maps = []
+        for rawzone in zones.fetch_blocks_as_list('pq:zone', keep_tag=True):
+            self.maps.append(ZoneMap(rawzone))
+
+
+class ZoneMap(object):
+    ''' An class reprsenting the zone coordinates for an article. '''
+    def __init__(self, rawzone):
+        data = UtilHelpers(rawzone).get_attributes(
+            'pq:zone', ['pq:src', 'pq:ulx', 'pq:uly', 'pq:lrx', 'pq:lry'])
+        self.image = data['src']
+        if self.image in RESIZE_FACTORS:
+            scaled = {}
+            for coord in ['ulx', 'uly', 'lrx', 'lry']:
+                scaled[coord] = float(data[coord]) / RESIZE_FACTORS[self.image]
+            self.top    = scaled['uly']
+            self.bottom = scaled['lry']
+            self.left   = scaled['ulx']
+            self.right  = scaled['lrx']
+        else:
+            # In case the image has not been rescaled, we still want to output
+            # SOMETHING. It will get corrected on the next run after the image
+            # is rescaled. Provided it ends up in the log, of course...
+            self.top    = int(data['uly'])
+            self.bottom = int(data['lry'])
+            self.left   = int(data['ulx'])
+            self.right  = int(data['lrx'])
+
+
+class ThreadingMap(object):
+    ''' A container holding all threading map information for current
+    article. '''
+    def __init__(self, article_data):
+        self.pages = []
+        for rawpage in UtilHelpers(article_data).fetch_block('pagemap'):
+            self.pages.append(ThreadingMapPage(rawpage))
+
+class ThreadingMapPage(object):
+    ''' Page-level threading information. '''
+    def __init__(self, string):
+        self.__dict__ = UtilHelpers(
+            string.split('\n')).get_attributes('page', ['image'])
+
+class OCRPages(object):
+    ''' A container holding all page level OCR data. '''
+    def __init__(self, ocr_data):
+        # ocr_data is a list of all the content in the ocr_content element
+        self.pages = []
+        pages = UtilHelpers(ocr_data).fetch_blocks_as_list('pq:page', keep_tag=True)
+        for page in pages:
+            self.pages.append(OCRPage(page))
+
+class OCRPage(object):
+    ''' The OCR data for the page in question. '''
+    def __init__(self, page_data):
+        self.data = page_data
+        try:
+            page_image = re.search(r'"([Vv]ogue_[^"]*)"', self.data[0]).group(1)
+        except AttributeError:
+            print self.data[0]
+            exit()
+        self.words = []
+        word_position = UtilHelpers(page_data).fetch_blocks_as_list(
+            'pq:wordPos', keep_tag=True)
+        if len(word_position) == 0:
+            pass
+        else:
+            for word in word_position:
+                # Some pq:word tags contain no sensible data.
+                # Skip them
+                try:
+                    self.words.append(OCRWord(word, page_image))
+                except TypeError:
+                    continue
+
+# Regex to match awkward Unicode characters that we want to exclude
+# from the output.  So far, we have:
+#
+# U+2122 (<e2><84><a2>) = Tradmark sign
+# U+00AE (<c2><ae>) = Registered sign
+# U+00A3 (<c2><a3>) = Pound sign
+# U+2014 (<e2><80><94>) = Emdash
+#### U+20AC (<e2><82><ac>) = Euro sign
+#### U+201D (<e2><80><9d>) = Right double quotation mark
+
+UNICODERE = re.compile(u'[\u2122\u00ae\u00a3\u2014]*'.encode('utf8'))
+
+class OCRWord(object):
+    ''' Represents the OCR data for each word in an article (the word itself,
+    and the coordinate points). '''
+    def __init__(self, word_data, page_image):
+        self.coord_attributes = ['pq:ulx', 'pq:uly', 'pq:lrx', 'pq:lry']
+        # Clean up the words a bit.
+        # Remove all instances of these punctuation marks
+        self.value = re.sub(r'["~/$^(){};,\\?-]', '', UtilHelpers(word_data).get_line('pq:word'))
+
+        # Remove this set if they occur at the end of a word
+        self.value = re.sub(r"[.,:;!']$", '', self.value).lower()
+        # Remove these from the beginning of a word
+        self.value = re.sub(r"^'.", '', self.value)
+        # Remove awkward Unicode characters. To save time, the regex
+        # is compiled in the top-level scope
+        self.value = UNICODERE.sub('', self.value)
+        self.coords = UtilHelpers(word_data).get_attributes(
+            'pq:wordPos', self.coord_attributes)
+        try:
+            self.coords = dict([(k, str(int(int(v)/RESIZE_FACTORS_HH[page_image]))) for k,v in self.coords.items()])
+        except KeyError as e:
+            logf_path = os.path.join(
+                os.path.expanduser('~'), 'vogue_resize_errors_%s' % os.getpid())
+            with open(logf_path, 'a') as logf:
+                logf.write("%s - missing or faulty image resize data. Skipping...\n" % page_image)
+                MSQ.append_to_message("Missing or faulty image resize data", page_image)
+            pass
+        except Exception as e:
+            print e
+            exit()
+
+    def word_coordinates(self):
+        ''' Build the formatted word coordinates for the word and return. '''
+        line = [self.value]
+        for attr in self.coord_attributes:
+            line.append(self.coords[attr.split(':')[1]])
+        return (':').join(line)
+
+class VogueMetaDataFile(object):
+    ''' A Borg that handles the metadata output files.  It
+    automatically detects changes in filename, and handles them
+    transparently. Consumers need only write to the current target
+    output file, with no need to worry about managing filehandles.  In
+    order to use this base class, subclasses should define a
+    __sharedState dict, overriding the defaults with suitable
+    values. '''
+
+    filename = ''
+    __sharedState = {
+        'suffix': 'txt',
+        'subDirPath': '',
+        'filename': filename,
+        'filehandle': '',
+        }
+    def __init__(self, state=None):
+        if state is not None:
+            self.__dict__ = state
+        else:
+            self.__dict__ = self.__sharedState
+        self.output_directory = os.path.join(self.issue_path, self.subDirPath)
+
+    def __getattr__(self, attr):
+        if attr in self.__dict__.keys():
+            return self.__dict__[attr]
+        elif attr in self.__sharedState.keys():
+            return self.__sharedState[attr]
+
+    def setup(self, filename):
+        ''' Make sure we always have the right underlying file to write to. '''
+        if not filename == self.filename:
+            self.filename = "%s.%s" % (filename, self.suffix)
+            self.rotate()
+
+    def rotate(self):
+        ''' Close existing filehandle, and open a new one. '''
+        self.close()
+        self.open()
+
+    def close(self):
+        ''' Close the currently held filehandle. '''
+        try:
+            self.filehandle.close()
+        except:
+            pass
+
+    def open(self):
+        ''' Open a new output file. '''
+        # Because Python doesn't have a retry statement, we must wrap this in a
+        # while loop.
+        while True:
+            try:
+                self.filehandle = open(os.path.join(
+                        self.output_directory, self.filename), 'w')
+            except IOError:
+                os.makedirs(self.output_directory)
+                continue
+            break
+
+    def write(self, data):
+        ''' Write metadata to currently opened file. '''
+        self.filehandle.write(data)
+        self.filehandle.flush()
+
+class ThreadingFile(VogueMetaDataFile):
+    ''' Threading data output file handler. '''
+    _myState = {
+        'subDirPath': '',
+        'suffix': 'txt',
+        'fileCache': [],
+        }
+    def __init__(self, issue_path, filename):
+        self._myState['issue_path'] = issue_path
+        super(ThreadingFile, self).__init__(self._myState)
+        self.setup(filename)
+
+
+    # Because threading files are not completely written in one go,
+    # we need this reimplemented open and write method. open either
+    # opens and reads the subject file if it exists, or sets the filehandle
+    # member to an empty list and adds the filename to its cache of files
+    # already seen.
+
+    # write opens the subject file, truncates it, and writes out the
+    # cumulative value of filehandle, making missing directories along
+    # the way.
+    def open(self):
+        if not self.filename in self.fileCache:
+            self.fileCache.append(self.filename)
+            self.filehandle = []
+        else:
+            self.filehandle = [line for line in codecs.open(os.path.join(
+                        self.output_directory, self.filename), 'r', 'utf8')]
+
+    def write(self, data):
+        self.filehandle.append(data)
+        while True:
+            try:
+                with codecs.open(os.path.join(
+                        self.output_directory, self.filename),
+                                 'w', 'utf8') as output_file:
+                    output_file.write(('').join(self.filehandle))
+            except IOError:
+                os.makedirs(self.output_directory)
+                continue
+            break
+
+class WordCoordsFile(VogueMetaDataFile):
+    ''' Word coordinates output file handler. '''
+    _myState = {
+        'subDirPath': 'coords',
+        'suffix': 'pos',
+        'fileCache': [],
+        }
+    def __init__(self, issue_path, filename):
+        self._myState['issue_path'] = issue_path
+        super(WordCoordsFile, self).__init__(self._myState)
+        self.setup(filename)
+
+    # Another case where the output file is not guaranteed to be written in one
+    # pass. Due to differences in the contents of the files, we can't easily
+    # share the implementation with ThreadingFile, above.
+    def open(self):
+        if not self.filename in self.fileCache:
+            self.fileCache.append(self.filename)
+            self.filehandle = []
+        else:
+            self.filehandle = open(os.path.join(
+                    self.output_directory, self.filename), 'r').readlines()
+
+    def write(self, data):
+        self.filehandle.append(data)
+        while True:
+            try:
+                with open(os.path.join(
+                        self.output_directory, self.filename),
+                          'w') as output_file:
+                    for line in [line.strip() for line
+                                 in self.filehandle if not line.strip() == '']:
+                        print >> output_file, line
+            except IOError:
+                os.makedirs(self.output_directory)
+                continue
+            except:
+                print self.filehandle
+                raise
+            break
+
+    # We need some way of working out how big the file has got so far, so we can
+    # correctly insert the byte offset where required. This is not most elegant
+    # solution, but given the way we build output files, is the best fit.
+    def tell(self):
+        ''' Get the position in the current file. '''
+        try:
+            with open(os.path.join(
+                    self.output_directory, self.filename),
+                      'r') as output_file:
+                output_file.readlines()
+                offset = output_file.tell()
+        except IOError:
+            offset = '0'
+        return offset
+
+class WordCoordsIndex(VogueMetaDataFile):
+    ''' Word coordinates index output file handler. '''
+    _myState = {
+        'subDirPath': 'coords',
+        'suffix': 'idx',
+        }
+    def __init__(self, issue_path, filename):
+        self._myState['issue_path'] = issue_path
+        super(WordCoordsIndex, self).__init__(self._myState)
+        self.setup(filename)
+
+class ZoneMapFile(VogueMetaDataFile):
+    ''' Page map output file handler. '''
+    _myState = {
+        'subDirPath': 'xml/pagemap',
+        'suffix': 'xml',
+        'fileCache': [],
+        }
+    def __init__(self, issue_path, filename, pc_id):
+        self._myState['issue_path'] = issue_path
+        super(ZoneMapFile, self).__init__(self._myState)
+        self.pc_id = pc_id
+        self.page_number = re.match(r'^0*([1-9][0-9]*)',
+                                filename.split('_')[4]).group(1)
+        self.setup(filename)
+
+    def open(self):
+        # The pagemap files are a bit awkward. They are per image
+        # file, and not per article record.  This means a single
+        # pagemap file may contain sections for several different
+        # articles, and it also means that we cannot guess when during
+        # a run a given file will be written. Therefore, we need to
+        # keep track of which files we have already touched, so we can
+        # cumulatively build the correct contents. Files we have
+        # already seen are read into memory as lists of lines.  The
+        # first request for a "file" actually gets an empty list.
+
+        # Note how we use polymorphism here - the overridden open()
+        # method in this class exposes the same interface as its
+        # parent, but internally the filehandle member is a list, not
+        # an open filehandle.
+
+        if not self.filename in self.fileCache:
+            self.fileCache.append(self.filename)
+            self.filehandle = []
+        else:
+            # Because we have to wrap the contents in
+            # <PageMap></PageMap>, we need to discard those lines when
+            # we read the file in, or we end up with more than one
+            # instance of each in files with multiple zones.
+            self.filehandle = [line for line in
+                               codecs.open(os.path.join(
+                        self.output_directory, self.filename), 'r', 'utf8')
+                               if not re.search(r'(Page(Map|Num)|PcId)', line)]
+
+    def write(self, data):
+        # Because we need to cumulatively build these files, we need
+        # to override the base class's write method, too. open() reads
+        # the files in as lists of lines, and write() takes those
+        # lists, wraps them in <PageMap> and </PageMap> tags before
+        # writing them out again.
+        self.filehandle.append(data)
+
+        while True:
+            try:
+                with codecs.open(os.path.join(
+                        self.output_directory, self.filename),
+                                 'w', 'utf8') as output_file:
+                    output_file.write('''<PageMap>\n''')
+                    output_file.write('''  <PcId>%s</PcId>\n''' % self.pc_id)
+                    output_file.write('''  <PageNum>%s</PageNum>\n''' %
+                                      self.page_number)
+                    output_file.write(('').join(self.filehandle))
+                    output_file.write('''</PageMap>\n''')
+            except IOError:
+                os.makedirs(self.output_directory)
+                continue
+            break
+
+if __name__ == '__main__':
+    optparser = OptionParser()
+    optparser.add_option('-s', dest='dataRoot', default=None)
+    optparser.add_option('-r', dest='resizedImages', default="/dc/dsol/steadystate/mediaservices/resize_lists/vogue-resize.700")
+    optparser.add_option('-H', dest='resizedImagesHH', default="/dc/dsol/steadystate/mediaservices/resize_lists/vogue-resize.2880")
+    optparser.add_option('-d', dest='dest_root', default=None)
+    (options, args) = optparser.parse_args()
+
+    # Let's get this out of the way as early as possible. If we didn't get
+    # a value for dest_root, print a message and die
+    if options.dest_root is None:
+        print >> sys.stderr, (
+            "Must supply an output destination with the -d flag")
+        exit(1)
+
+    # Due to changes in the implementation of FileStream, we need to
+    # be able to pass the optional dataRoot to the initialiser to
+    # overcome the limitation in glob.glob on the number of files it
+    # will glob for us.
+
+    if options.dataRoot is None:
+        streamOpts = None
+    else:
+        streamOpts = "dataRoot=%s" % options.dataRoot
+    path = args[0]
+
+    if options.resizedImages is not None:
+        get_resize_factors(options.resizedImages, RESIZE_FACTORS)
+    else:
+        print >> sys.stderr, "no resized images file."
+        exit(1)
+
+    if options.resizedImagesHH is not None:
+        get_resize_factors(options.resizedImagesHH, RESIZE_FACTORS_HH)
+    else:
+        print >> sys.stderr, "no resizing data for hit hightlighting."
+        exit(1)
+
+    for count, record in enumerate(TextStream(
+            {'stream': path, 'streamOpts': streamOpts}
+            ).streamdata(), start = 1):
+        record._cfg['dest_root'] = options.dest_root
+        metaRecord = VogueMetaMapping(record)
+        curFile = record._cfg['filename']
+        curFileBase = curFile.split('/')[-1]
+        try:
+            metaRecord.do_threading()
+        except Exception as e:
+            print >> sys.stderr, "do_threading: %s\n%s" % (curFile, e,)
+            raise
+        try:
+            metaRecord.do_coords()
+        except Exception as e:
+            print >> sys.stderr, "do_coords: %s\n%s" % (curFile, e,)
+            raise
+        try:
+            metaRecord.do_zonemap()
+        except Exception as e:
+            print >> sys.stderr, "do_zonemap: %s\n%s" % (curFile, e,)
+            raise
+
+        sys.stdout.write('\r\033[0K')
+        sys.stdout.write(
+            '\033[92mSeen\033[0m \033[91m%s (of %s)\033[0m \033[92mrecords.\033[0m \033[93m(\033[0m\033[94m%s\033[0m)' % (
+            count, record._cfg['filesInStream'], curFileBase))
+
+    # If the messagequeue has anything to say, let it say it now...
+    MSQ.print_messages()

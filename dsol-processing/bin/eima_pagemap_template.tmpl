@@ -1,0 +1,15 @@
+<PageMap>
+  <PcId>$page['pcid']</PcId>
+  <PageNum>$page['pageseq']</PageNum>
+#for $zone in $page['zones']
+  <Zone>
+    <DocId>$zone.docid</DocId>
+    <Title>$zone.title</Title>
+    <Blocked>false</Blocked>
+    <Top>$zone.uly</Top>
+    <Left>$zone.ulx</Left>
+    <Bottom>$zone.lry</Bottom>
+    <Right>$zone.lrx</Right>
+  </Zone>
+#end for
+</PageMap>

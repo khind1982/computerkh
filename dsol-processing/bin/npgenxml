@@ -1,0 +1,226 @@
+#!/usr/bin/env bash
+# -*- mode: sh -*-
+
+#set -x
+# A wrapper around the transformation app, to shield the
+# user from the worst of the hideous command line options.
+
+steadystate_prodcucts="iimp iipa prisma"
+ignored_products="bp oup imparef"
+
+config_file=`dirname $0`"/../etc/cstore.config"
+product_names=`grep "\[.*\]" ${config_file} | sed -e 's:\[\(.*\)\]:\1:' | sort`
+
+# Exclude from the list of products those that are managed by
+# the steadystate utility, or which are so infrequently updated
+# it makes no sense to try and accommodate them here...
+for prd in ${steadystate_prodcucts} ${ignored_products}
+do
+    product_names=`echo ${product_names} | sed -e s:$prd::`
+done
+
+usage() {
+    echo "Usage: `basename $0` <product> <path/to/source/data>" >&2
+    echo "Valid product names for this utility are:" >&2
+    for prd in ${product_names} 
+    do
+        echo $prd >&2
+    done
+}
+
+# Default to writing output files in /dc/dsol/steadystate/out/${product}
+outputdir=/dc/dsol/steadystate/out
+
+while getopts F:fli:I:o: opt;
+do
+    case $opt in
+        F)
+            if [ ! -f "$OPTARG" ]
+            then
+                echo "$OPTARG - no such file"
+                exit 1
+            fi
+            export IDSFILE=$OPTARG 
+            ;;
+        f)
+            FORCE=1
+            ;;
+        i)
+            case $OPTARG in
+                dev|pre|prod)
+                    export HMSINSTANCE=$OPTARG
+                    ;;
+                *)
+                    echo "Invalid instance name. Use one of dev, pre or prod"
+                    exit 1
+                    ;;
+            esac
+            ;;
+        I)
+            SELECTIDS=$OPTARG
+            ;;
+        l)
+            followlinks=true
+            ;;
+        o)
+            outputdir=$OPTARG
+            ;;
+        *)
+            usage
+            exit 2
+                    ;;
+    esac
+done
+
+shift $((OPTIND -1))
+
+case $# in
+    2)
+        product=$1
+        shift
+        feed=$1
+        shift
+        ;;
+    3)
+        product=$1
+        shift
+        feed=$1
+        shift
+        institution="${1}_"
+        if [ "$product" != "trj" ]
+        then
+            echo "Institution not appropriate for $product. Ignoring it."
+            unset institution
+        fi
+        ;;
+    *)
+	echo $@
+        usage
+        exit 1
+        ;;
+esac
+
+check_product_name() {
+    local product_name
+    product_name=$1
+    if ( echo ${product_names} | grep ${product_name} 2>&1 > /dev/null)
+    then
+        return 0
+    elif ( echo ${steadystate_prodcucts} | grep ${product_name} 2>&1 > /dev/null)
+    then
+
+        echo "`basename $0`: Please use the steadystate utility for \"${product_name}\"" >&2
+        return 2
+    elif ( echo ${ignored_products} | grep ${product_name} 2>&1 > /dev/null)
+    then
+        echo "`basename $0`: don't know how to handle \"${product_name}\"" >&2
+        return 2
+    else
+        return 1
+    fi
+}
+
+check_product_name $product
+
+case $? in
+    1)
+        echo "Unkown product: ${product}"
+        exit 1
+        ;;
+    2)
+        exit 2
+        ;;
+    *)
+        ;;
+esac
+
+# If the product is dnsa, insist that the user passes an HMS instance in with
+# -i. If not, exit.
+# Additionally, if FORCE is 1 (meaning the user passed -f on the command line),
+# set HMSRELOAD.
+if [ "${product}" = "dnsa" ]
+then
+    if [ -z "${HMSINSTANCE}" ]
+    then
+        echo "You must specify an HMS instance for DNSA using -i [dev|pre|prod]"
+        exit 1
+    fi
+    if [ "${FORCE}" = 1 ]
+    then
+        export HMSRELOAD=1
+    fi
+fi
+
+# If the product is film, and FORCE is 1 (meaning the user passed -f on the
+# command line), set FORCEBUILD to force FIAF and AFI records to be rebuilt,
+# even if unchnaged.
+if [ "${product}" = "film" ]
+then
+    if [ "${FORCE}" = 1 ]
+    then
+        export FORCEBUILD=1
+    fi
+fi
+
+if [ -f "${feed}" ]
+then
+    filename=`basename "${feed}"`
+    feed=`dirname "${feed}"`
+elif ! [ -d "${feed}" ]
+then
+    echo "${feed}: no such directory" >&2
+    exit 1
+fi
+
+# Set LD_LIBRARY_PATH so `transform' picks up a working lxml on Solaris
+case `uname -r` in
+    5.10)
+        LD_LIBRARY_PATH=/usr/local/lib
+        export LD_LIBRARY_PATH
+        ;;
+    *)
+        ;;
+esac
+
+# if [ `uname -s` != 'FreeBSD' ]
+# then
+#     LD_LIBRARY_PATH=/usr/local/lib
+#     export LD_LIBRARY_PATH
+# fi
+
+today=`date +%Y%m%d`
+NT="time nice -n 10"
+
+if [ -n "$SELECTIDS" ]
+then
+    recordids="-i ${SELECTIDS}"
+fi
+
+if [ ${product} = 'via' ]
+then
+    case `hostname` in
+        mfgsun[12]0[12]*)
+            /packages/dsol/.venvs/python3.8/viat12n/bin/via-transform -o ${outputdir}/${product} via ${feed:-'*.xml'}
+            ;;
+        *)
+            echo "The VIA transformation needs to run on mfgsun10[12]"
+            exit 13
+            ;;
+    esac
+elif [ ${product} = 'pio' ]
+then
+    $NT `dirname $0`/transform ${recordids} \
+        -o directory="${outputdir}/${product}",io="CH_SS_${product}_${today}_",records=5000 \
+        -s dataRoot="${feed}" ${product} ${filename:-'????.???'}
+else
+    if [ "$followlinks" = "true" ]
+    then
+        streamopts="dataRoot=${feed},followlinks=true"
+    else
+        streamopts="dataRoot=${feed}"
+    fi
+
+    $NT `dirname $0`/transform ${recordids} \
+        -o directory="${outputdir}/${product}",io="CH_SS_${product}_${institution}${today}_",records=5000 \
+        -s ${streamopts} ${product} ${filename:-'*.xml'}
+fi

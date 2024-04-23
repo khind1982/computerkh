@@ -1,0 +1,274 @@
+#!/usr/local/bin/ruby-1.8.6
+# -*- mode: ruby -*-
+
+$LOAD_PATH.unshift File.expand_path('../../../../lib/ruby', __FILE__)
+
+def cr
+  # move cursor to beginning of line
+  "\r"
+end
+def clear
+  # ANSI escape code to clear line from cursor to end of line
+  # "\e" is an alternative to "\033"
+  # cf. http://en.wikipedia.org/wiki/ANSI_escape_code
+  "\e[0K"
+end
+def reset
+  # reset lines
+  cr + clear
+end
+def str(n=31)
+  reset + "\e[#{n};1m"
+end
+def pp_number(number, delimiter=',')
+  number.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1#{delimiter}").reverse
+end
+
+require 'zlib'
+require 'optparse'
+
+# Get the latest feed directory in the steadystate subdirectory.
+
+latest_source_subdir = Dir.glob("/dc/dsol/steadystate/pqft/feeds/delivered/*").sort do |d1, d2|
+  File.new(d1).mtime <=> File.new(d2).mtime
+end.last
+
+
+options = {
+  :source => "#{latest_source_subdir}",
+  :destination => '/dc/dsol/steadystate/pqft/feeds/extracted',
+  :idlist => nil
+}
+
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: #{__FILE__} -r <feed-root> -d <data-files> [-i <idlist>]"
+
+  opts.on('-s', '--source DIR', "Directory containing source files") do |dir|
+    if File.exists? dir
+      options[:source] = dir
+    else
+      $stderr.puts "source directory #{dir} doesn't exist!"
+      exit 1
+    end
+  end
+  opts.on('-d', '--destination DIR', "Destination directory for unpacked data") do |dir|
+    if File.exists? dir
+      options[:destination] = dir
+    else
+      $stderr.puts "destination directory #{dir} doesn't exist!"
+      exit 1
+    end
+  end
+  opts.on('-i', '--idlist FILE', "File containing list of ids requested for the feed") do |f|
+    if File.exists? f
+      options[:idlist] = f
+    else
+      $stderr.puts "idlist file #{f} doesn't exist!"
+      exit 1
+    end
+  end
+end
+
+optparse.parse!
+
+# Give the user a chance to review the settings that'll be used.
+
+$stderr.puts "Using the following settings:"
+$stderr.puts "============================="
+options.each do |k,v|
+  $stderr.puts "#{k} => #{v}" unless v == nil
+end
+$stderr.puts "============================="
+begin
+  10.downto(1) do |i|
+    $stderr.print "#{reset}"
+    $stderr.print "Press CTRL-C NOW if this is not what you want! (#{i})"
+    sleep 1
+  end
+rescue Interrupt
+  $stderr.puts "\nQuitting. Nothing done. Fix your options and try again!"
+  exit 2
+end
+
+class Splitter
+  def initialize(infile, pattern=nil)
+    @infile = infile
+    @pattern = pattern
+  end
+
+  def each_record
+    @infile.each("#{@pattern}") do |record|
+      # The last record comes out as the last characters of the file
+      # after the pattern - usually a newline or two - which causes
+      # yield to return the string "\n", which in turn breaks other
+      # parts of the system. Stripping the record and then only
+      # yielding if it is not the empty string "" fixes the problem.
+
+      yield record unless record.strip == ""
+    end
+  end
+end
+
+class FullTextFeed
+  def initialize(src)
+    # The source files containing the feed live here.
+    if File.file?(src)
+      @src = [src]
+    elsif File.directory?(src)
+      @src = Dir.glob("#{src}/*.xml.gz")
+    else
+      $stderr.puts "Something went badly wrong..."
+      exit 4
+    end
+  end
+
+  def unpack
+    # Unpack the src files, yielding each record to the caller.
+    @src.each do |f|
+      s = Splitter.new(Zlib::GzipReader.new(File.open(f)), '</IngestRecord>')
+      s.each_record do |rec|
+        yield rec
+      end
+    end
+  end
+end
+
+class FullTextRecord
+  attr_reader :data
+
+  def initialize(data)
+    # @data is the string formerly yielded by FullTextFeed#unpack
+    @data = data
+  end
+
+  def record_id
+    @id ||= extract_id
+  end
+
+  private
+  def extract_id
+    # Looks for the matching line in a record, extracts and returns
+    # the data.
+    @data.split(/\n/).find do |line|
+      /<ObjectID IDOrigin="PQ" IDType="DOCID">(.*)<\/ObjectID>/.match(line)
+    end
+    $~[1]
+  end
+end
+
+class FullTextWriter
+  def initialize(full_text, destination)
+    # @full_text is an instance of FullTextRecord
+    @full_text = full_text
+    # @destination is the path to the directory into which the
+    # unpacked data will be written.
+    @destination = destination
+  end
+
+  def write
+    # I know, I know. But these temporary variables make the rest
+    # of the code more readable.
+    record_id = @full_text.record_id
+    level1 = record_id[-3, 1]
+    level2 = record_id[-3, 2]
+
+    # Ensure the target directory (@destination/level1/level2) exists
+    mkdir @destination, level1
+    mkdir @destination, level1, level2
+
+    File.open("#{@destination}/#{level1}/#{level2}/#{record_id}.xml", 'w') do |file|
+      @full_text.data.split(/\n/).each do |line|
+        next if line.match(/^$/)
+        file.write("#{line}\n")
+      end
+    end
+  end
+
+  private
+  # Helper methods for building the hashed directory structure.
+  def mkdir(*elements)
+    Dir.mkdir(path(*elements)) unless File.exists?(path(*elements))
+  end
+  def path(*elements)
+    File.join(*elements)
+  end
+end
+
+class RecordTracker
+  # Provide very basic audit feature. Pass in the list that was sent
+  # to ProQuest as the feed request. As each record is processed, a
+  # call to RecordTracker#check deletes its ID from the list. Calling
+  # RecordTracker#report will print the remaining unseen IDs to a file
+  # and leave a message on the terminal.
+
+  # If no idlist is passed in, then the @idlist is just an empty
+  # Array, and no report will be generated at the end of the run.
+  def initialize(idlist)
+    # @idlist can be built from a plain text file, or a gzip archive.
+    # It holds the list of IDs requested from ProQuest.
+    # If we don't receive an idlist, set @idlist to an empty
+    # Array so we can use the same code, with or without an id list.
+
+    if idlist == nil
+      @idlist = []
+    else
+      if /gzip compressed data/.match(`file #{idlist}`)
+        fh = Zlib::GzipReader
+      else
+        fh = File
+      end
+      @idlist = fh.open(idlist) do |file|
+        file.read.split(/\n/)
+      end
+    end
+  end
+
+  def check(record_id)
+    @idlist.delete(record_id)
+  end
+
+  def report
+    if @idlist.length > 0
+      idlist_report_file = "#{ENV['HOME']}/.pqfeed_report_#{Time.now.strftime("%Y.%m.%d")}"
+      $stderr.puts "\n#{@idlist.length} requested records were NOT in the feed"
+      $stderr.puts "They are listed in #{idlist_report_file}"
+      File.open(idlist_report_file, 'w') do |file|
+        file.puts @idlist
+      end
+    end
+  end
+end
+
+
+def main(options)
+  begin
+    record_count = 0
+    rtracker = RecordTracker.new(options[:idlist])
+
+    FullTextFeed.new(options[:source]).unpack do |record|
+      ftr = FullTextRecord.new(record)
+      FullTextWriter.new(ftr, options[:destination]).write
+
+      # Remove ids from the RecordTracker as we see them
+      rtracker.check(ftr.record_id)
+
+      # Provide some visual feedback so we know it's still running
+      record_count += 1
+      $stderr.print "#{str}#{pp_number(record_count)}"
+    end
+    $stderr.puts
+    $stderr.puts str(33)
+
+    # Now ask the Tracker if it's still got any record IDs that it
+    # hasn't seen in the feed.
+    rtracker.report
+  rescue Interrupt
+    $stderr.puts "#{str(39)}Caught Interrupt. Quitting."
+    $stderr.puts "Unpacked files will remain in #{options[:destination]}"
+    $stderr.print str(33)
+    exit 2
+  end
+end
+
+main(options)

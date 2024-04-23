@@ -1,0 +1,22 @@
+#!/usr/local/bin/python2.6
+# -*- mode: python -*-
+
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib'))
+sys.path.append('/packages/dsol/lib/python')
+
+import dbtools
+
+# Query the PRISMA MySQL database for all its ProQuest IDs. Useful when it comes time to
+# request the ProQuest full text.
+
+CONNSTR = {"user": "root", "db": "prisma_data", "host": "mysql-server"}
+
+# Connect...
+dbconn = dbtools.DBBase(CONNSTR)
+# and introspect... (builds the necessary models in memory)
+dbconn.introspect()
+
+for pqid in dbconn.find(['pqid'], ['article_records'], conditions = ['pqid IS NOT NULL']).results:
+    print pqid.pqid

@@ -1,0 +1,140 @@
+#!/usr/bin/env python2.7
+# -*- mode: python -*-
+# pylint: disable = E1101, F0401, W0201, W0212, W0621
+
+import codecs
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../lib'))
+
+from argparse import ArgumentParser
+from collections import defaultdict
+
+from confreader import ConfReader
+from commonUtils.fileUtils import buildLut, locate
+from dbcache import DBCacheManager
+from messagequeue import MessageQueue
+from metavogue.hithighlighting import HitHightlighting
+from metavogue.pagemap import PageMap
+from metavogue.pcmi import PCMI
+from metavogue.threading import Threading
+from streams.etreestream import EtreeStream
+
+# We import extensions.osextensions simply to get the
+# makedirsp function added to the os module. We can
+# therefore immediately delete the imported namespace
+# to avoid upsetting pylint...
+import extensions.osextensions
+del extensions.osextensions
+
+appconfig = ConfReader()
+
+# Generate the following media service metadata files
+# for Vogue:
+# threading - done
+# word coords
+# word coords index
+# pagemaps
+# pcmi
+
+# In order to run, we need to be told the location of the
+# source XML, and we can optionally receive an output directory
+# (by default, we write output to the current directory)
+
+# We also need to be able to find the rescale factors for an image,
+# which we can get from the binary database cache.
+
+# Let's start out easy.
+
+# Threading
+#
+# From each input file, we need to grab all image filenames. The
+# output format is one line per image, doc id, tab, image filename.
+# One threading file per issue (month), stored in yyyy/mm/yyyymm.txt
+
+# In order to avoid having to register an atexit() handler, and to
+# avoid having to explicitly call a flush() method on any of the
+# objects we create, it looks like the first thing we need to do is
+# walk the directory tree at args.srcdir and work out the number of
+# articles per issue. We can then pass the issue identifier and number
+# of documents into the various class instances so they can keep track
+# of where they are in the issue.
+
+# Pagemap
+#
+# <PageMap>
+#   <PcId> issueid, zero-padded to 15 digits </PcId>
+#   <PageNum> last digits of image file's name </PageNum>
+#   <Zone>
+#     <DocId> Vogue doc ID </DocId>
+#     <Title> Title from src XML </Title>
+#     <Blocked>false</Blocked>
+#     <Top> </Top>
+#     <Left> </Left>
+#     <Bottom> </Bottom>
+#     <Right> </Right>
+#   </Zone>
+# </PageMap>
+
+optparser = ArgumentParser(
+    description="Generate the media services metadata for Vogue")
+optparser.add_argument('-d', dest='dest_root',
+                       default=os.getcwd(), metavar='ROOTDIR')
+optparser.add_argument('srcdir')
+args = optparser.parse_args()
+
+streamOpts = 'dataRoot=%s' % args.srcdir
+
+etreearg = {
+    'stream': '*.xml',
+    'streamOpts': streamOpts,
+}
+
+nsmap = buildLut('mstar/vogue_xml_namespaces.lut')
+
+def get_issueid(filename, longid=False):
+    issueid = os.path.basename(filename).replace('Vogue_', '').split('_')[0]
+    if longid is True:
+        return issueid
+    else:
+        return issueid[0:6]
+
+articles_per_issue = defaultdict(list)
+
+for f in locate('*.xml', args.srcdir):
+    issue = get_issueid(f)
+    articles_per_issue[issue].append(f)
+    issue8 = get_issueid(f, longid=True)
+    articles_per_issue[issue8].append(f)
+
+# Ensure the desired output directory exists.
+
+if args.srcdir != os.getcwd():
+    os.makedirsp(args.srcdir)
+
+# Set up a message queue instance to keep track of any
+# messages or warnings that need to be reported.
+msq = MessageQueue()
+
+
+for doc in EtreeStream(etreearg).streamdata():
+    issue6 = get_issueid(doc._cfg['basename'])
+    issue8 = get_issueid(doc._cfg['basename'], longid=True)
+    articles_in_issue6 = len(articles_per_issue[issue6])
+    articles_in_issue8 = len(articles_per_issue[issue8])
+
+    thr = Threading(dest_root=args.dest_root, nsmap=nsmap, messagequeue=msq)
+    thr.handle_document(doc.data, issue6, articles_in_issue6)
+
+    pagemap = PageMap(dest_root=args.dest_root, nsmap=nsmap, messagequeue=msq)
+    pagemap.handle_document(doc.data, issue8, articles_in_issue8)
+
+    pcmi = PCMI(dest_root=args.dest_root, nsmap=nsmap)
+    pcmi.handle_document(doc.data, issue8, articles_in_issue8)
+
+    hh = HitHightlighting(dest_root=args.dest_root, nsmap=nsmap)
+    hh.handle_document(doc.data, issue8, articles_in_issue8)
+
+msq.print_messages()

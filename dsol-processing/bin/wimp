@@ -1,0 +1,319 @@
+#!/usr/local/bin/python2.7
+# -*- mode: python -*-
+# pylint: disable = E1101
+
+# Wellcome Image Mangling Program
+# Convert JPEG2000 to conform to the Wellcome Library's
+# JPEG2000 profile and name them appropriately for loading
+# into their automated content ingestion system.
+
+# Profile details
+#
+# tile size = 1024x1024
+# progression order = RLCP
+
+# Source scanner (found in XML manifest files)
+#
+# Images scanned on ATIZ compressed to 8:1
+# Images scanned on Zeutschel compressed to 16:1
+
+# Naming scheme
+#
+# Top level directory is collection_3
+#
+# Book-level directory is the Wellcome's b-number and their i-number,
+# separated with a hyphen.
+#
+# Next level is called "Images", and individual images appear here.
+#
+#
+# Image naming
+#
+# Images should be named with the PQ ID and the b-number, separated by '_'.
+# In addition, the front cover must be the first image, followed by the
+# page images, followed by the back cover and then the spine, edge shots
+# and endpapers. Each image must have a sequence number of four digits,
+# with the front cover getting _0001, and then each subsequent image gets
+# the next number.
+
+# APPROACH
+#
+# There are a lot of images to process. Let's keep a log of what we've
+# already done, so we don't need to worry about it ourselves. Log file
+# in /dc/dsol/var/wellcome/collection3_progress.log
+#
+# Working directory is /data/prd/eeb/wellcome/work.
+#
+# Copy the appropriate set of images into the working directory, into
+# a subdir ./raw. Use rsync here.
+#
+# Convert images, one at a time, to PNG in a ./png subdir, and then to
+# a JPEG2000 using the Library's profile in a ./jp2 subdir.
+#
+# Next step is to rename the converted jp2 files according to the
+# Library's rules - Front cover and front end papers, followed by the
+# page images, read end papers and back cover, followed by the spine
+# and edge shots. Renamed images go in a subdir ./out, inside a subdir
+# named for the PQ book ID, which in turn contains a subdir named for
+# the b-number and i-number values taken from the delivery manifest XML
+# files, and the final level of nesting is a subdir called "Images."
+#
+# Contents of ./out then copied back to bootes, and placed in
+# /dc/wellcome-coll3/Wellcome_Redelivery, separated by PQ book ID.
+#
+# Along the way, we keep a record of which combinations of b-number
+# and i-number we have seen, and which PQ book IDs.
+#
+# Script takes a list of PQIDs, either on the command line or in a
+# file, and converts those. If no arguments are given, it finds the
+# next volume that hasn't been done, and continues processing at that
+# point. This allows us to convert specific titles if required, or to
+# just fire up the tool and let it go.
+
+import atexit
+import os
+import shutil
+import sys
+
+from glob import glob
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
+
+# We need to import this module to get the makedirsp function
+# inserted into os. Then we can delete it to keep pylint happy.
+# There must be a better way to do this...
+import extensions.osextensions # pylint: disable = F0401
+del extensions.osextensions
+
+from messagequeue import MessageQueue # pylint: disable = F0401
+from tqdm import tqdm
+
+# pylint: disable = F0401
+from wimp import utils
+from wimp.bindery import Bindery
+from wimp.bindery import BinderyAlreadyProcessed
+from wimp.bookshelf import BookShelf
+from wimp.imageconverter import ImageConverter
+from wimp.progressmonitor import ProgressMonitor
+from wimp.readinglist import ReadingList
+# pylint: enable = F0401
+
+msq = MessageQueue()
+
+bookroot = '/dc/wellcome-coll3/Incoming'
+progresslog = '/dc/dsol/var/wellcome/progress'
+
+WORKDIR = '/data/prd/eeb/wellcome/work/%s' % os.getpid()
+
+pidfile_path = '/var/tmp/wellcome/pid.%s' % os.getpid()
+pidf = os.open(pidfile_path, os.O_CREAT|os.O_EXCL|os.O_WRONLY)
+os.write(pidf, '')
+os.close(pidf)
+
+def clean_up():
+    try:
+        shutil.rmtree(WORKDIR)
+    except OSError as e:
+        if e.errno == 2:
+            pass
+        else:
+            raise
+    os.unlink(pidfile_path)
+    try:
+        # This should already be deleted if we are terminating
+        # after a successful run. In that case, don't throw up
+        # all over the terminal!
+        os.unlink(os.environ['BOOKLOCKFILE'])
+    except OSError as e:
+        if e.errno == 2:
+            pass
+        else:
+            raise
+    except KeyError:
+        pass
+
+atexit.register(clean_up)
+
+# pylint: disable = W0621
+
+def set_book_ids_from_args(args):
+    if len(args) == 0:
+        return None
+    elif os.path.isfile(args[0]):
+        return utils.list_from_file(args[0])
+    else:
+        return args[0:]
+
+# build a dict of output directories we need during image
+# conversion. We want to keep cover images separate from
+# the content so we only process them once for bound-with
+# volumes (each item in a bound-with needs its own copy of
+# the cover images).
+def setup_directories(manifestation, bookid, bookshelf):
+    dirs = {}
+    for w in ['raw', 'png', 'jp2']:
+        dirs[w] = os.path.join(
+            getattr(manifestation, "%s_dir" % w),
+            bookid, manifestation.manifestation_id
+        )
+        dirs["%s_covers" % w] = os.path.join(
+            getattr(manifestation, "%s_dir" % w), bookid,
+            bookshelf.get_book(bookid).covers.manifestation_id
+        )
+    dirs['out'] = os.path.join(
+        getattr(manifestation, "out_dir"),
+        bookid, "%s_%s_SEQ" % (
+            manifestation.b_number,
+            manifestation.i_number
+        ), 'Images'
+    )
+    return dirs
+
+def lock_book(bookid):
+    '''Drop a lock file for <bookid> to ensure it is only processed
+    once, if running more than one instance of wimp.
+    '''
+    try:
+        fd = os.open(
+            book_lockfile(bookid), os.O_CREAT|os.O_EXCL|os.O_WRONLY, 0755
+        )
+        os.write(fd, str(os.getpid()))
+        os.close(fd)
+        # Stash the bookid in the environment so the atexit handler
+        # can find it, since the lockfile variable is out of scope when it
+        # runs.
+        os.environ['BOOKLOCKFILE'] = book_lockfile(bookid)
+    except OSError as e:
+        if e.errno == 17:
+            return False
+        else:
+            raise
+    return True
+
+def book_lockfile(bookid):
+    return os.path.join(
+        '/dc/dsol/var/wellcome', ".%s" % bookid
+    )
+
+def main(args):
+    bids = set_book_ids_from_args(args)
+    bookshelf = BookShelf(bookroot, WORKDIR)
+    pm = ProgressMonitor(progresslog, bookshelf)
+    rl = ReadingList(bookids=bids,
+                     bookshelf=bookshelf,
+                     progressmonitor=pm)
+
+    # now we have a list of books to transform, let's go ahead
+    # and grab the images from the network.
+    for bookid in rl:
+        # We don't want to process a book that's already been
+        # covnerted. Check to see if the current bookid is in the
+        # ProgressMonitor's progress attribute, and skip it if it is.
+        if bookid in pm.progress:
+            print "%s already processed. Moving on." % bookid
+            continue
+
+        # We don't want a book to be picked up by more than one instance
+        # of the script. If a lockfile for the current book already exists,
+        # move on without doing anything.
+        if not lock_book(bookid):
+            print "%s in progress by another instance. Moving on." % bookid
+            continue
+
+        # Make the 'raw' directory to hold the images copied from the network
+        os.makedirsp(os.path.join(WORKDIR, 'raw'))
+        # Copy images from network to process locally
+        copy_src = rl.bookshelf.get_book(bookid).bookpath
+        copy_dest = os.path.join(WORKDIR, 'raw', bookid)
+        print >> sys.stderr, "%s: Copying files from network..." % bookid,
+        utils.copy_tree("bootes:%s/" % copy_src, copy_dest, shutil.rmtree)
+        print >> sys.stderr, " Done"
+
+        # Once we have a copy of the images, we can start to process
+        # them.
+
+        for man in [man for man in rl.book(bookid).manifestations
+                    if man.covers is not True]:
+
+            dirs = setup_directories(man, bookid, bookshelf)
+
+            # Test to see if the cover images have already been done.
+            # No need to convert them multiple times for multiple
+            # manifestations.
+            if os.path.isdir(dirs['png_covers']):
+                print "Covers already done. Not processing again"
+            else:
+                print "%s: Converting covers..." % man.b_number
+                for image in tqdm(
+                        [man.cover_images[img] for img
+                         in sorted(man.cover_images.keys())],
+                        leave=True
+                ):
+                    ImageConverter(image).convert_image(
+                        dirs['raw_covers'],
+                        dirs['png_covers'],
+                        dirs['jp2_covers']
+                    )
+
+            # Convert the internal images.
+            print "%s: Converting images..." % man.b_number
+            for image in tqdm(
+                    [man.images[img] for img in sorted(man.images.keys())],
+                    leave=True
+            ):
+                ImageConverter(image).convert_image(
+                    dirs['raw'], dirs['png'], dirs['jp2']
+                )
+
+            # We now have all the images for the current volume, so
+            # the next step is to rename them according to the Library's rules.
+            print "%s: Binding book" % man.b_number
+            book = rl.bookshelf.get_book(bookid)
+            try:
+                Bindery(book, man).bind_book(dirs['jp2'], dirs['out'])
+            except BinderyAlreadyProcessed:
+                msq.append_to_message(
+                    "Combination already processsed",
+                    "%s_%s" % (man.b_number, man.i_number)
+                )
+                continue
+
+        # Now that we have converted the book's images and renamed them,
+        # we need to copy the output back to the Solaris machines.
+
+        # We need to chop off the last two path elems of the dirs['out'] value
+        print "%s: Copying converted images to network..." % bookid,
+        tfr_src = "%s/" % '/'.join(dirs['out'].split('/')[0:-2])
+        utils.copy_tree(
+            tfr_src, 'bootes:/dc/wellcome-coll3/Wellcome_Redelivery'
+        )
+        print " Done"
+
+        # Next thing to do is to delete the working copy of the data,
+        # including the PNG and newly generated JP2000.
+        for d in glob('%s/*' % WORKDIR):
+            shutil.rmtree(d)
+
+        # Register this book as complete
+        pm.update_with_bookid(bookid) # pylint: disable = W0631
+        # Remove the book lockfile
+        os.unlink(book_lockfile(bookid))
+        # If the stopfile exists in /dc/dsol/var/wellcome, stop this run
+        stop_if_told()
+
+def stop_if_told():
+    universal_stop_file = '/dc/dsol/var/wellcome/.stop'
+    my_stop_file = '/dc/dsol/var/wellcome/.stop.%s' % os.getpid()
+    if os.path.exists(my_stop_file):
+        print "Found stop file. Ending run now."
+        os.unlink(my_stop_file)
+        exit()
+
+    if os.path.exists(universal_stop_file):
+        print "Found universal stop file. Ending run now."
+        if os.listdir('/var/tmp/wellcome') == [os.path.basename(pidfile_path)]:
+            os.unlink(universal_stop_file)
+        exit()
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

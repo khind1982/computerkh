@@ -1,0 +1,218 @@
+#!/usr/bin/env python
+# -*- mode: python -*-
+
+import sys, os, site
+sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
+sys.path.append('../lib')
+#site.addsitedir('/packages/dsol/lib/python2.6/site-packages')
+
+sys.setcheckinterval(10000)
+
+# Hit Highlighting coordinates files generator.
+
+# Must be able to read legacy records for any product that needs hh
+# files.  Output format of the files is the same for all products, but
+# the layout of the files on disk may be different.
+
+# A module must be provided for each product that needs hit
+# highlighting files. The per-product modules must know:
+#
+# A) How to get records from the source data (using the standard
+#    streams modules)
+#
+# B) How to extract from each record the article ID, the list of
+#    pages, and the list of words per page.
+#
+# C) How to correctly partition output files in the appropriate
+#    directory structure for the product.
+
+# This module will ask the product module to give it a list of
+# articles with the pages and words coords already populated. It will
+# then push those data to the mshh database, before once more
+# deferring to the product module to write out the data to the correct
+# files.
+
+# Module API
+#
+# This control script expects the product modules to expose the
+# following API.
+#
+# ProductModule.stream_data(input_path, streamOpts, output_path) - A
+#     class method that returns a tuple of (index, src_record) for
+#     each record in the data set. This tuple is then split into
+#     count, src_record in the first loop, which then sets the
+#     Article up so it is ready to write to the database.
+#
+# ProductModule.write_data(article) - A class method that takes a
+#     single Article instance, and writes it to the appropriate output
+#     file (using the article's outputdir property, described
+#     below). Note that article, here, is a row from the database, and
+#     *not* an instance of ProductModule.Article (although the two
+#     are, necessarily, very similar). Instead, it is an instance of
+#     the Elixir schema's class called Article (described below)
+#
+# ProductModule.Article - a class representing an article and its
+#     pages and words.
+#
+# ProductModule.Article.aid - the article ID of the current
+#     article. Must be unique within the collection.
+#
+# ProductModule.Article.outputdir - a string representation of the
+#     directory structure to use when writing out the word coordinates
+#     files. Exactly how this is synthesised depends on the product's
+#     requirements. EIMA uses journalid, year of publication, month of
+#     publication. Vogue uses just year of publication, month of
+#     publication.
+#
+# ProductModule.Article.pages - Article instances must have some way
+#     of enumerating the pages in the article. For EIMA, this is done
+#     with a property on Article called pages. Alternatively, another
+#     class may be implemented, instances of which must be made
+#     available as the pages attribute on an instance of
+#     Article. Pages should be a dict, keyed on the page number (or
+#     page image id, or anything that uniquely identifies the page
+#     within the collection), with a list of words on the page as
+#     values. Note that there is no restriction on the name of the
+#     class implementing pages, nor even any strict requirement that a
+#     class be used at all. Pages are referenced in the control script
+#     as members of the ProductModule.Article.pages collection.
+#
+# page.words - Each page in an article must have some way of
+#     enumerating the words on the page. EIMA uses a PageZone class
+#     (an implementation detail, and not part of the API) to hold
+#     instances of APSWord in its instances' words attribute.  The
+#     words member is a dict, keyed on the cleaned value of the word
+#     from the source data, with the word's coordinates (another dict)
+#     as values.
+#
+# word.value - the raw value of each word as it appears in the source
+#     data.  Note that the *name* of the class representing a word is
+#     not important - words are referenced in the control script as
+#     members of the page.words collection.
+#
+# word.sanitized_value - the cleaned text (with puncuation marks
+#     removed, lower-cased, etc.) of the word.
+#
+# word.coords - a dict holding the word's coordinates data. Keys must
+#     be 'ulx', 'uly', 'lrx', 'lry'. Some products might need to apply
+#     a resize scaling factor, if the images used for hit highlighting
+#     display have been rescaled. This must be done in the Word class,
+#     at the time the coords dict is constructed.
+#
+#
+# Database Schema
+#
+# Recrods coming from the source data, exposing the API described
+# above, will be saved to a database, according to the following
+# schema description:
+#
+# Product.name - simply a string representation of the current
+#     product. Used to ensure only the current product's records are
+#     deleted as the job starts.
+#
+# Article - holds information about the article level.
+#
+# Article.uid - the unique identifier for the article. String,
+#     34. Indexed.
+#
+# Article.journalid - the ID of the journal to which the article
+#     belongs.  Used, along with Product, to ensure only the correct
+#     data is deleted. String, 56. Indexed.
+#
+# Article.outputdir - the path on disk to write the output files.
+#     String, 128.
+#
+# Page - holds page-level information. An article has many pages.
+#
+# Page.uid - the unique identifier of the page. String, 56. Indexed.
+#
+# Word - holds the cleaned value of the word text and its coordinate
+#     points.
+#
+# Word.value - the text of the word.
+#
+# Word.ulx, Word.uly, Word.lrx, Word.lry - integers holding the word's
+#     coordinates point.
+#
+# Word.formatted_for_output - a calculated value, not actually stored
+#     in the database. A property on the Word model that returns the
+#     value of the word and its four coordinate points formatted so
+#     that it can simply be written to the output file by the control
+#     script.
+#
+
+from optparse import OptionParser
+
+# Add any new products here. The key is the filename of the module,
+# the value is the name of the class defined at the top level of the
+# module.
+PRODUCTS = {
+    'eima':  'EIMA',
+    'vogue': 'Vogue',
+    'wwd':   'WWD',
+    }
+
+def import_product_module(product):
+    try:
+        product_proxy = __import__("mediaservices.%s" % product, globals(), locals(), PRODUCTS[product], level=-1)
+    except ImportError:
+        print >> sys.stderr, ("No product module found for %s" % product)
+        exit(1)
+    except KeyError:
+        print >> sys.stderr, ("Unknown product %s" % product)
+        exit(1)
+    sys.modules['ProductProxy'] = eval("product_proxy.%s" % PRODUCTS[product])
+
+optparser = OptionParser()
+optparser.add_option('-s', dest='data_root', default=None)
+optparser.add_option('-d', dest='dest_root', default=None)
+optparser.add_option('-r', dest='resize_list', default=None)
+(options, args) = optparser.parse_args()
+
+if options.dest_root is None:
+    print >> sys.stderr, ("Please provide an output directory with the -d flag")
+    exit()
+
+if options.data_root is None:
+    streamOpts = None
+else:
+    streamOpts = "dataRoot=%s" % options.data_root
+
+    #if options.resize_list is not None:
+resize_list = options.resize_list
+
+product = args[0]
+path = args[1]
+
+import_product_module(product)
+ProductProxy = sys.modules['ProductProxy']
+
+# Gather the word coords data from the source.
+print >> sys.stderr, ("Gathering word coordinates from source data...")
+
+pid = os.getpid()
+prd_proxy = ProductProxy(product, resize_list)
+
+for record in prd_proxy.stream_data(path, options.dest_root, streamOpts):
+    count, src_record = record
+    prd_proxy.store_coords_for_article(src_record, count)
+    sys.stderr.write('\r\033[0K')
+    sys.stderr.write("Seen %s (%s)" % (count, src_record._cfg['basename']))
+
+#     if count == 1000:
+#         break
+
+# A classmethod callback to allow the product module to do any finalization
+# operations that might be needed. If you don't need to do anything, don't
+# worry - the HitHighlighting class implements a stub method that simply
+# calls pass.
+ProductProxy.finalize()
+
+# Now write out the collected word coords data. Each product module
+# should know how the output files should be organised on disk.
+print >> sys.stderr, ("\nWriting word coordinate files...")
+
+for output_count, article in enumerate(prd_proxy.retrieve_records_from_storage(), start=1):
+    prd_proxy.write_data(article)
+    sys.stderr.write('\r\033[0K')
+    sys.stderr.write("Seen %s of %s (%4.2f%%), %s" % (output_count, count, (float(output_count)/count) * 100, article.uid))

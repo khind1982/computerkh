@@ -1,0 +1,434 @@
+#!/usr/bin/env bash
+# -*- mode: shell-script -*-
+
+# Allow people to transfer content to or from a vendor, 
+# without their having to know rsync or whatever other tool
+# we use.
+
+# Subcommands:
+#
+# send|upload|put - send content to the vendor's site
+# receive|download|fetch|get - copy content from the vendor
+# vendors - list known and configured vendors
+# info <vendor> - show config for named vendor
+# new - add a new vendor to the tfr.d directory
+
+# Example:
+#
+# tfr get ninestars bp3 <paths>  -  connect to the Ninestars server,
+#     and download BP3 content at the listed paths.
+#
+# tfr put ninestars bp3 /dc/bpc-images/Incoming/Autodocs/batch001
+#     connect to the ninestars server and send the local BP3 content
+#     in the named directories.
+
+# Each vendor has a config file in ../etc/tfr/vendor.d, and each
+# product has a config file in ../etc/tfr/product.d. In addition,
+# some options will be set in user-specific files, ~/.tfr.conf
+
+# Because Solaris doesn't have realpath(1)
+_realpath() {
+    readlink -f $1
+}
+
+if [ `uname` != "FreeBSD" ]
+then
+    REALPATH=_realpath
+    GREP=/usr/local/bin/ggrep
+else
+    REALPATH=/bin/realpath
+    GREP=/usr/bin/grep
+fi
+
+FQME=$($REALPATH $0)
+CONFDIR=$($REALPATH $(dirname $FQME)/../etc/tfr)
+VENDORDIR=${CONFDIR}/vendor.d
+PRODUCTDIR=${CONFDIR}/product.d
+
+usage() {
+    echo "$(basename $FQME) Usage:"
+    echo "$(basename $FQME) <subcommand>"
+}
+
+today() {
+    date +%Y%m%d
+}
+
+display_info() {
+    local type name
+    type=$1
+    name=$2
+
+    case $type in
+        vendor)
+            DIR=$VENDORDIR
+            ;;
+        product)
+            DIR=$PRODUCTDIR
+            ;;
+    esac
+    # display the requested vendor's or product's
+    # config details.
+    if [ -f $DIR/$name.conf ]
+    then
+        echo "Config for $type $name:"
+        cat $DIR/$name.conf
+    else
+        echo "Unknown $type \"$name\""
+        exit 1
+    fi
+}
+
+list_known() {
+    local things
+    things=$1
+    case $things in
+        vendors)
+            files=$VENDORDIR/*.conf
+            ;;
+        products)
+            files=$PRODUCTDIR/*.conf
+            ;;
+    esac
+    echo "Known $things:"
+    for f in $files
+    do
+        echo $(basename ${f%.conf})
+    done
+}
+
+parse_config() {
+    local conftype vendor
+    conftype=$1
+    vendor=$2
+
+    # Find the vendor, product and user config files, and set up
+    # required variables. These are all prefixed with TFR_<type>_, 
+    # where <type> is the source of the setting.
+    case $conftype in
+        vendor)
+            conffile=$VENDORDIR/$vendor.conf
+            ;;
+        product)
+            conffile=$PRODUCTDIR/$product.conf
+            ;;
+        user)
+            conffile=${HOME}/.tfr.conf
+            # We have already verified that the requested vendor and product
+            # configs exist (done in check_params()). Now we need to check the
+            # user's config file exists, and if it doesn't, create it.
+            
+            if ! [ -f ${HOME}/.tfr.conf ]
+            then
+                touch ${HOME}/.tfr.conf
+            fi            
+            ;;
+    esac
+
+            
+    while read opt
+    do
+        var=${opt%: *}
+        val=${opt#*: }
+        eval TFR_${conftype}_$var=${val}
+    done < <($GREP -v -E "^(#|$)" $conffile)
+}
+
+fetch_from_vendor() {
+    local vendor product 
+    vendor=$1
+    product=$2
+
+    # entry point into the fetch functionality.
+    # The first task is to parse the vendor's config
+    # file, so we know how to proceed. Config must include:
+    # remote host (IP or FQDN), remote user name, remote password
+    # (if password authentication is used), root directory on the
+    # remote host to check for content to retrieve, default
+    # location on this side to write the copied data.
+    parse_config vendor $vendor
+    parse_config product $product
+    parse_config user $USER
+
+    # Now we've parsed all the relevant config files, we should have
+    # enough information on hand to start the transfer. The only thing
+    # that might still catch us out is not having a password for the
+    # remote host. If that's the case, we need to use the current
+    # user's ssh private key for the host in question. If that's not
+    # set in their config file, we need to prompt them for it, save it
+    # in the file for next time, and then use it.
+
+    # Get the privkey file for the current vendor.
+    eval TFR_privkey=\$TFR_user_${TFR_vendor}_private_key
+
+    if [ -z $TFR_vendor_password ] && [ -z $TFR_privkey ]
+    then
+        echo "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
+        echo "$TFR_vendor_remotehost requires a private key to authenticate,"
+        echo "but there is no private key listed in your ~/.tfr.conf file"
+        echo
+        echo "If you have set up a key pair with $TFR_vendor, and you know"
+        echo "the location of your private key file, enter it below. It will"
+        echo "be saved in your ~/.tfr.conf for future use."
+        echo
+        echo "If you have not set up a keypair, or you do not know where the"
+        echo "relevant private key file is, just hit <ENTER> to exit. Before"
+        echo "you can successfully use this tool for $TFR_vendor, you will need"
+        echo "to put a line like this in your config file:"
+        echo
+        echo "${TFR_vendor}_private_key: <path to private key>"
+        echo
+        read -p "Path to your private key file for $TFR_vendor: " keyfile
+        if [ -z $keyfile ]
+        then
+            echo "No path given. Quitting"
+            exit 1
+        elif [ -f $HOME/.ssh/$keyfile ]
+        then
+            echo "${TFR_vendor}_private_key: ${HOME}/.ssh/$keyfile" >> ${HOME}/.tfr.conf
+            echo "Keyfile saved."
+            TFR_privkey=${HOME}/.ssh/$keyfile
+        elif [ -f $keyfile ]
+        then
+            echo "${TFR_vendor}_private_key: $keyfile" >> ${HOME}/.tfr.conf
+            echo "WARNING! You keyfile is in a non-standard location! Consider moving it"
+            echo "to ${HOME}/.ssh"
+            TFR_privkey=$keyfile
+        else
+            echo "Could not find $keyfile"
+            exit 1
+        fi
+    fi
+
+    case $TFR_vendor_protocol in
+        rsync)
+            do_rsync fetch
+            ;;
+        *)
+            echo "Unsupported protocol: $TFR_vendor_protocol"
+            exit 1
+            ;;
+    esac
+}
+
+do_rsync() {
+    local direction
+    local user remhost keyfile srcdir rsyncopts port 
+    local rsyncpath remotedir copypaths vendor
+    direction=$1
+
+    vendor=$TFR_vendor
+    user=$TFR_vendor_user
+    remhost=$TFR_vendor_remotehost
+    rsyncopts=$TFR_vendor_rsyncopts
+    keyfile=$TFR_privkey
+    port=$TFR_vendor_remoteport
+    rsyncpath="--rsync-path=${TFR_vendor_rsyncpath:-/usr/local/bin/rsync}"
+    copypaths=$TFR_paths
+    rsyncchmod="--chmod=u=rwx,g=rwsx,o=rx"
+
+    case $direction in
+        fetch)
+            remoteroot=$TFR_vendor_fromdir           
+            for p in $copypaths
+            do
+                p=${p%/}
+                if ( echo $p | $GREP "^/" )
+                then
+                    remotedir=$p
+                else
+                    remotedir=$remoteroot/$p
+                fi
+                remotedirhead=$(basename $remotedir)
+
+                # 
+                if [ -z $TFR_vendor_vendor_dir_name ]
+                then
+                    localroot=$TFR_product_defaultdir/${vendor}
+                else
+                    localroot=$TFR_product_defaultdir/${TFR_vendor_vendor_dir_name}
+                fi
+                localdir=$localroot/$remotedirhead
+                rshconf="--rsh=\"ssh -l $user -i $keyfile -p $port\""
+                logfile="$localroot/tfr_`today`.log"
+                if ! [ -f $logfile ]
+                then
+                    touch $logfile
+                fi
+                logging="--log-file=$logfile"                
+                # TODO remove this eval
+                eval rsync -av --progress $rshconf $rsyncpath $logging $rsyncopts $rsyncchmod $remhost:$remotedir/ $localdir
+            done
+            ;;
+        put)
+            echo "This functionality is not yet implemented."
+            exit 2
+            remotedir=$TFR_vendor_todir
+            ;;
+    esac
+}
+
+gen_help() {
+    local me
+    me=$(basename $0)
+    echo
+    echo "The \"$me\" command can be used to copy content to or from a vendor server."
+    echo "In order to work properly, each vendor to or from whom you wish to transfer"
+    echo "content must have a configuration file, as must each product for which you"
+    echo "wish to transfer content."
+    echo
+    echo "\"$me\" has a number of \"subcommands\" that tell it what to do:"
+    echo
+    echo "get - copy content from a remote server to a local file system"
+    echo "put - copy content from a local file system to a remote server"
+    echo "vendor - show configuration for a named vendor"
+    echo "product - show configuration for a named product"
+    echo "vendors - list known vendors"
+    echo "products - list known products"
+    echo
+    echo "For help on a particular command, try \"$me help <command>\""
+    exit 1
+}
+
+get_help() {
+    local me
+    me=$(basename $0)
+    echo
+    echo "Use the \"get\" subcommand to retrieve content from a remote server."
+    echo
+    echo "Usage: $me get vendor_name product_name remote_directory_1 [... remote_directory_n]"
+    echo
+    echo "Note that 'fetch', 'receive' and 'rcv' are all synonyms for 'get'."
+    echo "vendor_name and product_name can appear in any order, but must be the first"
+    echo "two arguments to the get command. All remaining arguments are interpreted as"
+    echo "directories on the remote server. \`tfr get' will try to download the contents"
+    echo "of each directory to the product's default target location."
+    exit 1
+}
+
+put_help() {
+    echo
+    echo "The \"put\" command is not implemented yet"
+    exit 13
+}
+
+info_help() {
+    local type
+    type=$1
+    echo
+    echo "Use the \"$type\" command to see the configuration information for a given"
+    echo "$type. Each $type must have a configuration file which sets certain options"
+    echo "needed by \"tfr\" to work correctly. If the $type doesn't have a config file,"
+    echo "\"tfr\" will print an error message and quit."
+    echo
+    echo "Usage: $(basename $0) $type <${type}_name>"
+    exit 1
+}
+
+display_info_help() {
+    local type
+    type=$1
+    echo
+    echo "Use the \"$type\" command to see a list of $type known to \"tfr\"."
+    echo
+    echo "Usage: $(basename $0) $type"
+    exit 1
+}
+
+check_params() {
+    local direction
+    direction=$1
+
+    if [ -z $2 ] || [ -z $3 ]
+    then
+        # Assume help is required
+        echo "$(basename $0) $direction - not enough arguments."        
+        echo "Try \"$(basename $0) help $direction\" for more information."
+        exit 1
+    fi
+    
+    for word in $2 $3
+    do
+        if [ -f $VENDORDIR/$word.conf ]
+        then
+            TFR_vendor=$word
+            TFR_parsed_vendor=1
+        elif [ -f $PRODUCTDIR/$word.conf ]
+        then
+            TFR_product=$word
+            TFR_parsed_product=1
+        else
+            echo "$word is not a known product or vendor name"
+            exit 1
+        fi
+    done
+    shift 3
+
+    # Make sure we have seen both a vendor and product config file
+    if [ -z $TFR_parsed_product ] || [ -z $TFR_parsed_vendor ]
+    then
+        echo "Missing either a product or a vendor name"
+        echo "Type \"$(basename $0) help get\" for more information"
+        exit 37
+    fi
+    TFR_paths=${@:?No directories to copy!}
+}
+
+case $# in
+    0)
+        usage
+        exit 1
+        ;;
+    *)  ;;
+esac
+
+case $1 in
+    get|receive|rcv|fetch)
+        shift
+        check_params get $@
+        fetch_from_vendor $TFR_vendor $TFR_product 
+        ;;
+    vendors)
+        list_known vendors
+        ;;
+    products)
+        list_known products
+        ;;
+    vendor)
+        display_info vendor $2
+        ;;
+    product)
+        display_info product $2
+        ;;
+    help)
+        case $2 in
+            get)
+                get_help
+                ;;
+            put)
+                put_help
+                ;;
+            vendors)
+                display_info_help vendors
+                ;;
+            products)
+                display_info_help products
+                ;;
+            vendor)
+                info_help vendor
+                ;;
+            product)
+                info_help product
+                ;;
+            *)
+                gen_help
+                ;;
+        esac
+        exit 1
+        ;;
+    *)
+        echo "Unknown subcommand $1"
+        exit 1
+        ;;
+esac
+
