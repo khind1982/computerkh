@@ -1,9 +1,0 @@
-#!/usr/local/bin/python2.6
-
-import os, sys
-sys.path.append(os.path.join(os.path.dirname(__file__) + '/../lib/python'))
-from  knowuk.hutch import *
-
-
-if __name__ == '__main__':
-    process_hutch(sys.argv[1])

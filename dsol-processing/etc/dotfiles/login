@@ -1,3 +1,0 @@
-if { /bin/bash --help > /dev/null } then
-  exec bash --login
-endif

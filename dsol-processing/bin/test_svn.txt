@@ -1,5 +1,0 @@
-This is a test file
-to see whether TortoiseSVN
-does a good job of remembering
-changes to file line
-endings.

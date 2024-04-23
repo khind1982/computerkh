@@ -1,4 +1,0 @@
-#!/bin/sh
-# -*- mode: shell-script -*-
-
-/usr/local/bin/xmlplint -W -V -s -f3 -X2 -E2 $@

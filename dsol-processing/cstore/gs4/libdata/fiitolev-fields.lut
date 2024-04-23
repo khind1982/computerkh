@@ -1,8 +1,0 @@
-# List of fields and their destinations. When a field requires a parent, it can be defined after the child element separated by a comma and a space. Shared parents are defined in the function filmtransformfunc
-TITLEID|docid
-TITLE|title
-CTRY|country_of_production
-PERSID|docid
-ALTNAME|alternate_title
-ACTIVITY|activity,production_roles
-NATION|nationality

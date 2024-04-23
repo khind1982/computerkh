@@ -1,5 +1,0 @@
-from ds_abstract_mapping import DSAbstractMapping
-from proxy_mapping import ProxyMapping
-from prisma_mapping import PrismaMapping
-from pq_prisma_mapping import PQPrismaMapping
-from hapi_prisma_mapping import HAPIPrismaMapping

@@ -1,2 +1,0 @@
-import prisma_parser
-import iimp_iipa_parser

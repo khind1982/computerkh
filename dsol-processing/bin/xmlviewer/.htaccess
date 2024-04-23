@@ -1,5 +1,0 @@
-<IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresByType text/css "access 1 year"
-  ExpiresByType text/js "access 1 year"
-</IfModule>
