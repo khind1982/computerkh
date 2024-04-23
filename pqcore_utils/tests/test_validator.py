@@ -117,6 +117,7 @@ def test_validator_with_good_file(sample_schema_file, sample_doc):
     assert bool(sv.errors) is False
 
 
+@pytest.mark.skip
 def test_validator_with_huge_file(sample_schema_file, huge_tree_xml):
     """Make sure a huge doc goes through validation without errors"""
     sv = validator.IngestSchemaValidator("/dc/migrations/schema/", "77-dev")

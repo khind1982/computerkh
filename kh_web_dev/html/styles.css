@@ -1,0 +1,10 @@
+h1 {
+    text-align: center;
+    color: tomato;
+    background-color: rgba(0, 128, 0, 0.3);
+    border-style: double;
+    border-width: thick;
+    border-color: black;
+    margin: 25px 150px 25px 150px;
+    padding: 10px 10px 10px 10px;
+}
