@@ -1,0 +1,80 @@
+#!/usr/bin/env python2.7
+# -*- mode: python -*-
+
+import datetime
+import os
+import sys
+
+APP_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+app_lib = os.path.join(APP_ROOT, 'lib')
+app_etc = os.path.join(APP_ROOT, 'etc')
+sys.path.append(app_lib)
+
+import logging, logging.config, logging.handlers
+
+from optparse import OptionParser
+
+# pylint: disable= F0401
+from mediaservices import build_pagefiles
+from messagequeue import MessageQueue
+# pylint: enable= F0401
+
+optparser = OptionParser()
+optparser.add_option('-v', dest='verbosity', default=0)
+optparser.add_option('-r', dest='rebuild', default=False, action='store_true')
+
+opts, args = optparser.parse_args()
+
+# Set this in the environment so we don't have to pass
+# the switch around through every layer of the code...
+if opts.rebuild == True:
+    os.environ['GENMSMETADATA_REBUILD'] = "TRUE"
+
+# Given a directory containing APS-style xml, create pagefiles, hit
+# highlighting tables, pagemap and pcmi files, and check which records
+# need to be added to the threading and pagecollection_threading
+# tables in the product's threading database.
+
+try:
+    product = args[0]
+    dataroot = args[1]
+except IndexError:
+    print >> sys.stderr, "Usage: genmsmetadata <product> <directory>"
+    exit(1)
+
+# Set up the logging system.
+# Store the product name in the environment so we can use it later to
+# name the log file.
+os.environ['TR_LOG_DIR'] = 'genmsmetadatalogs'
+os.environ['TR_TOOL_NAME'] = 'genmsmetadata'
+os.environ['TR_PROD_NAME'] = product
+logdir = os.path.join(os.path.expanduser('~'), 'genmsmetadatalogs')
+if not os.path.isdir(logdir):
+    os.mkdir(logdir)
+
+os.datetime = datetime
+logconfig = os.path.join(app_etc, 'transformationLogging.conf')
+logging.config.fileConfig(logconfig)
+del os.datetime
+log = logging.getLogger('srv.genmsmetadata')
+
+def spew(message, verbosity=0):
+    """
+    Print given message, if the user rqeuested a verbosity
+    level greater than or equal to the message's trigger
+    level.
+
+    Arguments:
+    - `message`:
+    - `verbosity`:
+    """
+    if int(opts.verbosity) >= verbosity:
+        print message
+
+msq = MessageQueue()
+spew("Building pagefiles...", 1)
+build_pagefiles(product, dataroot, msq, log)
+
+msq.print_messages("\nThe following warnings were generated:\n")
+#spew("Building hit highlighting tables...", 2)
+#build_hit_highlighting_tables(dataroot)

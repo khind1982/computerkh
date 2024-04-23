@@ -1,0 +1,68 @@
+#!/bin/sh
+# -*- mode: shell-script -*-
+
+# Given a (possibly partial) journal title,
+# find the JID. Relies on having a copy of the
+# latest build data in /dc/dsol/steadystate/src/(iimp/iipa)
+
+# Where we store our working copies of the IMPA data:
+SSS="/dc/dsol/steadystate/src"
+IIMP="${SSS}/iimp"
+IIPA="${SSS}/iipa"
+
+# We need the -m option of GNU grep, which is here:
+test -x /usr/sfw/bin/ggrep && GGREP="/usr/sfw/bin/ggrep" || GGREP=/usr/bin/grep
+
+test_args () {
+    if [ "x${TITLE}" = "x" ]
+    then
+        echo "No title given"
+        exit 1
+   fi
+}
+
+search_iimp () {
+    search iimp
+}
+
+search_iipa () {
+    search iipa
+}
+
+search () {
+    product=${1}
+    # We can't do this by running ggrep on all files in the directory as the 
+    # for statement splits the result into word tokens.
+    for file in ${SSS}/${product}/JID*
+    do
+        # Use ggrep's -m option, which allows us to stop searching once we hit the
+        # specified number of matches. Each JID file relates to a single journal, 
+        # so this saves us time.
+        result=`${GGREP} -m 1 -w journaltitle ${file} | ${GGREP} -i "${TITLE}"`
+        if [ ! "x${result}" = "x" ]
+        then
+            title=`echo ${result} | sed -e 's!.*\[CDATA\[\(.*\)\]\].*!\1!'`
+            filename=`basename ${file} | sed -e 's!\.xml!!'`
+            echo ${filename}: ${title} \(${product}\)
+        fi
+    done
+}
+
+do_search () {
+    for word in iimp iipa
+    do
+        eval "search_${word}"
+    done
+}
+
+if [ ! -d "${IIMP}" -a -d "${IIPA}" ]
+then
+    echo "No data, or data incomplete"
+    exit 1
+else
+    TITLE=${1}
+    test_args && do_search
+fi
+
+
+

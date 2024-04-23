@@ -1,0 +1,88 @@
+#!/usr/local/bin/bash
+
+# Convert the passed file from jp2 to png, and from the png back to jp2,
+# using a different profile.
+
+# The image filename passed in is expected to be the path to the original image,
+# as supplied by the vendor, and located somewhere under
+# /dc/${library}-coll?/Incoming
+
+# The second argument is the path to the directory to write the converted
+# image to. To this supplied path, we add the source image path, stripped
+# up to the delivery batch id, in order to preserve the structure of the
+# content in the converted bundle.
+
+# Without this, ImageMagick uses /var/tmp as its tmpdir, causing a lot
+# of thrashing. /tmp resides in RAM on Solaris, so is much more suitable
+# for this purpose.
+TMPDIR="/tmp"
+export TMPDIR
+
+DATADIR="$(dirname $0)/../libdata/eeb"
+
+case `uname` in
+    FreeBSD)
+        DECOMPRESS="/usr/local/bin/opj_decompress"
+        COMPRESS="/usr/local/bin/opj_compress"
+        ;;
+    *)
+        DECOMPRESS="/usr/local/versions/openjpeg-2.1.0/bin/opj_decompress"
+        COMPRESS="/usr/local/versions/openjpeg-2.1.0/bin/opj_compress"
+        ;;
+esac
+
+case $# in
+    2)
+        SRCIMG=$1
+        OUTDIR=$2
+        ;;
+    *)
+        echo "Usage: $(basename $0) input_file output_dir" 
+        exit 1
+        ;;
+esac
+
+JP2NAME="$(basename ${SRCIMG})"
+PNGNAME="${JP2NAME/.jp2/.png}"
+# Strip off everything up to and including the Incoming/ part of the SRCIMG
+# path. Append the result to the passed value of OUTDIR. This will preserve
+# the book's structure.
+OUTDIR="${OUTDIR}/$(dirname ${SRCIMG##*/Incoming/})"
+
+# Chop up and rearrange the bits we know to derive the path to the incoming
+# book's XML manifest file. This contains the scanner manufacturer name,
+# which we need to know to determine the correct compression ratio for the
+# output JPEG2000 images.
+BOOKID=${SRCIMG##*/}
+TRACT=${BOOKID%-*}
+BOOKID=${BOOKID%-*-*}
+
+BOOK_DELBATCH=$(grep ${BOOKID} ${DATADIR}/index-wel.txt)
+BOOKXML="${BOOK_DELBATCH}/${TRACT}/${TRACT}.xml"
+
+scanner=$(
+    xml select -N mix=http://www.loc.gov/mix/v20 -t -v \
+        "//mix:mix[descendant::mix:objectIdentifierValue='${JP2NAME}']//mix:scannerManufacturer" \
+        ${BOOKXML}
+       )
+
+case $scanner in
+    Zeutschel)
+        compr_ratio="16"
+        ;;
+    *)
+        compr_ratio="8"
+        ;;
+esac
+
+# Make sure the output directory exists, or opj_decompress will complain
+# and not write any output
+mkdir -p "${OUTDIR}"
+
+# Push the image through $DECOMPRESS and see what happens...
+$DECOMPRESS -i $SRCIMG -o "${OUTDIR}/${PNGNAME}"
+
+# And now pass it back through $COMPRESS
+$COMPRESS -i "${OUTDIR}/${PNGNAME}" -o "${OUTDIR}/$(basename ${SRCIMG})" -t 1024,1024 -p RLCP -r ${compr_ratio}
+rm -f "${OUTDIR}/${PNGNAME}"
+

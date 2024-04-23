@@ -1,0 +1,372 @@
+#!/usr/bin/env python2.7
+# -*- mode: python -*-
+
+#import cProfile
+
+import datetime
+import getpass
+import os
+import re
+import site
+import sys
+
+APP_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+app_lib = os.path.join(APP_ROOT, 'lib')
+sys.path.insert(0, app_lib)
+site.addsitedir(app_lib)
+
+sys.setcheckinterval(10000)
+
+import logging, logging.config, logging.handlers
+
+from optparse import OptionParser
+
+# pylint: disable = F0401
+from config import Config
+from confreader import ConfReader
+from cstoreerrors import InvalidTransformationError
+from cstoreerrors import RunCompleteException
+from cstoreerrors import SkipRecordException
+from cstoreerrors import SteadyStateUnchanged
+from cstoreerrors import UndefinedHookException
+from cstoreerrors import XmlValidationError
+#from deliveryaudit import DeliveryAudit
+from filters.filterregistry import import_filter
+from mappings.mappingregistry import import_mapping
+from messagequeue import MessageQueue
+from outputstream import OutPutStream
+from steadystatehandler import SteadyStateHandler
+from transformation import Transformation
+# pylint: enable = F0401
+
+confdir = os.path.join(APP_ROOT, 'etc')
+
+appconfig = ConfReader()
+
+optparser = OptionParser()
+optparser.set_usage(
+    '%prog [options] product_name stream\n\t%prog -h for more detail')
+
+#optparser.add_option(
+#    '-a', dest='auditlog', default=None,
+#    help='pathname to the audit log file, if required')
+optparser.add_option(
+    '-n', type='int',
+    dest='reccount',
+    help='specifiy the number of records to extract')
+optparser.add_option(
+    '-i', dest='recordids',
+    help='a list of record ids, comma-separated, to extract')
+optparser.add_option(
+    '-c', dest='configfile',
+    help='path to an alternate config file')
+
+optparser.add_option('-o', dest='outputOptions', default='')
+
+optparser.add_option(
+    '-f', dest='outputFilter',
+    help='name the output filter to use. Default in this version is GS4 XML')
+optparser.add_option(
+    '-x', dest='validationSchemaLogging',
+    default=os.path.join(os.environ['HOME'], 'validationlogs'),
+    help='Validate XML emitted by the XML Filter against the appropriate Ingest Schema. Log information to named directory.')
+optparser.add_option(
+    '-v', dest='verbose', action='store_true', default=False,
+    help='Provide more verbose analytical output')
+optparser.add_option('-s', dest='streamOpts')
+optparser.add_option(
+    '-q', dest='provideFeedBack', action='store_false', default=True,
+    help='Suppress visual feedback')
+optparser.add_option('-m', dest='mappingOptions')
+
+optparser.add_option(
+    '-r', dest='resumePreviousRun', action='store_true', default=False,
+    help='Resume a previously failed or aborted steady state run')
+
+(options, args) = optparser.parse_args()
+
+try:
+    cfg = Config()
+    cfg = {'product': args[0], 'stream': args[1]}
+    cfg['app_root'] = APP_ROOT
+    cfg['confdir'] = confdir
+    cfg['app_libdata'] = os.path.join(APP_ROOT, 'libdata')
+
+    # ### NO UPDATES TO AAA OR EIMA
+    # ### The app needs to be reconfigured to include PDF links for these
+    # ### products, so until that happens, refuse to run for them
+    # if cfg['product'] in ['eima', 'aaa']:
+    #     if getpass.getuser() != 'dan':
+    #         print "Updates to EIMA, AAA and Country Life are suspended"
+    #         print "until the app is changed to handle generating PDF links"
+    #         print "as part of the ongoing accessibility enhancements."
+    #         sys.exit(1)
+    #cfg['auditlog'] = options.auditlog
+
+    cfg['msq'] = MessageQueue()
+
+    if options.streamOpts:
+        cfg['streamOpts'] = options.streamOpts
+    else:
+        cfg['streamOpts'] = None
+
+    if options.reccount:
+        cfg['recordCount'] = options.reccount
+
+    cfg['outputOptions'] = options.outputOptions
+
+    out = OutPutStream(cfg['outputOptions'])
+
+    if options.mappingOptions:
+        cfg['mappingOptions'] = options.mappingOptions.split(',')
+    else:
+        cfg['mappingOptions'] = ''
+
+    if cfg['product'] in ['iimp', 'iipa'] and 'fulltext' in cfg['mappingOptions']:
+        dbname = cfg['product'] + 'ft'
+        prodName = cfg['product'] + 'ft'
+    else:
+        dbname = cfg['product']
+        prodName = cfg['product']
+
+    # If we're doing IIMP or IIPA, add a function to cfg that knows
+    # how to calculate a sensible checksum so we can short circuit
+    # files that haven't changed since the last run.
+    if cfg['product'] in ['iimp', 'iipa']:
+        import hashlib
+        cfg['file_checksum_check'] = lambda filename: hashlib.sha256(
+            ''.join(
+                [line for line in open(
+                    filename, 'r'
+                ).readlines() if "UPDATED" in line]
+            )
+        ).hexdigest()
+
+    # Add the product name to the environment, so we can use it later to name
+    # the log file to write.
+    os.environ['TR_LOG_DIR'] = 'transformationlogs'
+    os.environ['TR_TOOL_NAME'] = 'transform'
+    os.environ['TR_PROD_NAME'] = prodName
+
+    if options.recordids:
+        try:
+            with open(options.recordids.strip()) as records:
+                cfg['recordids'] = [l.strip() for l in records.readlines() if not re.match(r'^($|#)', l)]
+        except IOError:
+            cfg['recordids'] = [i.strip() for i in options.recordids.split(',')]
+
+
+    # I don't like putting this here, but can think of no other way to
+    # accommodate IIMP/IIPA using the same mapping.
+    # The Steady State tracking database.
+    # We need to pass in the product name here, as it is the only
+    # reliable place to do it while avoiding global variables and
+    # passing the whole cfg dict into the SteadyStateHandler.
+    # I tried to use os.environ to get the product name to SteadyStateHandler,
+    # but environment changes don't propagate to other modules, and Python
+    # on Solaris doesn't have ctypes to allow me to use native C functions
+    # to read the environment.
+    if options.resumePreviousRun:
+        # Store resumePreviousRun on the Config object so it is available
+        # in the DeliveryAudit class.
+        cfg['resumePreviousRun'] = True
+        out.updateIOHandle("%sRESUMED_" % out.filename)
+    else:
+        cfg['resumePreviousRun'] = False
+
+    if appconfig.has_option(cfg['product'], 'ssroot'):
+        ssroot = appconfig.get(cfg['product'], 'ssroot')
+        cfg['steadyStateHandler'] = SteadyStateHandler(
+            product=prodName, ssroot=ssroot
+        )
+    else:
+        cfg['steadyStateHandler'] = None
+
+    if options.outputFilter:
+        cfg['outputFilter'] = options.outputFilter
+    elif cfg['product'] == "imparef":
+        cfg['outputFilter'] = "iimpref"
+    else:
+        cfg['outputFilter'] = "gs4xml"
+
+    if options.validationSchemaLogging:
+        cfg['validationSchemaLogging'] = options.validationSchemaLogging
+    cfg['verbose'] = options.verbose
+
+    cfg['provideFeedBack'] = options.provideFeedBack
+
+except IndexError as e:
+    print >> sys.stderr, (optparser.get_usage())
+    exit(1)
+
+# Load logging config from a file.
+
+# Make sure the transformationlogs directory exists before we continue.
+logdir = os.path.join(os.path.expanduser('~'), 'transformationlogs')
+if not os.path.isdir(logdir):
+    os.mkdir(logdir)
+
+# We need to use the current date and time in the log file name, but
+# Python doesn't like it when we try to access the datetime module
+# in the config file. Monkey-patch the os module so it contains a
+# reference to the datetime module. And don't tell Guido...
+os.datetime = datetime
+logconfig = os.path.join(confdir, 'transformationLogging.conf')
+logging.config.fileConfig(logconfig)
+del os.datetime
+log = logging.getLogger('tr')
+
+# The global application logger
+cfg['app_log'] = log
+
+# When you build the Transformation object, its own initialisation
+# takes care of handling the construction of the contained Stream
+# object. The Stream, addressable as tr.datastream, has a single
+# method called streamdata() which returns a Generator. Simply
+# iterate over the Generator in a for loop, and do what you need
+# to do with each returned object.
+tr = Transformation(cfg)
+
+import_mapping(tr.mappingname)
+MappingProxy = sys.modules['MappingProxy']
+
+# Import the output filter
+try:
+    import_filter(cfg['outputFilter'])
+    FilterProxy = sys.modules['FilterProxy']
+except:
+    raise
+
+# If the user requested output validation, test the value of
+# FilterProxy.__module__ and import an appropriate validator.
+# Do this here so it is only done once per run, and not for
+# each record that comes out the end.
+
+if FilterProxy.__module__ == 'filters.gs4xml' or FilterProxy.__module__ == 'filters.iimpref':
+    from validators.gs4xmlvalidator import GS4XmlValidator #pylint: disable = F0401
+    validator = GS4XmlValidator(cfg)
+else:
+    # Turn off validation and logging if we're not using
+    # a filter module that generates actual ingest records
+    cfg['validationSchemaLogging'] = None
+
+#auditlog = DeliveryAudit(cfg)
+
+try:
+    encoding = cfg['source_encoding']
+except KeyError:
+    encoding = 'utf-8'
+
+for record in tr.datastream.streamdata():  #encoding=encoding):
+    try:
+        mapping = MappingProxy(record)
+    except SkipRecordException:
+        # Certain conditions can cause a record to fail at this stage
+        # (e.g. when the mapping encounters an unknown entity reference)
+        # Rather than falling over, lets handle SkipRecordException and
+        # continue.
+        continue
+    except RunCompleteException as exc:
+        # This is a successful outcome, so quit with exit status 0.
+        print >> sys.stderr, ('\n' + exc.parameter)
+        break
+
+    try:
+        mapping.before_hooks()
+        # UndefinedHookException means there is no before_hooks method
+        # defined on the object.
+        # Ignore these, as they are inocuous.
+    except UndefinedHookException:
+        pass
+    except SkipRecordException:
+        # This ecxeption is raised in the event a record is to be omitted
+        # from the output.
+        continue
+    except SteadyStateUnchanged:
+        continue
+
+    try:
+        mapping.do_mapping()
+    except AssertionError as exc:
+        print >> sys.stderr, (exc)
+        exit(3)
+    except SkipRecordException:
+        mapping.visualFeedBack()
+        continue
+    except Exception:
+        raise
+
+    try:
+        mapping.after_hooks()
+    except UndefinedHookException:
+        pass
+    except SkipRecordException:
+        continue
+    except SteadyStateUnchanged:
+        continue
+
+    # If we get here, then we can output the gs4 record in the desired format.
+    try:
+        outputfilter = FilterProxy(mapping)
+        # print cfg
+        if 'validationSchemaLogging' in cfg and cfg['validationSchemaLogging'] is not None:
+            try:
+                validator.validate(outputfilter.print_record(),
+                                   mapping.ingest_schema)
+            except SkipRecordException:
+                continue
+            except XmlValidationError:
+                try:
+                    cfg['errorcount'] += 1
+                except KeyError:
+                    cfg['errorcount'] = 1
+                continue
+            except InvalidTransformationError as e:
+                cfg['msq'].append_to_message('Invalid Transformation', mapping.gs4.legacyID)
+                log.error("Invalid transformation result: %s. Possible invalid character?", mapping.gs4.legacyID)
+                print unicode(mapping.gs4)
+                print "ERROR: %s" % e.original_msg
+                print e.bad_line
+                continue
+            except:
+                raise
+        out.write(outputfilter.print_record())
+    except:
+        raise
+
+    # Output some details to a log file. Name is provided as an arg to -a option
+    # auditlog.write(
+    #     "{platform}~{journalid}~{articleid}~DELIVERED\n".format(
+    #         platform=mapping.gs4.legacy_platform,
+    #         journalid=mapping.gs4.journalID,
+    #         articleid=mapping.gs4.legacyID
+    #     )
+    # )
+
+# Make sure we return the cursor on a newline.
+if cfg['provideFeedBack']:
+    print >> sys.stderr, ('\n')
+
+# And be nice and explicitly close the audit log. If none was specified
+# on the command line, we just call close() on /dev/null, essentially a NOOP.
+#auditlog.close()
+
+if 'errorcount' in cfg.keys():
+    print >> sys.stderr, ("Encountered " + str(cfg['errorcount']) + " XML schema validation errors")
+    print >> sys.stderr, ("See the logfiles under ~/validationlogs for details")
+
+try:
+    if len(cfg['pubIDHandler'].unseen) > 0:
+        print >> sys.stderr, ("The following journal IDs have never been seen before:")
+        for unseen in cfg['pubIDHandler'].unseen:
+            print >> sys.stderr, (unseen)
+except KeyError:
+    pass
+
+try:
+    if len(cfg['msq']) > 0:
+        print >> sys.stderr, "ATTENTION! Execution generated the following messages:\n"
+        cfg['msq'].print_messages()
+except KeyError:
+    pass

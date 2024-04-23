@@ -1,0 +1,245 @@
+#!/usr/local/bin/bash
+
+# Given a collection ID and a list of book ids or paths to book ids,
+# locate and copy the books' zipped images to the right place on the
+# image servers. This needs to be run on the image servers, to reduce
+# network traffic as much as possible.
+
+# Before we get too far, let's check to see that we're on the right host
+
+case $(hostname) in
+    canopus.*|capella.*)
+        # Create a logfile for this session and associate it with fd3.
+        logfile="${HOME}/$(basename $0).$(hostname | awk -F. '{print $1}').$(date +%Y%m%d).log"
+        touch $logfile
+        exec 3>$logfile
+        ;;
+    *)
+        echo "This script must only be run on canopus or capella"
+        exit 2
+        ;;
+esac
+
+function usage() {
+    me=$(basename $0)
+    echo "$me collection_id book_id..."
+    echo "$me collection_id file"
+}
+
+function verbose() {
+    if [ "$VERBOSE" = "1" ]
+    then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function warn() {
+    local bookid msg
+    bookid=$1
+    msg=$2
+    echo $bookid $msg
+    echo $bookid $msg >&3
+}
+
+function do_copy() {
+    local book collection
+    # Capitalize the first letter of the collection name. A bit of a
+    # hack, but the only reliable way to do it...
+    collection="$(gtr '[:lower:]' '[:upper:]' <<<"${1:0:1}")"
+    collection+="$(gtr '[:upper:]' '[:lower:]' <<<"${1:1}")"
+
+    book=$2
+    bookid=${book##*/}
+
+    if $(verbose)
+    then
+        echo $bookid
+        echo -n "copying jpegs..."
+    fi
+    do_copy_jpegs $collection $book
+    if $(verbose)
+    then
+        echo " Done"
+        echo -n "copying zoomed tilesets..."
+    fi
+    do_copy_zoomify $collection $book
+    if $(verbose)
+    then
+        echo " Done"
+        echo
+    fi
+}
+
+function alter_dirname() {
+    local path batch type
+    path=$1
+    type=$2
+    batch=$(echo $path | awk -F/ '{print $5}')
+    path="${path%/Incoming/*}/$type/$batch"
+    echo $path
+}
+
+function processed_dir() {
+    # Return the Processed directory for the given book.
+    local path
+    path=$1
+    alter_dirname $path Processed
+}
+
+function zipped_dir() {
+    local path
+    path=$1
+    alter_dirname $path Zipped
+}
+
+function do_copy_jpegs() {
+    # There are 4 different jpg versions for each page. Each needs to be
+    # copied to the servers
+    local book collection
+    local bookid jpeg_root processed parts
+    collection=$1
+    book=$2
+    bookid=${book##*/}
+    
+    processed=$(processed_dir $book)
+    jpeg_root="/images/eeb-jpeg-${collection}"
+
+    # parts holds the paths to each part of the book - 000 for the covers
+    # and edge shots, and 001 upwards for the individual "books" in the
+    # current volume.
+    parts=("${book}"/*)
+    for part in ${parts[@]}
+    do
+        # Take the last element of the part's path, and use that to
+        # construct the final output directory path for the copied images.
+        partid=${part##*/}
+        jpeg_path="${jpeg_root}/${partid//-//}"
+        if ! [ -d "${jpeg_path}" ]
+        then
+            mkdir -m u=rwx,g=rwsx,o=rx -p "${jpeg_path}"
+        fi
+        for srcimg in "${part}/"*.tif
+        do
+            img="${processed}/$(basename ${srcimg%.tif})"
+            img_j="${img}.jpg"            # Normal sized jpeg
+            img_t="${img}.thumb.jpg"      # Thumbnail
+            img_96="${img}_96.jpg"        # 96 px
+            img_300="${img}_300.jpg"      # 300 px
+            for img in $img_j $img_t $img_96 $img_300
+            do
+                if ! [ -f "$img" ]
+                then
+                    warn $bookid "WARNING: ${img} does not exist. Skipping image."
+                    continue 3  # jump back up three levels to the next book part
+                fi
+            done
+            cp "${img_j}" "${img_t}" "${img_96}" "${img_300}" "${jpeg_path}"
+        done
+    done
+}
+
+function do_copy_zoomify() {
+    local book collection
+    local processed zipped parts zoomify_root
+    collection=$1
+    book=$2
+
+    processed=$(processed_dir $book)
+    zipped=$(zipped_dir $book)
+    zoomify_root="/images/eeb-zoomify-${collection}"
+
+    # parts holds the paths to each part of the book - 000 for the covers
+    # and edge shots, 001 upwards for the individual "books" in the
+    # current volume.
+    parts=("${book}"/*)
+    for part in ${parts[@]}
+    do
+        partid=${part##*/}
+        zoomify_path="${zoomify_root}/${partid//-//}"
+
+        if [ -d "${zoomify_path}" ]
+        then
+            mv "${zoomify_path}" "${zoomify_path}.replaced"
+            echo "Remember to delete ${zoomify_path}.replaced"
+        fi
+        mkdir -m u=rwx,g=rwsx,o=rx -p "${zoomify_path}"
+        cd ${zoomify_path}
+        for img_path in "${part}"/*.tif
+        do
+            img_base=$(basename ${img_path%.tif})
+            if ! [ -f "${processed}/${img_base}/ImageProperties.xml" ]
+            then
+                warn $bookid "ERROR: Failed zoomify ${processed}/${img_base}"
+                continue 2  # Missing image? Fail!
+            fi
+            if ! [ -d "${zipped}/$img_base.zip" ]
+            then
+                # Send any error output from unzip to the logfile.
+                unzip -q "${zipped}/${img_base}.zip" 2>&3
+            else
+                cp -r "${processed}/${img_base}" "${zoomify_path}"
+            fi
+        done
+    done
+}
+
+if [ "$1" = "-v" ]
+then
+    VERBOSE=1
+    shift
+fi
+
+function main() {
+    case $# in
+        0|1)
+            usage
+            exit 1
+            ;;
+        2)
+            COLLECTION=$1
+            # If the second arg is a file, read its contents as book ids to copy
+            if [ -f "$2" ]
+            then
+                cat "$2" | while read book
+                do
+                    test -n $book && do_copy $COLLECTION $book
+                done
+                # Otherwise, it's just a book id.
+            else
+                book="$2"
+                do_copy $COLLECTION $book
+            fi
+            ;;
+        *)
+            COLLECTION=$1
+            # The second and subsequent args are book ids.
+            shift
+            for book in "$@"
+            do
+                do_copy $COLLECTION $book
+            done
+            ;;
+    esac
+    # Close the log file
+    3>&-
+    echo "Check output in $logfile"
+}
+
+# The book id is actually the path to the appropriate incoming directory where
+# the book's raw images, as delivered from the vendor, can be found. We need
+# to alter this a little to find the zipped image archives that we need to
+# copy to the servers.
+
+# e.g. /dc/paris-coll5/Incoming/20140804/fra-bnf-rlr-00005836
+
+# This needs to change to
+
+# /dc/paris-coll5/Processed/20140804/fra-bnf-rlr-00005836
+
+# for the jpegs, and to
+
+# /dc/paris-coll5/Zipped/20140403 /fra-bnf-rlr-00005836-*.zip
+
+main $@

@@ -1,0 +1,67 @@
+#!/usr/local/bin/bash
+# -*- mode: shell-script -*-
+
+# A wrapper that can be used to invoke multiple instances of
+# transform. It adds checking so that it doesn't process an input
+# batch if it is already being done or has already been processed.
+
+trap 'exit 1' INT
+
+case $# in
+    1)
+        DATADIR=$1
+        ;;
+    *)
+        echo >&2 "Not enough arguments."
+        exit 1
+        ;;
+esac
+
+TMPDIR=/dc/dsol/var/tmp/dnsa
+OUTDIR=/dc/dsol/steadystate/out/dnsa
+
+# So all output files get the same date, even if we pass midnight during the
+# run. Makes it easier to find and submit the files with chsubmit.
+RUNDATE=$(today)
+
+touch ${TMPDIR}/run.${$}
+
+for d in ${DATADIR}/*
+do
+    COLL=$(basename ${d})
+    if [ -e ${TMPDIR}/${COLL}_in_flight ]
+    then
+        continue
+    fi
+    if [ -e ${TMPDIR}/${COLL}_done ]
+    then
+        continue
+    fi
+    touch ${TMPDIR}/${COLL}_in_flight
+    ./transform -o directory=${OUTDIR},io=CH_SS_dnsa_${COLL}_${RUNDATE}_,records=5000 -s dataRoot=${d} dnsa '*.xml'
+    if [ "$?" != 0 ]
+    then
+        # If transform exits non-zero, don't move the lock file, but just
+        # delete it. That way, another instance can try this collection
+        # again, and hopefully have more luck...
+        rm -f ${TMPDIR}/${COLL}_in_flight
+        continue
+    fi
+    mv ${TMPDIR}/${COLL}_in_flight ${TMPDIR}/${COLL}_done
+    if [ -e ${TMPDIR}/stop ]
+    then
+        rm -f ${TMPDIR}/run.${$}
+        if ! (ls ${TMPDIR}/run.*)
+        then
+            rm ${TMPDIR}/stop
+        fi
+        break
+    fi
+    if [ -e ${TMPDIR}/stop.${$} ]
+    then
+        rm ${TMPDIR}/stop.${$}
+        break
+    fi
+done
+
+rm -f ${TMPDIR}/run.${$}

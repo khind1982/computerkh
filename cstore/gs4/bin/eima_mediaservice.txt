@@ -1,0 +1,150 @@
+EIMA MEDIA SERVICE PROCESSES
+
+The processes are quite messy as they're still pretty much in the order I
+wrote them - so the first part is a separate script, because I started out
+thinking they would all be separate scripts, and the rest is all in one class,
+since I realised they shared various things - database connections, regular
+expressions - that it would be good not to repeat all over the place.
+
+So, here is a summary of everything you'd need to run to do a media service
+update, and below it a step by step set of notes. It's all run from the python
+2.6 interactive prompt.
+
+Summary of the commands you'd run:
+
+>>> from eimabits import *
+>>> populatethreading('/dc/popcult-images/handover')
+
+>>> from eima_pagemap import *
+>>> a = pagemapgenerator()
+>>> a.getresizefactors('resize.list')
+>>> a.gatherdata('/dc/popcult-images/handover')
+>>> a.createhandoverdirs('/dc/scratch/electra/eima_metadata')
+>>> a.createPCMIfiles()
+>>> a.createpagemapfiles()
+>>> a.populate_pagethreading()
+>>> a.populate_hithighlighting_threading()
+
+If you want to roll back a load that fell over part-way through:
+
+>>> a.undoload('/dc/popcult-images/handover')
+
+
+Notes:
+
+>>> from eimabits import *
+>>> populatethreading('/dc/popcult-images/handover')
+
+This populates basic article-to-page image threading in the SD database on
+mysql-server (just called 'eima'). It currently adds data to what's already
+there rather than truncating the database first. If you need to start again
+completely from scratch you will need to truncate the table manually. If you
+just want to remove everything you added in the most recent load,
+eima_pagemap.undoload will do that.
+
+This is one of the two processes (eima_pagemap.gatherdata is the other) that
+take the most time, as they read through the input files, breaking them up by
+zone and using regular expressions to identify strings to put in MySQL
+databases. They do something between 100,000 and 200,000 records an hour,
+though I haven't tried them on corvus. They can be run simultaneously, and
+you could run multiple instances on separate subdirectories, though I haven't
+tried that yet.
+
+>>> from eima_pagemap import *
+>>> a = pagemapgenerator()
+
+Everything else is a function on pagemapgenerator. You can run most of these
+independently - e.g. if you need to regenerate PCMI files you can just run
+that function - though there are some interdependencies as described below.
+
+>>> a.getresizefactors('resize.list')
+
+You need this before you can run gatherdata. So why not include it in
+gatherdata, I hear you ask? Because I hadn't got round to doing that yet.
+
+>>> a.gatherdata('/dc/popcult-images/handover')
+
+Populates the eima database on dsol with page image and zone information. Does
+not truncate the tables first, so if you want to renew the data completely you
+will need to do that manually. If you want to get rid of a bad load, or redo a
+load that failed halfway through without duplicating content, use undoload
+to remove all records picked up from a specific network location.
+
+Once you have populated the databases you don't need to do that again unless
+the base data changes or you want to add a new load.
+
+>>> a.createhandoverdirs('/dc/scratch/electra/eima_metadata')
+
+Based on the info in the dsol eima database, this creates the directory
+structure that will be filled with PCMI and page map files. You need to run
+this before generating either file type (though you only need to run
+it once in the same pagemapgenerator instance). Even if the structure has
+already been set up you still need to run this, as it sets an internal
+attribute identifying where to write files to. I've left it working like that
+as createhandoverdirs acts as a convenient safeguard that all the
+necessary directory paths have been created.
+
+>>> a.createPCMIfiles()
+>>> a.createpagemapfiles()
+
+Should be self explanatory. NB You need to run createhandoverdirs before
+running these even if the directory structure already exists. You can run
+these independently of each other if, for example, PCMI files need a tweak
+to the formatting.
+
+Note that the output format is governed by cheetah
+templates - eima_pcmi_template and eima_pagemap_template. I precompile these
+from .tmpl files using the command 'cheetah-compile *.tmpl'. You'll need to do
+that the first time as it's the .tmpl files that are stored in svn.
+
+>>> a.populate_pagethreading()
+
+This updates the pagecollection_threading table in the media service eima
+database on mysql-server with paths for PCMI, pagemap and scaled image files.
+All the information is determined from data in the dsol eima database. When
+this is run the pagecollection_threading table is truncated and then populated
+with data for all records in the dsol eima database. So you don't need to
+worry about rolling back unfinished loads or accidentally deleting old data -
+provided the dsol eima database is up to date, running this will bring the SD
+data on mysql-server in line with it.
+
+>>> a.populate_hithighlighting_threading()
+
+This adds paths for hit highlighting files to the basic threading table on
+mysql-server. It's a bit awkward. Basically all the information you need to
+populate this can be determined from the article-to-page threading already in
+that database. So in the interests of doing things quickly and simply,
+that's what this uses. However, you do need to make sure you've removed any
+previous hit highlighting paths stored in the table first, or they will
+be duplicated.
+
+I have added the following MySQL statement to the script to do this:
+
+DELETE FROM threading WHERE type='co'
+
+Previously I would have run this manually first. Hopefully the script will run
+fine but I haven't tested it so if I've got anything wrong you may get an
+error when you run it.
+
+>>> a.undoload('/dc/popcult-images/handover')
+
+Only to be used when a load has gone wrong!
+
+This goes through the directories in the location you give it, works out the
+document ids and page collection ids for all XML files it finds, and removes
+everything belonging to those ids from the threading table on mysql-server,
+and from both tables in the eima database on dsol. It effectively removes
+all trace of anything eima_bits.populatethreading and
+eima_pagemap.gatherdata have added to the relevant tables.
+
+It's useful when a load has failed part-way through and you need to get the
+data from that load out of the databases so you can start a fresh run.
+
+It doesn't deal with anything after the eima_pagemap.gatherdata stage. It's
+purely for rolling back the two processes that pull data out of the original
+XML files: eima_bits.populatethreading and eima_pagemap.gatherdata. If you
+need to clear the pagecollection_threading table on mysql_server, just make
+sure the eima database on dsol is up to date and run
+eima_pagemap.populate_threading again. Similarly, as long as you've got the
+dsol database right, running eima_pagemap.populate_hithighlighting_threading
+should bring the hit highlighting data up to date.

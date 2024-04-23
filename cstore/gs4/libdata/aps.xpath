@@ -1,0 +1,14 @@
+zone|//APS_zone
+page_sequence|.//APS_page_sequence
+page_number|.//APS_zone_pagenumber
+images|.//APS_page_image
+word|.//APS_word
+wordcoords|.//APS_wc
+wordtext|.//APS_text
+zonecoords|.//APS_zone_coord
+zculx|.//APS_zone_coord/APS_ULX
+zculy|.//APS_zone_coord/APS_ULY
+zclrx|.//APS_zone_coord/APS_LRX
+zclry|.//APS_zone_coord/APS_LRY
+company|//APS_company
+product|//APS_brand

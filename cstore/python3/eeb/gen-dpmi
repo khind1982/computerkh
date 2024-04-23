@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+
+import argparse
+
+import eeb.dpmi
+
+'''Generate DPMI files from the handover XML in `root_dir`, and
+write them to `outdir`, which defaults to the CWD if not specified.'''
+
+argparser = argparse.ArgumentParser()
+
+argparser.add_argument('-o', dest='outdir', action='store', default='.',
+        help='Directory to write the output files')
+argparser.add_argument(dest='root_dir', action='store',
+        help='Directory to walk looking for EEB handover XML files')
+
+args = argparser.parse_args()
+
+eeb.dpmi.main(args.root_dir, args.outdir)

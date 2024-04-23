@@ -1,0 +1,198 @@
+Layout of files.
+
+Within the gs4 top level directory are subdirectories called doc, bin,
+etc and lib.
+
+bin contains only the executable frontend for the suite, called
+transform.
+
+lib contains several subdirectories:
+
+* filters - output filters for handling rendering of GS4 records
+* views - Cheetah templates, filled in and rendered by the filters
+* helpers - modules of methods for performing complex rendering 
+* streams - data stream handlers
+* mappings - the mappings from legacy products to GS4
+* commonUtils - a set of modules that contain functions useful in
+    other areas of the suite (mostly in the mapping classes). Includes
+    functions for normalising dates, language names and ISOCodes, some
+    string and list manipulations, etc.
+
+In the top level of lib is a module called transformation.py and
+another called cstoreerrors.py. transformation.py defines the outer
+layer of the whole process, the Transformation class. cstoreerrors.py
+defines a number of Exception classes that can be used to customise
+exception handling, etc.
+
+etc contains just the configuration file, cstore.config. It is a
+simple Windows-style INI file, and each product that needs to be
+handled must be registered in it. It consists of one section per
+product:
+
+[prisma]  # <== section name (and product name)
+mappingname: prisma   # <== the per-product mapping to use[1]
+streamtype: xml    # <== data stream to use to split the source data
+xpath: /ROOT/row   # <== XPath spec - how to split the input. 
+
+xpath is specific to the XML stream. Other streams may require
+different fields - that is an implementation detail. The important
+thing is that a new stream can add new fields, or an existing one can
+change fields, without affecting anything else in the system.
+
+[1] This may seem redundant, but in the case of IIMP and IIPA, two
+products can be handled by the same mapping class - IMPA. 
+
+
+The transform executable reads the config file, looking for the
+section that corresponds to the name of the product specified on the
+commandline. It then instantiates the Transformation class, passing in
+the config section to dictate what it does internally. The
+Transformation object creates a data stream object of the appropriate
+type, which it makes available as its datastream attribute.
+
+The Stream object defines a method called streamdata() which returns a
+generator. Each call to streamdata's __next__ method should return a
+single legacy record object, and optionally the name of the current
+input file and the count of records seen.
+
+transform arranges to have the appropriate product mapping class
+imported by calling the import_mapping function in the mappingregistry
+module, with the Transformation object's mappingname as its sole
+argument. mappingregistry.import_mapping imports the named mapping
+class module into its own namespace, and creates a reference to it in
+the global module namespace as "MappingProxy". transform then uses
+this reference to create a mapping object for each record yielded by
+the data stream in the for loop.
+
+Each product mapping class should inherit from AbstractMapping,
+defined in lib/mappings/abstractmapping.py. AbstractMapping creates a
+GS4Record object (a subclass of Struct, defined at the top of the
+abstractmapping.py module) and attaches it to its instance as
+gs4. Thus, a product-specific Mapping object will have a legacy record
+(self.record), corresponding to the data that came from the source,
+and a GS4 Record (self.gs4) to which will be assigned attributes whose
+values are derived somehow from the legacy data. In many cases,
+nothing more than converting a string to unicode will be sufficient,
+and in such cases, the attribute mapping should be handled in
+AbstractMapping. However, for more complex, product-dependent
+transformations, you can either call the method in AbstractMapping and
+modify its results (whether it be the return value, or the value it
+assigns to self.gs4), or simply override the method in your subclass
+and handle the transformation entirely within the scope of the product
+mapping.
+
+A product mapping subclass should define a dict object called
+_dtable, with legacy field names as keys and method names in the
+current namespace as values (e.g. {'article_title':MyMapping.title})
+This is then used as a dispatch table to trigger invocation of each
+method in the class's do_mapping() method. These methods should set an
+appropriate attribute on the GS4Record instance stored in self.gs4. 
+
+For conversion tasks that cannot be handled in this simplistic atomic
+manner, there is a hook method called AbstractMapping.computedValues.
+To use it, you must define a list in your subclass called
+self._computedValues, whose members are strings representing the names
+of the methods you wish to call. For example:
+
+self._computedValues = ['_aComplexConversion']
+
+will cause AbstractMapping.computedValues to search in your class for
+a method called _aComplexConversion and invoke it. Note that methods
+called in this manner cannot take arguments. You must perform all
+conversions in the context of self, which is always passed in by
+Python.
+
+The format of GS4Record is deliberately left loose - but there are
+some bits of data that will need to have some sort of structure. For
+example, language data is encapsulated as a list of dictionary
+objects, one dictionary per language defined in the data. The
+dictionary has two keys - langname and langISOCode, which will be
+interpolated into the appropriate parts of the output template. Other
+attributes will require a similar approach, to allow us to capture the
+data and any necessary attributes and values that GS 4 mandates.
+
+Once all the mapping methods have been run, the resulting GS4Record
+instance is fed into the output filter subsystem. Currently, the only
+output filter implemented generates XML in GS4 format, and consists of
+a selection of Cheetah templates, which are conditionally rendered
+depending on the contents of the gs4 object on the record.
+
+As with mappings and streams, filter classes must be registered in
+filterregistry and are imported using the same technique - import them
+within the registry module's namespace, and take a reference in the
+global module namespace. The Filter interface is extremely
+simple. Each mapped record (mapping) is passed by the transform script
+to the FilterProxy constructor. This constructor sets up the context
+of the filter. In the case of the GS4Xml filter, this entails storing
+the passed in mapping object as self.object, setting self._template to
+the root template for the filter, and setting self._cfg to be a copy
+of the passed in object's _cfg. This can be used outside the context
+of the filter to get a view on how many records have been processed,
+which source file is being converted, etc.
+
+Apart from these setup actions that must be carried out by the
+constructor, a filter module must also implement a print_record
+method, which is invoked to render the record. It doesn't matter how
+this is done, only that the rendered record is returned from the
+method. It is not acceptable to use a void method here. In the case of
+the GS4Xml filter, the print_record method simply coerces the template
+to a string and returns it:
+
+def print_record(self):
+    return str(self._template)
+
+The Cheetah template engine handles the details of how to fill in the
+template, so we are able to write a very pleasingly short method!
+
+Once the filter has done its job and returned the rendered object, we
+need some way of keeping the results of our hard work. This is where
+the OutPutStream comes into play. It is not implemented in the streams
+package, since conceptually it has nothing to do with input
+streams. Instead, it is implemented as a class in a plain Python
+module. Its job is to handle writing transformed records to STDOUT,
+the default, or to a named file. It can split the output into multiple
+files of a specified length, and write them to a directory specified
+on the command line. If transform is called with no -o option, then
+output is written a record at a time to STDOUT and can be captured
+using normal shell redirection. However, if you want more
+sophisticated control over where the data goes, pass -o with one or
+more of these options:
+
+io - the name of the file to write to. It should be in the standard
+format for a handover file, without the order number or .xml suffix,
+both of which are added by the output stream object.
+
+directory - path to the directory where you want the file(s) to be
+written.
+
+records - the number of records to write in each file. Once this
+number has been written to a file, that file is closed and a new one
+created. The number at the end of the name will be incremented by one.
+
+To transform a prisma file, and write the results, in groups of 5000
+to files in the directory /dc/scratch/vega/samples/, call transform
+like this:
+
+transform -o records=5000,directory=/dc/scratch/vega/samples,io=filenameForOutput prisma /file/to/prisma/source/file.xml 
+
+The order in which the arguments to -o are given doesn't matter - they
+are turned into a dict anyway. Arguments are comma separated, and
+key/value pairs are given with an = sign between them. There may be no
+spaces in the output options specification.
+
+The transform script accepts several options that can be used to
+customise the behaviour of certain subsystems in the suite. We have
+already seen -o for the output stream. Also known are:
+
+  -m  -  anything given with -m is stored in cfg['mappingOptions'] and
+   can be used in the Mapping classes to influence how the mapping is
+   carried out.
+
+  -s  -  this gets passed through to the stream object, and can
+   influence how a product's stream works.
+
+The ways in which the values passed to these options may influence the
+functionality of a given module is an implementation detail for the
+developer of that module - the options are provided as a convenient
+way of passing arbitrary values into a module, and in no way intend to
+impose any expectation on what behaviour is modified.

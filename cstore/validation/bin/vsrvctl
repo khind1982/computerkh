@@ -1,0 +1,39 @@
+#!/usr/local/bin/ruby
+# -*- mode: ruby -*-
+
+require 'socket'
+
+class ValidationServerControl
+  def initialize(command, arg=nil)
+    @command = command
+    @arg = arg
+    @vserver = TCPSocket.new('localhost', 12346)
+    @commands = {
+      'status' => 'STATUS',
+      'stop'   => 'STOP',
+      'reset'  => 'RESET',
+      'unload' => 'UNLOAD',
+      'help'   => 'HELP'}
+  end
+  def talk_to_server
+    if @commands.has_key? @command
+      @vserver.puts "#{@commands[@command]} #{@arg}"
+      yield @vserver.readlines
+    else
+      yield "Invalid command: #{@command}"
+    end
+  end
+end
+
+begin
+  if ARGV[0]
+    vs = ValidationServerControl.new(ARGV[0], ARGV[1])
+    vs.talk_to_server {|r| puts r}
+  else
+    ValidationServerControl.new('help').talk_to_server {|r| $stderr.puts r}
+    exit 1
+  end
+rescue Errno::ECONNREFUSED
+  $stderr.puts "No validation server running"
+  exit 1
+end

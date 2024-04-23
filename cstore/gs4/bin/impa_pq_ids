@@ -1,0 +1,49 @@
+#!/bin/sh
+# -*- mode: shell-script -*-
+
+# Compile a list of PQ IDs as part of the regular steady state updates.
+# Must be sent to Andrea for now, but eventually we will be able to simply
+# upload the lists and have the appropriate records pulled as if by magic...
+
+TODAY=`date +%d%m%Y`
+
+BUILD=1
+#BUILDROOT="/products/impa/build/${BUILD}"
+BUILDROOT="/dc/scratch/steadystate/src/"
+OUTDIR="/dc/scratch/steadystate/pqft/request"
+IIMP_OUT=${OUTDIR}/iimp/iimp_pqids_${TODAY}.list
+IIPA_OUT=${OUTDIR}/iipa/iipa_pqids_${TODAY}.list
+
+if [ "x" = "x${BUILD}" ]
+then
+  echo Must specify location of the build you want PQIDs for
+  exit 1
+fi
+
+do_find() {
+    PRODUCT=$1
+    OUTFILE=${OUTDIR}/${PRODUCT}/pqids_${TODAY}.list
+    SORTEDFILE=${OUTDIR}/${PRODUCT}/pqids_${TODAY}.txt
+    echo "finding DIDs in build data..."
+#    find "${BUILDROOT}/${PRODUCT}/output" -name '*.xml' -exec grep '<element name="DID">' {} \; | sed -e 's!.*<value>\(.*\)</value>.*!\1!' > "${OUTFILE}"
+    find "${BUILDROOT}/${PRODUCT}" -name '*.xml' -exec grep '<element name="DID">' {} \; | sed -e 's!.*<value>\(.*\)</value>.*!\1!' > "${OUTFILE}"
+    echo "adding backfile ids..."
+    awk -F: '{print $2}' /packages/dsol/libdata/${PRODUCT}rids >> "${OUTFILE}"
+    echo "sorting and removing duplicates..."
+    sort -u "${OUTFILE}" > "${SORTEDFILE}"
+    rm -f "${OUTFILE}"
+    echo "${PRODUCT} - PQ ids in ${SORTEDFILE} (`wc -l ${SORTEDFILE} | awk '{print $1}'` ids)"
+}
+
+if [ -d "${BUILDROOT}" ]
+then
+  # iimp first
+  echo "IIMP..."
+  do_find iimp
+  echo "IIPA..."
+  do_find iipa
+  echo "done"
+else
+  echo "NO"
+fi
+

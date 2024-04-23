@@ -1,0 +1,79 @@
+#!/usr/bin/env bash 
+# -*-  mode: shell-script -*-
+
+if [ `uname -s` = "FreeBSD" ]
+then
+    GREP="grep"
+else
+    GREP=ggrep
+fi
+
+# Check certain properties of a directory of Trench Journals XML.
+
+usage() {
+    echo "`basename $0` <product> <dir>"
+}
+
+die() {
+    usage
+    echo "${1}"
+    exit 1
+}
+
+# Which product and directory?
+
+case "$#" in
+    2)
+        PRODUCT=${1}
+        CHKDIR=${2}
+        ;;
+    *)
+        usage
+        exit 1
+        ;;
+esac
+
+# First, make sure we were given a real directory to scan.
+[ -d "${CHKDIR}" ] || die "${CHKDIR} does not exist"
+
+# Test for the existence of the rules directory here, so we don't have
+# to do it for every file in the handover.
+[ -d "/dc/dsol/audit.d/${PRODUCT}" ] || die "Rules directory /dc/dsol/audit.d/${PRODUCT} doesn't exist"
+
+RULES="/dc/dsol/audit.d/${PRODUCT}/*"
+
+if ( echo ${RULES} | ${GREP} -E "\*$" )
+then 
+    die "No rules found for ${PRODUCT} in /dc/dsol/audit.d/${PRODUCT}"
+fi
+
+while read file
+do
+
+    # Check -1. Do we have any spaces in the filename? This is bad
+    # enough that we don't want to run any further checks on a file if
+    # it fails this test.
+
+    if ( echo $file | grep ' ' 2>&1 > /dev/null )
+    then
+        echo "Filename has a space! $file. Not doing any more checks on this file."
+        continue
+    fi
+
+    # Now call each of the rules files in the product's audit.d
+    # directory. We pass in the product code and the current file
+    # path. This should be enough for each script to get whatever
+    # information it needs
+    for script in $RULES
+    do
+        $script $PRODUCT $file
+        # The called script returns 3, we need to skip the rest of the
+        # tests for this input file, by breaking out of the innermost
+        # loop.
+        if [ $? -eq 3 ]
+        then
+            break 1
+        fi
+    done
+
+done < <(find ${CHKDIR} -type f \( -name '*.xml' -or -name '*.XML' \))
